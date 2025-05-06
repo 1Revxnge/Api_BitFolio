@@ -1,0 +1,7 @@
+C:\Users\Allison_2\ApiJobfy\obj\Debug\net9.0\ApiJobfy.csproj.AssemblyReference.cache
+C:\Users\Allison_2\ApiJobfy\obj\Debug\net9.0\ApiJobfy.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Allison_2\ApiJobfy\obj\Debug\net9.0\ApiJobfy.AssemblyInfoInputs.cache
+C:\Users\Allison_2\ApiJobfy\obj\Debug\net9.0\ApiJobfy.AssemblyInfo.cs
+C:\Users\Allison_2\ApiJobfy\obj\Debug\net9.0\ApiJobfy.csproj.CoreCompileInputs.cache
+C:\Users\Allison_2\ApiJobfy\obj\Debug\net9.0\ApiJobfy.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Allison_2\ApiJobfy\obj\Debug\net9.0\ApiJobfy.MvcApplicationPartsAssemblyInfo.cache

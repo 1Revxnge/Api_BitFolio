@@ -1,0 +1,6 @@
+@ApiJobfy_HostAddress = http://localhost:5272
+
+GET {{ApiJobfy_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
