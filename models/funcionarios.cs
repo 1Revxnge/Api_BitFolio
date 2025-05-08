@@ -1,27 +1,40 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApiJobfy.models
 {
-    public class Funcionario : Usuario
+    public class Funcionario 
     {
-        [Required]
-        [MaxLength(100)]
-        public string Cargo { get; set; } = string.Empty;
+        public int Id { get; set; } 
+        public int NegocioId { get; set; } 
 
-        [Required]
-        [MaxLength(100)]
-        public string Loja { get; set; } = string.Empty;
+        public string Nome { get; set; } 
+        public string Email { get; set; } 
+        public string Senha { get; set; }
+        public TimeOnly DtNascimento { get; set; } 
+        public decimal Salario { get; set; } 
+        public string Cargo { get; set; } 
+        public string Telefone { get; set; } 
+        public string StatusFunc { get; set; }
+        public TimeOnly DtAdmissao { get; set; } 
+        public TimeOnly? DtDemissao { get; set; } 
+        public DateTime DtCriacao { get; set; } 
+        public DateTime DtAtualizacao { get; set; }
+        public bool Ativo { get; set; } 
 
-        public DateTime DataAdmissao { get; set; } = DateTime.UtcNow;
-
-        public DateTime? DataDemissao { get; set; } = null;
-
-        public override void Anonimizar()
+        // Método independente de anonimização
+        public void Anonimizar()
         {
-            base.Anonimizar();
+            // Anonimiza dados pessoais (nome, email, telefone)
+            Nome = "Anonimizado";
+            Email = $"anonimizado{Id}@example.com";
+            Telefone = "0000000000";
+
+            // Anonimiza campos específicos do funcionário
+            Salario = 0m;  
             Cargo = "Anonimizado";
-            Loja = "Anonimizado";
+            NegocioId = 0;
         }
     }
 }

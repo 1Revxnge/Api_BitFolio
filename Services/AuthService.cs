@@ -26,7 +26,7 @@ namespace ApiJobfy.Services
         {
             // Hash password
             string senhaHash = HashPassword(dto.Senha);
-
+            DateTime agora = DateTime.Now;
             // Encrypt PDF (currículo)
             byte[] curriculoBytes;
             using (var ms = new MemoryStream())
@@ -41,9 +41,10 @@ namespace ApiJobfy.Services
                 Nome = dto.Nome,
                 Email = dto.Email,
                 SenhaHash = senhaHash,
-                DataNascimento = dto.DataNascimento,
+                DtNascimento = dto.DataNascimento,
                 Telefone = dto.Telefone,
-                CurriculoCriptografado = curriculoCriptografado
+                CurriculoCriptografado = curriculoCriptografado,
+                DtCriacao = agora
             };
 
             _dbContext.Candidatos.Add(candidato);
@@ -54,7 +55,7 @@ namespace ApiJobfy.Services
 
         public async Task<string?> LoginAsync(string email, string senha)
         {
-            var usuario = await _dbContext.Usuarios.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+            var usuario = await _dbContext.Candidatos.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
 
             if (usuario == null)
                 return null;
@@ -131,7 +132,7 @@ namespace ApiJobfy.Services
             return ms.ToArray();
         }
 
-        private string GenerateJwtToken(Usuario usuario)
+        private string GenerateJwtToken(Candidato usuario)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]);

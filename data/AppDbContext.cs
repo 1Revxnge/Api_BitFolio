@@ -5,7 +5,7 @@ namespace ApiJobfy.Data
 {
     public class AppDbContext : DbContext
     {
-        public DbSet<Usuario> Usuarios => Set<Usuario>();
+     //   public DbSet<Usuario> Usuarios => Set<Usuario>();
         public DbSet<Candidato> Candidatos => Set<Candidato>();
         public DbSet<Funcionario> Funcionarios => Set<Funcionario>();
         public DbSet<Administrador> Administradores => Set<Administrador>();
@@ -17,15 +17,19 @@ namespace ApiJobfy.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Keys & Inheritances
-            modelBuilder.Entity<Usuario>()
-                .HasDiscriminator<string>("Role")
-                .HasValue<Candidato>("Candidato")
-                .HasValue<Funcionario>("Funcionario")
-                .HasValue<Administrador>("Administrador");
+            // Configurações específicas para Candidato
+            modelBuilder.Entity<Candidato>()
+                .HasIndex(c => c.Email)
+                .IsUnique();
 
-            modelBuilder.Entity<Usuario>()
-                .HasIndex(u => u.Email)
+            // Configurações específicas para Funcionario
+            modelBuilder.Entity<Funcionario>()
+                .HasIndex(f => f.Email)
+                .IsUnique();
+
+            // Configurações específicas para Administrador
+            modelBuilder.Entity<Administrador>()
+                .HasIndex(a => a.Email)
                 .IsUnique();
 
             base.OnModelCreating(modelBuilder);

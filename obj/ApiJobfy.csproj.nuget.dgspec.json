@@ -1,26 +1,33 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Allison_2\\ApiJobfy\\ApiJobfy.csproj": {}
+    "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\ApiJobfy.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Allison_2\\ApiJobfy\\ApiJobfy.csproj": {
+    "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\ApiJobfy.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Allison_2\\ApiJobfy\\ApiJobfy.csproj",
+        "projectUniqueName": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\ApiJobfy.csproj",
         "projectName": "ApiJobfy",
-        "projectPath": "C:\\Users\\Allison_2\\ApiJobfy\\ApiJobfy.csproj",
-        "packagesPath": "C:\\Users\\Allison_2\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Allison_2\\ApiJobfy\\obj\\",
+        "projectPath": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\ApiJobfy.csproj",
+        "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Allison_2\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "https://api.nuget.org/v3/index.json": {}
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://ppsnugetserver.papersoft.pt/nuget": {}
         },
         "frameworks": {
           "net9.0": {
