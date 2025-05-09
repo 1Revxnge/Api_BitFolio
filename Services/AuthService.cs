@@ -55,19 +55,48 @@ namespace ApiJobfy.Services
 
         public async Task<string?> LoginAsync(string email, string senha)
         {
-            var usuario = await _dbContext.Candidatos.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+            // Tenta buscar o usuário nas 3 tabelas (Candidatos, Administradores e Funcionarios)
+            var candidato = await _dbContext.Candidatos
+                                            .FirstOrDefaultAsync(c => c.Email.ToLower() == email.ToLower());
 
-            if (usuario == null)
-                return null;
+            if (candidato != null)
+            {
+                if (!VerifyPassword(senha, candidato.SenhaHash))
+                    return null;  // Senha inválida
 
-            if (!VerifyPassword(senha, usuario.SenhaHash))
-                return null;
+                var token = GenerateJwtToken(candidato);
+                // TODO: log login (pode ser implementado)
+                return token;
+            }
 
-            var token = GenerateJwtToken(usuario);
+            var administrador = await _dbContext.Administradores
+                                                .FirstOrDefaultAsync(a => a.Email.ToLower() == email.ToLower());
 
-            // TODO: log login (pode ser implementado)
+            if (administrador != null)
+            {
+                if (!VerifyPassword(senha, administrador.Senha))
+                    return null;  // Senha inválida
 
-            return token;
+                var token = GenerateJwtToken(administrador);
+                // TODO: log login (pode ser implementado)
+                return token;
+            }
+
+            var funcionario = await _dbContext.Funcionarios
+                                              .FirstOrDefaultAsync(f => f.Email.ToLower() == email.ToLower());
+
+            if (funcionario != null)
+            {
+                if (!VerifyPassword(senha, funcionario.Senha))
+                    return null;  // Senha inválida
+
+                var token = GenerateJwtToken(funcionario);
+                // TODO: log login (pode ser implementado)
+                return token;
+            }
+
+            // Se nenhum usuário foi encontrado, retorna null
+            return null;
         }
 
         // Hash password with salt using PBKDF2
@@ -132,17 +161,37 @@ namespace ApiJobfy.Services
             return ms.ToArray();
         }
 
-        private string GenerateJwtToken(Candidato usuario)
+        private string GenerateJwtToken(object usuario)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]);
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
-                new Claim(ClaimTypes.Email, usuario.Email),
-                new Claim(ClaimTypes.Role, usuario.GetType().Name)
-            };
 
+            List<Claim> claims = new List<Claim>();
+
+            if (usuario is Candidato candidato)
+            {
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, candidato.Id.ToString()));
+                claims.Add(new Claim(ClaimTypes.Email, candidato.Email));
+                claims.Add(new Claim(ClaimTypes.Role, "Candidato"));
+            }
+            else if (usuario is Administrador administrador)
+            {
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, administrador.Id.ToString()));
+                claims.Add(new Claim(ClaimTypes.Email, administrador.Email));
+                claims.Add(new Claim(ClaimTypes.Role, "Administrador"));
+            }
+            else if (usuario is Funcionario funcionario)
+            {
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, funcionario.Id.ToString()));
+                claims.Add(new Claim(ClaimTypes.Email, funcionario.Email));
+                claims.Add(new Claim(ClaimTypes.Role, "Funcionario"));
+            }
+            else
+            {
+                throw new ArgumentException("Tipo de usuário inválido.");
+            }
+
+            // Cria o token
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
@@ -155,5 +204,6 @@ namespace ApiJobfy.Services
 
             return tokenHandler.WriteToken(token);
         }
+
     }
 }
