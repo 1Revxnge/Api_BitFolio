@@ -1,6 +1,7 @@
 using ApiJobfy.Data;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace ApiJobfy.Services
 {
     public class UserService : IUserService
@@ -14,7 +15,7 @@ namespace ApiJobfy.Services
 
         public async Task<bool> ExistsByEmailAsync(string email)
         {
-            return await _dbContext.Usuarios.AnyAsync(u => u.Email.ToLower() == email.ToLower());
+            return await _dbContext.Candidatos.AnyAsync(u => u.Email.ToLower() == email.ToLower());
         }
     }
 }
