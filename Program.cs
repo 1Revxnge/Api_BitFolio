@@ -60,6 +60,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 
 app.UseRouting();
+app.MapGet("/", () => "API funcionando!"); // Esta linha mapeia a raiz "/".
 
 app.UseAuthentication();
 app.UseAuthorization();
