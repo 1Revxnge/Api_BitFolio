@@ -7,12 +7,15 @@
         public string Cnpj { get; set; } 
         public string Email { get; set; } 
         public string Descricao { get; set; } 
-        public List<Endereco> Endereco { get; set; } 
-        public string LogoUrl { get; set; } 
+        public string? LogoUrl { get; set; } 
         public bool Ativo { get; set; }
         public DateTime? DtAprovacao { get; set; } 
-        public DateTime DtCadastro { get; set; } 
+        public DateTime DtCadastro { get; set; }
+        public int? EnderecoId { get; set; }
 
+        // Propriedade de navegação
+        public Endereco Endereco { get; set; }
+        public List<Vagas> Vagas { get; set; }
         // Método de anonimização
         public void Anonimizar()
         {

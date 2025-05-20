@@ -15,7 +15,9 @@ namespace ApiJobfy.models
         public string Cargo { get; set; } 
         public bool Aprovado { get; set; } 
         public TimeOnly? DtAprovacao { get; set; } 
-        public DateTime DtCadastro { get; set; } 
+        public DateTime DtCadastro { get; set; }
+
+        public ICollection<LogAdministrador> LogAdministradores { get; set; }
 
         // Método de anonimização
         public void Anonimizar()
