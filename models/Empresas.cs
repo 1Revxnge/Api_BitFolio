@@ -1,5 +1,6 @@
-﻿namespace ApiJobfy.models
-{
+﻿namespace ApiJobfy.models;
+using System.ComponentModel.DataAnnotations;
+
     public class Empresas
     {
         public int Id { get; set; } 
@@ -26,4 +27,4 @@
    
         }
     }
-}
+
