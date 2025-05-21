@@ -21,7 +21,9 @@ namespace ApiJobfy.models
         public TimeOnly? DtDemissao { get; set; } 
         public DateTime DtCriacao { get; set; } 
         public DateTime DtAtualizacao { get; set; }
-        public bool Ativo { get; set; } 
+        public bool Ativo { get; set; }
+
+        public ICollection<LogFuncionarios> LogFuncionarios { get; set; }
 
         // Método independente de anonimização
         public void Anonimizar()

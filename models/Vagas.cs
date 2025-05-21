@@ -1,6 +1,6 @@
 ﻿namespace ApiJobfy.models
 {
-    public class Vaga
+    public class Vagas
     {
         public int Id { get; set; } 
         public int NegocioId { get; set; } 
@@ -16,7 +16,8 @@
         public TimeOnly DtFim { get; set; } 
         public bool Ativo { get; set; } 
         public DateTime DtCadastro { get; set; }
-        public DateTime DtAtualizacao { get; set; } 
+        public DateTime DtAtualizacao { get; set; }
+        public Empresas Empresa { get; set; }
 
         public void Anonimizar()
         {

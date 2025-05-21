@@ -5,14 +5,18 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ApiJobfy.Services.ApiJobfy.Services;
+using ApiJobfy.Services.IService;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-// Add DbContext with InMemory database for demo
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseInMemoryDatabase("ApiDb"));
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        new MySqlServerVersion(new Version(8, 0, 36))  // Certifique-se de que a versão do MySQL está correta
+    ));
 
 // Add controllers
 builder.Services.AddControllers();
@@ -23,6 +27,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IFuncionarioService, FuncionarioService>();
 
 // Configure Authentication with JWT
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");

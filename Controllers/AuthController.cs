@@ -1,6 +1,6 @@
 using ApiJobfy.models;
 using ApiJobfy.models.DTOs;
-using ApiJobfy.Services;
+using ApiJobfy.Services.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

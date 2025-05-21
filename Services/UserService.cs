@@ -1,5 +1,7 @@
 using ApiJobfy.Data;
+using ApiJobfy.Services.IService;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace ApiJobfy.Services
 {
@@ -14,6 +16,7 @@ namespace ApiJobfy.Services
 
         public async Task<bool> ExistsByEmailAsync(string email)
         {
+
             // Verifica se o email existe na tabela de Candidatos
             bool candidatoExiste = await _dbContext.Candidatos
                                                    .AnyAsync(c => c.Email.ToLower() == email.ToLower());
@@ -33,6 +36,7 @@ namespace ApiJobfy.Services
                                                       .AnyAsync(f => f.Email.ToLower() == email.ToLower());
 
             return funcionarioExiste;
+
         }
 
     }
