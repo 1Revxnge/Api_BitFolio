@@ -3,16 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\migrations\\appdbcontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|solutionrelative:migrations\\appdbcontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\migrations\\20250520185014_initialcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|solutionrelative:migrations\\20250520185014_initialcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\models\\empresas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|solutionrelative:models\\empresas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\services\\iservice\\icandidatoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|solutionrelative:services\\iservice\\icandidatoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\services\\candidatoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -27,6 +19,22 @@
       "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|solutionrelative:controllers\\funcionariocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\models\\vagas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|solutionrelative:models\\vagas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\models\\empresas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|solutionrelative:models\\empresas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\migrations\\appdbcontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|solutionrelative:migrations\\appdbcontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\migrations\\20250520185014_initialcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|solutionrelative:migrations\\20250520185014_initialcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|solutionrelative:services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -35,20 +43,12 @@
       "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|solutionrelative:models\\endereco.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\services\\iservice\\icandidatoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|solutionrelative:services\\iservice\\icandidatoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|solutionrelative:services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\models\\candidato.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|solutionrelative:models\\candidato.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\models\\vagas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|solutionrelative:models\\vagas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\models\\logadministrador.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -126,76 +126,50 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "AppDbContextModelSnapshot.cs",
-              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Migrations\\AppDbContextModelSnapshot.cs",
-              "RelativeDocumentMoniker": "Migrations\\AppDbContextModelSnapshot.cs",
-              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Migrations\\AppDbContextModelSnapshot.cs",
-              "RelativeToolTip": "Migrations\\AppDbContextModelSnapshot.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-21T00:07:31.362Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "20250520185014_InitialCreate.cs",
-              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Migrations\\20250520185014_InitialCreate.cs",
-              "RelativeDocumentMoniker": "Migrations\\20250520185014_InitialCreate.cs",
-              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Migrations\\20250520185014_InitialCreate.cs",
-              "RelativeToolTip": "Migrations\\20250520185014_InitialCreate.cs",
-              "ViewState": "AgIAAIEBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-21T00:07:28.143Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "Empresas.cs",
               "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\Empresas.cs",
               "RelativeDocumentMoniker": "models\\Empresas.cs",
               "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\Empresas.cs",
               "RelativeToolTip": "models\\Empresas.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAwAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-21T00:06:19.155Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "CandidatoService.cs",
               "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Services\\CandidatoService.cs",
               "RelativeDocumentMoniker": "Services\\CandidatoService.cs",
               "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Services\\CandidatoService.cs",
               "RelativeToolTip": "Services\\CandidatoService.cs",
-              "ViewState": "AgIAACMAAAAAAAAAAAAgwC8AAAA8AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-20T23:57:04.102Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "CandidatoController.cs",
               "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Controllers\\CandidatoController.cs",
               "RelativeDocumentMoniker": "Controllers\\CandidatoController.cs",
               "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Controllers\\CandidatoController.cs",
               "RelativeToolTip": "Controllers\\CandidatoController.cs",
-              "ViewState": "AgIAABIAAAAAAAAAAAA1wC4AAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAABUAAAAAAAAAAAAYwCgAAAAbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-20T23:18:50.012Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 3,
               "Title": "FuncionarioController.cs",
               "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Controllers\\FuncionarioController.cs",
               "RelativeDocumentMoniker": "Controllers\\FuncionarioController.cs",
@@ -208,7 +182,62 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Vagas.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\Vagas.cs",
+              "RelativeDocumentMoniker": "models\\Vagas.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\Vagas.cs",
+              "RelativeToolTip": "models\\Vagas.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-20T23:31:25.98Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ICandidatoService.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Services\\IService\\ICandidatoService.cs",
+              "RelativeDocumentMoniker": "Services\\IService\\ICandidatoService.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Services\\IService\\ICandidatoService.cs",
+              "RelativeToolTip": "Services\\IService\\ICandidatoService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-20T23:54:15.867Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 6,
+              "Title": "AppDbContextModelSnapshot.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Migrations\\AppDbContextModelSnapshot.cs",
+              "RelativeDocumentMoniker": "Migrations\\AppDbContextModelSnapshot.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Migrations\\AppDbContextModelSnapshot.cs",
+              "RelativeToolTip": "Migrations\\AppDbContextModelSnapshot.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAuwBoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-21T00:07:31.362Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "20250520185014_InitialCreate.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Migrations\\20250520185014_InitialCreate.cs",
+              "RelativeDocumentMoniker": "Migrations\\20250520185014_InitialCreate.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Migrations\\20250520185014_InitialCreate.cs",
+              "RelativeToolTip": "Migrations\\20250520185014_InitialCreate.cs",
+              "ViewState": "AgIAAIEBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-21T00:07:28.143Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
               "Title": "EmailService.cs",
               "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Services\\EmailService.cs",
               "RelativeDocumentMoniker": "Services\\EmailService.cs",
@@ -216,12 +245,11 @@
               "RelativeToolTip": "Services\\EmailService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-08T20:49:25.814Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-08T20:49:25.814Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "Endereco.cs",
               "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\Endereco.cs",
               "RelativeDocumentMoniker": "models\\Endereco.cs",
@@ -229,12 +257,11 @@
               "RelativeToolTip": "models\\Endereco.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-20T23:31:23.318Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-20T23:31:23.318Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "AuthService.cs",
               "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Services\\AuthService.cs",
               "RelativeDocumentMoniker": "Services\\AuthService.cs",
@@ -242,25 +269,11 @@
               "RelativeToolTip": "Services\\AuthService.cs",
               "ViewState": "AgIAABIAAAAAAAAAAAAIwDwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-08T20:04:18.888Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-08T20:04:18.888Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "ICandidatoService.cs",
-              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Services\\IService\\ICandidatoService.cs",
-              "RelativeDocumentMoniker": "Services\\IService\\ICandidatoService.cs",
-              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Services\\IService\\ICandidatoService.cs",
-              "RelativeToolTip": "Services\\IService\\ICandidatoService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-20T23:54:15.867Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "Candidato.cs",
               "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\Candidato.cs",
               "RelativeDocumentMoniker": "models\\Candidato.cs",
@@ -268,21 +281,7 @@
               "RelativeToolTip": "models\\Candidato.cs",
               "ViewState": "AgIAABAAAAAAAAAAAAAQwAUAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-20T20:06:28.509Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "Vagas.cs",
-              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\Vagas.cs",
-              "RelativeDocumentMoniker": "models\\Vagas.cs",
-              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\Vagas.cs",
-              "RelativeToolTip": "models\\Vagas.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-20T23:31:25.98Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-20T20:06:28.509Z"
             },
             {
               "$type": "Document",
@@ -294,8 +293,7 @@
               "RelativeToolTip": "models\\LogAdministrador.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-20T23:31:24.81Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-20T23:31:24.81Z"
             },
             {
               "$type": "Document",
@@ -307,8 +305,7 @@
               "RelativeToolTip": "models\\funcionarios.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-20T23:31:24.009Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-20T23:31:24.009Z"
             },
             {
               "$type": "Document",
@@ -320,8 +317,7 @@
               "RelativeToolTip": "models\\administrador.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-20T23:31:22.11Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-20T23:31:22.11Z"
             },
             {
               "$type": "Document",
@@ -333,8 +329,7 @@
               "RelativeToolTip": "models\\DTOs\\LoginDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-20T23:31:20.919Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-20T23:31:20.919Z"
             },
             {
               "$type": "Document",
@@ -346,8 +341,7 @@
               "RelativeToolTip": "Controllers\\AuthController.cs",
               "ViewState": "AgIAABoAAAAAAAAAAAAAwC8AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-08T20:04:05.624Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-08T20:04:05.624Z"
             },
             {
               "$type": "Document",
@@ -359,8 +353,7 @@
               "RelativeToolTip": "Services\\FuncionarioService.cs",
               "ViewState": "AgIAAD8AAAAAAAAAAAAowE8AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-20T23:14:49.155Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-20T23:14:49.155Z"
             },
             {
               "$type": "Document",
@@ -372,25 +365,19 @@
               "RelativeToolTip": "models\\DTOs\\registerCandidatoDto.cs",
               "ViewState": "AgIAAAUAAAAAAAAAAAAAwAoAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-20T20:06:19.308Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+              "WhenOpened": "2025-05-20T20:06:19.308Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 19,
-              "Title": "ApiJobfy",
+              "Title": "ApiJobfy.csproj",
               "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\ApiJobfy.csproj",
               "RelativeDocumentMoniker": "ApiJobfy.csproj",
               "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\ApiJobfy.csproj",
               "RelativeToolTip": "ApiJobfy.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-05-20T19:58:10.438Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-20T19:58:10.438Z"
             },
             {
               "$type": "Document",
@@ -402,8 +389,7 @@
               "RelativeToolTip": "Services\\UserService.cs",
               "ViewState": "AgIAAAkAAAAAAAAAAAAAwBYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-08T20:31:27.842Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-08T20:31:27.842Z"
             },
             {
               "$type": "Document",
@@ -415,8 +401,7 @@
               "RelativeToolTip": "ApiJobfy.http",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
-              "WhenOpened": "2025-05-15T21:05:12.522Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-15T21:05:12.522Z"
             },
             {
               "$type": "Document",
@@ -428,8 +413,7 @@
               "RelativeToolTip": "Program.cs",
               "ViewState": "AgIAAEQAAAAAAAAAAAAAAEYAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-15T21:03:53.525Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-15T21:03:53.525Z"
             },
             {
               "$type": "Document",
@@ -441,8 +425,7 @@
               "RelativeToolTip": "appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-05-15T21:03:52.62Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-15T21:03:52.62Z"
             },
             {
               "$type": "Document",
@@ -454,8 +437,7 @@
               "RelativeToolTip": "Properties\\launchSettings.json",
               "ViewState": "AgIAAAwAAAAAAAAAAAAAACIAAAADAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-05-15T21:06:03.149Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-15T21:06:03.149Z"
             },
             {
               "$type": "Document",
@@ -467,8 +449,7 @@
               "RelativeToolTip": "Services\\IService\\IEmailService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-08T20:49:37.108Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-08T20:49:37.108Z"
             },
             {
               "$type": "Document",
@@ -480,8 +461,7 @@
               "RelativeToolTip": "Services\\IService\\IUserService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-08T20:49:37.997Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-08T20:49:37.997Z"
             },
             {
               "$type": "Document",
@@ -492,8 +472,7 @@
               "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\ApiJobfy.csproj",
               "RelativeToolTip": "ApiJobfy.csproj",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-05-15T21:23:35.437Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-15T21:23:35.437Z"
             },
             {
               "$type": "Document",
@@ -505,8 +484,7 @@
               "RelativeToolTip": "data\\AppDbContext.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-15T21:05:59.397Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-15T21:05:59.397Z"
             }
           ]
         }
