@@ -11,7 +11,8 @@
         public string Estado { get; set; } 
         public string Cep { get; set; }
         public DateTime DtCriacao { get; set; } 
-        public DateTime DtAtualizacao { get; set; } 
+        public DateTime DtAtualizacao { get; set; }
+        public ICollection<Empresas> Empresas { get; set; }
 
         // Método de anonimização
         public void Anonimizar()
