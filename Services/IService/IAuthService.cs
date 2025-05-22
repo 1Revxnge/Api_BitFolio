@@ -1,7 +1,7 @@
 using ApiJobfy.models;
 using ApiJobfy.models.DTOs;
 
-namespace ApiJobfy.Services
+namespace ApiJobfy.Services.IService
 {
     public interface IAuthService
     {

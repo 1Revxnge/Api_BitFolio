@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using ApiJobfy.Services.IService;
 using Microsoft.Extensions.Logging;
 
 namespace ApiJobfy.Services

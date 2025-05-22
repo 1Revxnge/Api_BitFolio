@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ApiJobfy.Services.ApiJobfy.Services;
+using ApiJobfy.Services.IService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,6 +65,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 
 app.UseRouting();
+app.MapGet("/", () => "API funcionando!"); // Esta linha mapeia a raiz "/".
 
 app.UseAuthentication();
 app.UseAuthorization();

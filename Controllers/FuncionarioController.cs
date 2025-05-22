@@ -6,7 +6,7 @@ using ApiJobfy.Services.ApiJobfy.Services;
 namespace ApiJobfy.Controllers
 {
     [ApiController]
-    [Route("api_jobfy/[controller]")]
+    [Route("api/funcionario")]
     public class FuncionarioController : ControllerBase
     {
         private readonly IFuncionarioService _funcionarioService;

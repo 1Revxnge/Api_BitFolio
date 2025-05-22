@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using ApiJobfy.models;
 
-namespace ApiJobfy.Services
+namespace ApiJobfy.Services.IService
 {
     public interface IEmpresaService
     {

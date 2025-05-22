@@ -3,16 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\Allison_2\\ApiJobfy\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|c:\\users\\allison_2\\apijobfy\\services\\vagaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|solutionrelative:services\\vagaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|c:\\users\\allison_2\\apijobfy\\services\\iservice\\iempresaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|solutionrelative:services\\iservice\\iempresaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|c:\\users\\allison_2\\apijobfy\\services\\ivagaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|solutionrelative:services\\ivagaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|c:\\users\\allison_2\\apijobfy\\services\\iservice\\ivagaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|solutionrelative:services\\iservice\\ivagaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|c:\\users\\allison_2\\apijobfy\\controllers\\vagascontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|solutionrelative:controllers\\vagascontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|c:\\users\\allison_2\\apijobfy\\services\\vagaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|ApiJobfy.csproj|solutionrelative:services\\vagaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -27,12 +31,25 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "IEmpresaService.cs",
+              "DocumentMoniker": "C:\\Users\\Allison_2\\ApiJobfy\\Services\\IService\\IEmpresaService.cs",
+              "RelativeDocumentMoniker": "Services\\IService\\IEmpresaService.cs",
+              "ToolTip": "C:\\Users\\Allison_2\\ApiJobfy\\Services\\IService\\IEmpresaService.cs",
+              "RelativeToolTip": "Services\\IService\\IEmpresaService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-22T01:09:02.623Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "VagaService.cs",
               "DocumentMoniker": "C:\\Users\\Allison_2\\ApiJobfy\\Services\\VagaService.cs",
               "RelativeDocumentMoniker": "Services\\VagaService.cs",
               "ToolTip": "C:\\Users\\Allison_2\\ApiJobfy\\Services\\VagaService.cs",
               "RelativeToolTip": "Services\\VagaService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAwAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-22T00:42:17.155Z",
               "EditorCaption": ""
@@ -41,10 +58,10 @@
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "IVagaService.cs",
-              "DocumentMoniker": "C:\\Users\\Allison_2\\ApiJobfy\\Services\\IVagaService.cs",
-              "RelativeDocumentMoniker": "Services\\IVagaService.cs",
-              "ToolTip": "C:\\Users\\Allison_2\\ApiJobfy\\Services\\IVagaService.cs",
-              "RelativeToolTip": "Services\\IVagaService.cs",
+              "DocumentMoniker": "C:\\Users\\Allison_2\\ApiJobfy\\Services\\IService\\IVagaService.cs",
+              "RelativeDocumentMoniker": "Services\\IService\\IVagaService.cs",
+              "ToolTip": "C:\\Users\\Allison_2\\ApiJobfy\\Services\\IService\\IVagaService.cs",
+              "RelativeToolTip": "Services\\IService\\IVagaService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-22T00:41:48.591Z",
@@ -58,7 +75,7 @@
               "RelativeDocumentMoniker": "Controllers\\VagasController.cs",
               "ToolTip": "C:\\Users\\Allison_2\\ApiJobfy\\Controllers\\VagasController.cs",
               "RelativeToolTip": "Controllers\\VagasController.cs",
-              "ViewState": "AgIAACsAAAAAAAAAAAArwDYAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAACsAAAAAAAAAAIA6wDYAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-22T00:35:58.003Z",
               "EditorCaption": ""

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ApiJobfy.Services;
 using System.Threading.Tasks;
 using ApiJobfy.models;
+using ApiJobfy.Services.IService;
 
 namespace ApiJobfy.Controllers
 {

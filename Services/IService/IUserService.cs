@@ -1,4 +1,4 @@
-namespace ApiJobfy.Services
+namespace ApiJobfy.Services.IService
 {
     public interface IUserService
     {

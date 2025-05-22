@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using ApiJobfy.Data;
 using ApiJobfy.models;
+using ApiJobfy.Services.IService;
 using Microsoft.EntityFrameworkCore;       
 
 namespace ApiJobfy.Services
