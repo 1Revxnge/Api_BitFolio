@@ -28,15 +28,12 @@ namespace ApiJobfy.Services
             // Hash password
             string senhaHash = HashPassword(dto.Senha);
             DateTime agora = DateTime.Now;
-            // Encrypt PDF (currículo)
             byte[] curriculoBytes;
             using (var ms = new MemoryStream())
             {
                 await dto.CurriculoPdf.CopyToAsync(ms);
-                curriculoBytes = ms.ToArray();
+                curriculoBytes = ms.ToArray(); // Obtém os bytes do arquivo PDF
             }
-            var curriculoCriptografado = EncryptData(curriculoBytes);
-
             var candidato = new Candidato
             {
                 Nome = dto.Nome,
@@ -44,9 +41,11 @@ namespace ApiJobfy.Services
                 SenhaHash = senhaHash,
                 DtNascimento = dto.DataNascimento,
                 Telefone = dto.Telefone,
-                CurriculoCriptografado = curriculoCriptografado,
+                CurriculoCriptografado = curriculoBytes,
                 DtCriacao = agora,
-                Status = "Aprovado"
+                Status = "Aprovado",
+                Ativo =  true
+
             };
 
             _dbContext.Candidatos.Add(candidato);

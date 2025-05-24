@@ -20,7 +20,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Add controllers
 builder.Services.AddControllers();
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy =>
+        {
+            policy.AllowAnyOrigin() // Permite qualquer origem
+                .AllowAnyHeader() // Permite qualquer cabeçalho
+                .AllowAnyMethod(); // Permite qualquer método HTTP
+        });
+});
 // Add AutoMapper if needed (not added now for simplicity)
 
 // Add custom services
@@ -61,6 +70,7 @@ builder.Services.AddAuthorization(options =>
 });
 
 var app = builder.Build();
+app.UseCors("AllowAll"); // Aplica a política de CORS
 
 // Configure the HTTP request pipeline.
 

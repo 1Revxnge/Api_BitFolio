@@ -32,7 +32,37 @@ namespace ApiJobfy.Controllers
 
             var user = await _authService.RegisterCandidatoAsync(dto);
 
-            return CreatedAtAction(nameof(RegisterCandidato), new { id = user.Id }, new { user.Id, user.Nome, user.Email });
+            return Ok(new { user.Id, user.Nome, user.Email });
+        }
+        [HttpPost("register/funcionario")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RegisterFuncionario([FromForm] RegisterCandidatoDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var exists = await _userService.ExistsByEmailAsync(dto.Email);
+            if (exists)
+                return Conflict("Email já cadastrado");
+
+            var user = await _authService.RegisterFuncionarioAsync(dto);
+
+            return Ok(new { user.Id, user.Nome, user.Email });
+        }
+        [HttpPost("register/candidato")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RegisterAdmin([FromForm] RegisterCandidatoDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var exists = await _userService.ExistsByEmailAsync(dto.Email);
+            if (exists)
+                return Conflict("Email já cadastrado");
+
+            var user = await _authService.RegisterAdminAsync(dto);
+
+            return Ok(new { user.Id, user.Nome, user.Email });
         }
 
         [HttpPost("login")]
