@@ -36,7 +36,7 @@ namespace ApiJobfy.Controllers
         }
         [HttpPost("register/funcionario")]
         [AllowAnonymous]
-        public async Task<IActionResult> RegisterFuncionario([FromForm] RegisterCandidatoDto dto)
+        public async Task<IActionResult> RegisterFuncionario([FromBody] RegisterFuncionarioDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -49,9 +49,10 @@ namespace ApiJobfy.Controllers
 
             return Ok(new { user.Id, user.Nome, user.Email });
         }
-        [HttpPost("register/candidato")]
+
+        [HttpPost("register/admin")]
         [AllowAnonymous]
-        public async Task<IActionResult> RegisterAdmin([FromForm] RegisterCandidatoDto dto)
+        public async Task<IActionResult> RegisterAdmin([FromBody] RegisterAdminDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -60,7 +61,7 @@ namespace ApiJobfy.Controllers
             if (exists)
                 return Conflict("Email já cadastrado");
 
-            var user = await _authService.RegisterAdminAsync(dto);
+            var user = await _authService.RegisterAdministradorAsync(dto);
 
             return Ok(new { user.Id, user.Nome, user.Email });
         }
@@ -69,12 +70,59 @@ namespace ApiJobfy.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            var token = await _authService.LoginAsync(dto.Email, dto.Senha);
+            try
+            {
+                var token = await _authService.LoginAsync(dto.Email, dto.Senha, dto.Tipo);
+                return Ok(new { Token = token });
+            }
+            catch (InvalidOperationException ex)
+            {
+                var mensagem = ex.Message;
+                int? tentativasRestantes = null;
 
-            if (token == null)
-                return Unauthorized("Credenciais inválidas");
+                var partes = mensagem.Split("Tentativas restantes:");
+                if (partes.Length == 2 && int.TryParse(partes[1].Trim(), out var restantes))
+                {
+                    tentativasRestantes = restantes;
+                    mensagem = partes[0].Trim();
+                }
 
-            return Ok(new { Token = token });
+                return Unauthorized(new
+                {
+                    success = false,
+                    mensagem,
+                    tentativasRestantes
+                });
+            }
+        }
+
+        [HttpPost("recuperar-senha")]
+        [AllowAnonymous]
+        public async Task<IActionResult> EnviarCodigoRecuperacao([FromBody] string email)
+        {
+            try
+            {
+                await _authService.EnviarTokenRecuperacaoAsync(email);
+                return Ok(new { mensagem = "Código de recuperação enviado para o e-mail informado." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensagem = $"Erro ao enviar código: {ex.Message}" });
+            }
+        }
+        [HttpPost("redefinir-senha")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RedefinirSenha([FromBody] RedefinirSenhaDto dto)
+        {
+            try
+            {
+                await _authService.RedefinirSenhaAsync(dto.Email, dto.Codigo, dto.NovaSenha);
+                return Ok(new { mensagem = "Senha redefinida com sucesso!" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensagem = ex.Message });
+            }
         }
     }
 }

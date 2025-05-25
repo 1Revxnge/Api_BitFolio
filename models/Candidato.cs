@@ -41,6 +41,8 @@ namespace ApiJobfy.models
 
         public ICollection<LogCandidato> LogCandidatos { get; set; }
         public ICollection<Permissoes> Permissoes { get; set; }
+        public ICollection<Vagas> VagasInscritas { get; set; } = new List<Vagas>();
+
         // Anonimizar currículo (limpar dados sensíveis eventualmente)
         public virtual void Anonimizar()
         {

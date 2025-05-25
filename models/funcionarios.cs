@@ -12,13 +12,13 @@ namespace ApiJobfy.models
         public string Nome { get; set; } 
         public string Email { get; set; } 
         public string Senha { get; set; }
-        public TimeOnly DtNascimento { get; set; } 
+        public DateOnly DtNascimento { get; set; } 
         public decimal Salario { get; set; } 
         public string Cargo { get; set; } 
         public string Telefone { get; set; } 
         public string StatusFunc { get; set; }
-        public TimeOnly DtAdmissao { get; set; } 
-        public TimeOnly? DtDemissao { get; set; } 
+        public DateOnly DtAdmissao { get; set; } 
+        public DateOnly? DtDemissao { get; set; } 
         public DateTime DtCriacao { get; set; } 
         public DateTime DtAtualizacao { get; set; }
         public bool Ativo { get; set; }

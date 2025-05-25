@@ -16,11 +16,13 @@ namespace ApiJobfy.Services
     {
         private readonly AppDbContext _dbContext;
         private readonly IConfiguration _configuration;
+        private readonly IEmailService _emailService;
 
-        public AuthService(AppDbContext dbContext, IConfiguration configuration)
+        public AuthService(AppDbContext dbContext, IConfiguration configuration, IEmailService emailservice)
         {
             _dbContext = dbContext;
             _configuration = configuration;
+            _emailService = emailservice;
         }
 
         public async Task<Candidato> RegisterCandidatoAsync(RegisterCandidatoDto dto)
@@ -53,66 +55,323 @@ namespace ApiJobfy.Services
 
             return candidato;
         }
-
-        public async Task<string?> LoginAsync(string email, string senha)
+        public async Task<Funcionario> RegisterFuncionarioAsync(RegisterFuncionarioDto dto)
         {
-            TestarHashing();
+            string senhaHash = HashPassword(dto.Senha);
+            DateTime agora = DateTime.Now;
 
-            // Tenta buscar o usuário nas 3 tabelas (Candidatos, Administradores e Funcionarios)
-            var candidato = await _dbContext.Candidatos
-                                            .FirstOrDefaultAsync(c => c.Email.ToLower() == email.ToLower());
+            var funcionario = new Funcionario
+            {
+                Nome = dto.Nome,
+                Email = dto.Email,
+                Senha = senhaHash,
+                Telefone = dto.Telefone,
+                DtNascimento = dto.DataNascimento,
+                Cargo = dto.Cargo,
+                NegocioId = dto.NegocioId,
+                StatusFunc = "Aprovado",
+                DtAdmissao = dto.DtAdmissao,
+                DtCriacao = agora,
+                Ativo = true,
+                
+            };
 
+            _dbContext.Funcionarios.Add(funcionario);
+            await _dbContext.SaveChangesAsync();
+
+            return funcionario;
+        }
+        public async Task<Administrador> RegisterAdministradorAsync(RegisterAdminDto dto)
+        {
+            string senhaHash = HashPassword(dto.Senha);
+            DateTime agora = DateTime.Now;
+
+            var administrador = new Administrador
+            {
+                Nome = dto.Nome,
+                Email = dto.Email,
+                Senha = senhaHash,
+                Telefone = dto.Telefone,
+                DtNascimento = dto.DataNascimento,
+                Cargo = dto.Cargo,
+                NegocioId = dto.NegocioId,
+                Aprovado = true,
+                DtCadastro = agora,
+                DtAprovacao = DateOnly.FromDateTime(agora)
+
+            };
+
+            _dbContext.Administradores.Add(administrador);
+            await _dbContext.SaveChangesAsync();
+
+            return administrador;
+        }
+
+        public async Task<string?> LoginAsync(string email, string senha, string tipo)
+        {
+            email = email.ToLower().Trim();
             senha = senha.Trim();
-            if (candidato != null)
+
+            switch (tipo.ToLower())
             {
-                if (!VerifyPassword(senha, candidato.SenhaHash))
-                    return null;  // Senha inválida
+                case "candidato":
+                    var candidato = await _dbContext.Candidatos.FirstOrDefaultAsync(c => c.Email == email);
+                    if (candidato == null)
+                        throw new InvalidOperationException("Candidato não encontrado.");
 
-                var token = GenerateJwtToken(candidato);
-                // TODO: log login (pode ser implementado)
-                return token;
+                    if (await EstaBloqueadoPorEmailCandidato(email))
+                        throw new InvalidOperationException("Este candidato está temporariamente bloqueado por várias tentativas falhas.");
+
+                    bool senhaValidaCandidato = VerifyPassword(senha, candidato.SenhaHash);
+                    await RegistrarLogCandidato(candidato.Id, senhaValidaCandidato);
+
+                    if (!senhaValidaCandidato)
+                    {
+                        int restantes = await TentativasRestantesCandidato(candidato.Id);
+                        throw new InvalidOperationException($"Credenciais inválidas. Tentativas restantes: {restantes}");
+                    }
+
+                    await LimparTentativasFalhasCandidato(candidato.Id);
+                    return GenerateJwtToken(candidato);
+
+                case "administrador":
+                    var administrador = await _dbContext.Administradores.FirstOrDefaultAsync(a => a.Email == email);
+                    if (administrador == null)
+                        throw new InvalidOperationException("Administrador não encontrado.");
+
+                    if (await EstaBloqueadoPorEmailAdministrador(email))
+                        throw new InvalidOperationException("Administrador bloqueado por muitas tentativas falhas.");
+
+                    bool senhaValidaAdmin = VerifyPassword(senha, administrador.Senha);
+                    await RegistrarLogAdministrador(administrador.Id, senhaValidaAdmin);
+
+                    if (!senhaValidaAdmin)
+                    {
+                        int restantes = await TentativasRestantesAdministrador(administrador.Id);
+                        throw new InvalidOperationException($"Credenciais inválidas. Tentativas restantes: {restantes}");
+                    }
+
+                    await LimparTentativasFalhasAdministrador(administrador.Id);
+                    return GenerateJwtToken(administrador);
+
+                case "funcionario":
+                    var funcionario = await _dbContext.Funcionarios.FirstOrDefaultAsync(f => f.Email == email);
+                    if (funcionario == null)
+                        throw new InvalidOperationException("Funcionário não encontrado.");
+
+                    if (await EstaBloqueadoPorEmailFuncionario(email))
+                        throw new InvalidOperationException("Funcionário bloqueado temporariamente.");
+
+                    bool senhaValidaFunc = VerifyPassword(senha, funcionario.Senha);
+                    await RegistrarLogFuncionario(funcionario.Id, senhaValidaFunc);
+
+                    if (!senhaValidaFunc)
+                    {
+                        int restantes = await TentativasRestantesFuncionario(funcionario.Id);
+                        throw new InvalidOperationException($"Credenciais inválidas. Tentativas restantes: {restantes}");
+                    }
+
+                    await LimparTentativasFalhasFuncionario(funcionario.Id);
+                    return GenerateJwtToken(funcionario);
+
+                default:
+                    throw new InvalidOperationException("Tipo de usuário inválido.");
             }
-
-            var administrador = await _dbContext.Administradores
-                                                .FirstOrDefaultAsync(a => a.Email.ToLower() == email.ToLower());
-
-            if (administrador != null)
-            {
-                if (!VerifyPassword(senha, administrador.Senha))
-                    return null;  // Senha inválida
-
-                var token = GenerateJwtToken(administrador);
-                // TODO: log login (pode ser implementado)
-                return token;
-            }
-
-            var funcionario = await _dbContext.Funcionarios
-                                              .FirstOrDefaultAsync(f => f.Email.ToLower() == email.ToLower());
-
-            if (funcionario != null)
-            {
-                if (!VerifyPassword(senha, funcionario.Senha))
-                    return null;  // Senha inválida
-
-                var token = GenerateJwtToken(funcionario);
-                // TODO: log login (pode ser implementado)
-                return token;
-            }
-
-            // Se nenhum usuário foi encontrado, retorna null
-            return null;
         }
 
-        public void TestarHashing()
+        private async Task RegistrarLogCandidato(int candidatoId, bool sucesso)
         {
-            string senhaTeste = "12345678";
-            string hashGerado = HashPassword(senhaTeste);
-            bool resultadoVerificacao = VerifyPassword(senhaTeste, hashGerado);
-            Console.WriteLine($"Hash gerado: {hashGerado}");
-            Console.WriteLine($"Verificação: {resultadoVerificacao}");
-            return;
+            if (sucesso)
+            {
+                var logsSucesso = await _dbContext.LogCandidatos
+                    .Where(l => l.CandidatoId == candidatoId && l.Acao == "Login bem-sucedido")
+                    .ToListAsync();
+
+                if (logsSucesso.Any())
+                    _dbContext.LogCandidatos.RemoveRange(logsSucesso);
+
+                _dbContext.LogCandidatos.Add(new LogCandidato
+                {
+                    CandidatoId = candidatoId,
+                    Acao = "Login bem-sucedido",
+                    DataAcao = DateTime.UtcNow
+                });
+            }
+            else
+            {
+                _dbContext.LogCandidatos.Add(new LogCandidato
+                {
+                    CandidatoId = candidatoId,
+                    Acao = "Login falhou",
+                    DataAcao = DateTime.UtcNow
+                });
+            }
+
+            await _dbContext.SaveChangesAsync();
         }
 
+        private async Task RegistrarLogAdministrador(int adminId, bool sucesso)
+        {
+            if (sucesso)
+            {
+                var logsSucesso = await _dbContext.LogAdministrador
+                    .Where(l => l.AdministradorId == adminId && l.Acao == "Login bem-sucedido")
+                    .ToListAsync();
+
+                if (logsSucesso.Any())
+                    _dbContext.LogAdministrador.RemoveRange(logsSucesso);
+
+                _dbContext.LogAdministrador.Add(new LogAdministrador
+                {
+                    AdministradorId = adminId,
+                    Acao = "Login bem-sucedido",
+                    DtAcao = DateTime.UtcNow
+                });
+            }
+            else
+            {
+                _dbContext.LogAdministrador.Add(new LogAdministrador
+                {
+                    AdministradorId = adminId,
+                    Acao = "Login falhou",
+                    DtAcao = DateTime.UtcNow
+                });
+            }
+
+            await _dbContext.SaveChangesAsync();
+        }
+
+
+        private async Task RegistrarLogFuncionario(int funcionarioId, bool sucesso)
+        {
+            if (sucesso)
+            {
+                var logsSucesso = await _dbContext.LogFuncionarios
+                    .Where(l => l.FuncionarioId == funcionarioId && l.Acao == "Login bem-sucedido")
+                    .ToListAsync();
+
+                if (logsSucesso.Any())
+                    _dbContext.LogFuncionarios.RemoveRange(logsSucesso);
+
+                _dbContext.LogFuncionarios.Add(new LogFuncionarios
+                {
+                    FuncionarioId = funcionarioId,
+                    Acao = "Login bem-sucedido",
+                    DtAcao = DateTime.UtcNow
+                });
+            }
+            else
+            {
+                _dbContext.LogFuncionarios.Add(new LogFuncionarios
+                {
+                    FuncionarioId = funcionarioId,
+                    Acao = "Login falhou",
+                    DtAcao = DateTime.UtcNow
+                });
+            }
+
+            await _dbContext.SaveChangesAsync();
+        }
+
+        private async Task<bool> EstaBloqueadoPorEmailCandidato(string email)
+        {
+            var candidato = await _dbContext.Candidatos.FirstOrDefaultAsync(c => c.Email.ToLower() == email.ToLower());
+            if (candidato == null)
+                return false;
+
+            var limite = DateTime.UtcNow.AddMinutes(-15);
+            var falhas = await _dbContext.LogCandidatos
+                .Where(l => l.CandidatoId == candidato.Id && l.DataAcao >= limite && l.Acao == "Login falhou")
+                .CountAsync();
+
+            return falhas >= 5;
+        }
+
+        private async Task<bool> EstaBloqueadoPorEmailAdministrador(string email)
+        {
+            var admin = await _dbContext.Administradores.FirstOrDefaultAsync(c => c.Email.ToLower() == email.ToLower());
+            if (admin == null)
+                return false;
+
+            var limite = DateTime.UtcNow.AddMinutes(-15);
+
+            var logs = await _dbContext.LogAdministrador
+                .Where(l => l.AdministradorId == admin.Id && l.DtAcao >= limite && l.Acao.Contains("Login falhou"))
+                .OrderByDescending(l => l.DtAcao)
+                .Take(5)
+                .ToListAsync();
+
+            return logs.Count >= 5;
+        }
+
+        private async Task<bool> EstaBloqueadoPorEmailFuncionario(string email)
+        {
+            var func = await _dbContext.Funcionarios.FirstOrDefaultAsync(c => c.Email.ToLower() == email.ToLower());
+            if (func == null)
+                return false;
+            var limite = DateTime.UtcNow.AddMinutes(-15);
+
+            var logs = await _dbContext.LogFuncionarios
+                .Where(l => l.FuncionarioId == func.Id && l.DtAcao >= limite && l.Acao.Contains("Login falhou"))
+                .OrderByDescending(l => l.DtAcao)
+                .Take(5)
+                .ToListAsync();
+
+            return logs.Count >= 5;
+        }
+        private async Task<int> TentativasRestantesCandidato(int candidatoId)
+        {
+            var desde = DateTime.UtcNow.AddMinutes(-15);
+            var falhas = await _dbContext.LogCandidatos
+                .CountAsync(l => l.CandidatoId == candidatoId && l.DataAcao >= desde && l.Acao == "Login falhou");
+
+            return Math.Max(0, 5 - falhas);
+        }
+
+        private async Task<int> TentativasRestantesAdministrador(int adminId)
+        {
+            var desde = DateTime.UtcNow.AddMinutes(-15);
+            var falhas = await _dbContext.LogAdministrador
+                .CountAsync(l => l.AdministradorId == adminId && l.DtAcao >= desde && l.Acao.Contains("Login falhou"));
+
+            return Math.Max(0, 5 - falhas);
+        }
+
+        private async Task<int> TentativasRestantesFuncionario(int funcionarioId)
+        {
+            var desde = DateTime.UtcNow.AddMinutes(-15);
+            var falhas = await _dbContext.LogFuncionarios
+                .CountAsync(l => l.FuncionarioId == funcionarioId && l.DtAcao >= desde && l.Acao.Contains("Login falhou"));
+
+            return Math.Max(0, 5 - falhas);
+        }
+
+        private async Task LimparTentativasFalhasCandidato(int candidatoId)
+        {
+            var logsFalhos = _dbContext.LogCandidatos
+                .Where(l => l.CandidatoId == candidatoId && l.Acao == "Login falhou");
+
+            _dbContext.LogCandidatos.RemoveRange(logsFalhos);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        private async Task LimparTentativasFalhasAdministrador(int adminId)
+        {
+            var logsFalhos = _dbContext.LogAdministrador
+                .Where(l => l.AdministradorId == adminId && l.Acao == "Login falhou");
+
+            _dbContext.LogAdministrador.RemoveRange(logsFalhos);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        private async Task LimparTentativasFalhasFuncionario(int funcionarioId)
+        {
+            var logsFalhos = _dbContext.LogFuncionarios
+                .Where(l => l.FuncionarioId == funcionarioId && l.Acao == "Login falhou");
+
+            _dbContext.LogFuncionarios.RemoveRange(logsFalhos);
+            await _dbContext.SaveChangesAsync();
+        }
         // Hash password with salt using PBKDF2
         private string HashPassword(string password)
         {
@@ -238,6 +497,74 @@ namespace ApiJobfy.Services
 
             return tokenHandler.WriteToken(token);
         }
+        public async Task EnviarTokenRecuperacaoAsync(string email)
+        {
+            email = email.ToLower().Trim();
 
+            var usuario = await BuscarUsuarioPorEmail(email);
+            if (usuario == null)
+                return; // Não revela se existe
+
+            var token = Guid.NewGuid().ToString().Substring(0, 6).ToUpper();
+
+            var entidade = new CodigoRecuperacaoSenha
+            {
+                Email = email,
+                Codigo = token,
+                CriadoEm = DateTime.UtcNow,
+                ExpiraEm = DateTime.UtcNow.AddMinutes(15),
+                Utilizado = false
+            };
+
+            _dbContext.CodigosRecuperacaoSenha.Add(entidade);
+            await _dbContext.SaveChangesAsync();
+
+            // Simule envio de e-mail
+            await _emailService.EnviarEmailAsync(email, "Recuperação de Senha", $"Seu código de verificação é: {token}");
+        }
+
+        public async Task RedefinirSenhaAsync(string email, string token, string novaSenha)
+        {
+            var recuperacao = await _dbContext.CodigosRecuperacaoSenha
+                .Where(r => r.Email == email && r.Codigo == token)
+                .OrderByDescending(r => r.ExpiraEm)
+                .FirstOrDefaultAsync();
+
+            if (recuperacao == null || recuperacao.ExpiraEm < DateTime.UtcNow)
+                throw new Exception("Token inválido ou expirado.");
+
+            var usuario = await BuscarUsuarioPorEmail(email);
+            if (usuario == null)
+                throw new Exception("Usuário não encontrado.");
+
+            var senhaHash = HashPassword(novaSenha);
+
+            if (usuario is Candidato candidato)
+                candidato.SenhaHash = senhaHash;
+            else if (usuario is Administrador admin)
+                admin.Senha = senhaHash;
+            else if (usuario is Funcionario func)
+                func.Senha = senhaHash;
+
+            _dbContext.CodigosRecuperacaoSenha.Remove(recuperacao);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        // Retorna um dos tipos de usuário
+        public async Task<object?> BuscarUsuarioPorEmail(string email)
+        {
+            email = email.ToLower().Trim();
+
+            var candidato = await _dbContext.Candidatos.FirstOrDefaultAsync(c => c.Email == email);
+            if (candidato != null) return candidato;
+
+            var admin = await _dbContext.Administradores.FirstOrDefaultAsync(a => a.Email == email);
+            if (admin != null) return admin;
+
+            var funcionario = await _dbContext.Funcionarios.FirstOrDefaultAsync(f => f.Email == email);
+            if (funcionario != null) return funcionario;
+
+            return null;
+        }
     }
 }

@@ -162,4 +162,7 @@ C:\Users\admin\source\repos\Api_Jobfy\obj\Debug\net9.0\refint\ApiJobfy.dll
 C:\Users\admin\source\repos\Api_Jobfy\obj\Debug\net9.0\ApiJobfy.pdb
 C:\Users\admin\source\repos\Api_Jobfy\obj\Debug\net9.0\ApiJobfy.genruntimeconfig.cache
 C:\Users\admin\source\repos\Api_Jobfy\obj\Debug\net9.0\ref\ApiJobfy.dll
+C:\Users\admin\source\repos\Api_Jobfy\bin\Debug\net9.0\BouncyCastle.Cryptography.dll
+C:\Users\admin\source\repos\Api_Jobfy\bin\Debug\net9.0\MailKit.dll
+C:\Users\admin\source\repos\Api_Jobfy\bin\Debug\net9.0\MimeKit.dll
 C:\Users\admin\source\repos\Api_Jobfy\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

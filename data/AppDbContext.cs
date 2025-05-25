@@ -15,6 +15,7 @@ namespace ApiJobfy.Data
         public DbSet<Vagas> Vagas => Set<Vagas>();
         public DbSet<Empresas> Empresas => Set<Empresas>();
         public DbSet<Endereco> Endereco => Set<Endereco>();
+        public DbSet<CodigoRecuperacaoSenha> CodigosRecuperacaoSenha { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -76,6 +77,12 @@ namespace ApiJobfy.Data
                 .WithMany(e => e.Vagas)
                 .HasForeignKey(v => v.NegocioId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Vagas ←→ Candidato (N:N)
+            modelBuilder.Entity<Vagas>()
+              .HasMany(v => v.CandidatosInscritos)
+              .WithMany(c => c.VagasInscritas)
+              .UsingEntity(j => j.ToTable("CandidatosVagas"));
 
             base.OnModelCreating(modelBuilder);
         }

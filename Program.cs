@@ -37,6 +37,10 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IFuncionarioService, FuncionarioService>();
+builder.Services.AddScoped<ICandidatoService, CandidatoService>();
+builder.Services.AddScoped<IEnderecoService, EnderecoService>();
+builder.Services.AddScoped<IEmpresaService, EmpresaService>();
+
 
 // Configure Authentication with JWT
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");

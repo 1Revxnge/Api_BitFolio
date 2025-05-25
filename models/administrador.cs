@@ -11,10 +11,10 @@ namespace ApiJobfy.models
         public string Senha { get; set; }
         public decimal Salario { get; set; }
         public string Telefone { get; set; }
-        public TimeOnly DtNascimento { get; set; } 
+        public DateOnly DtNascimento { get; set; } 
         public string Cargo { get; set; } 
         public bool Aprovado { get; set; } 
-        public TimeOnly? DtAprovacao { get; set; } 
+        public DateOnly? DtAprovacao { get; set; } 
         public DateTime DtCadastro { get; set; }
 
         public ICollection<LogAdministrador> LogAdministradores { get; set; }

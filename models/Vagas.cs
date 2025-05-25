@@ -18,6 +18,7 @@
         public DateTime DtCadastro { get; set; }
         public DateTime DtAtualizacao { get; set; }
         public Empresas Empresa { get; set; }
+        public ICollection<Candidato> CandidatosInscritos { get; set; } = new List<Candidato>();
 
         public void Anonimizar()
         {

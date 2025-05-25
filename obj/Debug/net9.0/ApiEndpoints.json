@@ -18,6 +18,107 @@
     ]
   },
   {
+    "ContainingType": "ApiJobfy.Controllers.VagasController",
+    "Method": "CriarVaga",
+    "RelativePath": "api_jobfy/Vagas/criarVaga",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "vaga",
+        "Type": "ApiJobfy.models.Vagas",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ApiJobfy.Controllers.VagasController",
+    "Method": "DeleteVaga",
+    "RelativePath": "api_jobfy/Vagas/deleteVaga/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ApiJobfy.Controllers.VagasController",
+    "Method": "GetVagas",
+    "RelativePath": "api_jobfy/Vagas/getVagas",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ApiJobfy.Controllers.VagasController",
+    "Method": "GetVagaById",
+    "RelativePath": "api_jobfy/Vagas/getVagasById/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ApiJobfy.Controllers.VagasController",
+    "Method": "GetVagasByNegocio",
+    "RelativePath": "api_jobfy/Vagas/getVagasByNegocio/{empresaId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "empresaId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ApiJobfy.Controllers.VagasController",
+    "Method": "UpdateVaga",
+    "RelativePath": "api_jobfy/Vagas/updateVaga",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "vaga",
+        "Type": "ApiJobfy.models.Vagas",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "ApiJobfy.Controllers.AuthController",
     "Method": "Login",
     "RelativePath": "api/auth/login",
@@ -28,6 +129,54 @@
       {
         "Name": "dto",
         "Type": "ApiJobfy.models.DTOs.LoginDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ApiJobfy.Controllers.AuthController",
+    "Method": "EnviarCodigoRecuperacao",
+    "RelativePath": "api/auth/recuperar-senha",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ApiJobfy.Controllers.AuthController",
+    "Method": "RedefinirSenha",
+    "RelativePath": "api/auth/redefinir-senha",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "ApiJobfy.models.DTOs.RedefinirSenhaDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ApiJobfy.Controllers.AuthController",
+    "Method": "RegisterAdmin",
+    "RelativePath": "api/auth/register/admin",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "ApiJobfy.models.DTOs.RegisterAdminDto",
         "IsRequired": true
       }
     ],
@@ -70,6 +219,22 @@
         "Name": "CurriculoPdf",
         "Type": "Microsoft.AspNetCore.Http.IFormFile",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ApiJobfy.Controllers.AuthController",
+    "Method": "RegisterFuncionario",
+    "RelativePath": "api/auth/register/funcionario",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "ApiJobfy.models.DTOs.RegisterFuncionarioDto",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
@@ -223,6 +388,70 @@
       {
         "Name": "empresas",
         "Type": "ApiJobfy.models.Empresas",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ApiJobfy.Controllers.EnderecoController",
+    "Method": "CreateEndereco",
+    "RelativePath": "api/endereco/createEndereco",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "endereco",
+        "Type": "ApiJobfy.models.Endereco",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ApiJobfy.Controllers.EnderecoController",
+    "Method": "DeleteEndereco",
+    "RelativePath": "api/endereco/deleteEndereco/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ApiJobfy.Controllers.EnderecoController",
+    "Method": "GetEnderecoById",
+    "RelativePath": "api/endereco/getEnderecoById/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ApiJobfy.Controllers.EnderecoController",
+    "Method": "UpdateEndereco",
+    "RelativePath": "api/endereco/updateEndereco",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "endereco",
+        "Type": "ApiJobfy.models.Endereco",
         "IsRequired": true
       }
     ],
