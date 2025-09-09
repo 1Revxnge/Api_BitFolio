@@ -30,22 +30,13 @@ namespace ApiJobfy.Services
             // Hash password
             string senhaHash = HashPassword(dto.Senha);
             DateTime agora = DateTime.Now;
-            byte[] curriculoBytes;
-            using (var ms = new MemoryStream())
-            {
-                await dto.CurriculoPdf.CopyToAsync(ms);
-                curriculoBytes = ms.ToArray(); // Obtém os bytes do arquivo PDF
-            }
             var candidato = new Candidato
             {
                 Nome = dto.Nome,
                 Email = dto.Email,
-                SenhaHash = senhaHash,
-                DtNascimento = dto.DataNascimento,
+                Senha = senhaHash,
+                DataNascimento = dto.DataNascimento,
                 Telefone = dto.Telefone,
-                CurriculoCriptografado = curriculoBytes,
-                DtCriacao = agora,
-                Status = "Aprovado",
                 Ativo =  true
 
             };
@@ -55,28 +46,23 @@ namespace ApiJobfy.Services
 
             return candidato;
         }
-        public async Task<Funcionario> RegisterFuncionarioAsync(RegisterFuncionarioDto dto)
+        public async Task<Recrutador> RegisterFuncionarioAsync(RegisterFuncionarioDto dto)
         {
             string senhaHash = HashPassword(dto.Senha);
             DateTime agora = DateTime.Now;
 
-            var funcionario = new Funcionario
+            var funcionario = new Recrutador
             {
                 Nome = dto.Nome,
                 Email = dto.Email,
                 Senha = senhaHash,
                 Telefone = dto.Telefone,
-                DtNascimento = dto.DataNascimento,
-                Cargo = dto.Cargo,
-                NegocioId = dto.NegocioId,
-                StatusFunc = "Aprovado",
-                DtAdmissao = dto.DtAdmissao,
-                DtCriacao = agora,
+                EmpresaId = dto.EmpresaId,
                 Ativo = true,
                 
             };
 
-            _dbContext.Funcionarios.Add(funcionario);
+            _dbContext.Recrutadores.Add(funcionario);
             await _dbContext.SaveChangesAsync();
 
             return funcionario;
@@ -92,14 +78,8 @@ namespace ApiJobfy.Services
                 Email = dto.Email,
                 Senha = senhaHash,
                 Telefone = dto.Telefone,
-                DtNascimento = dto.DataNascimento,
-                Cargo = dto.Cargo,
-                NegocioId = dto.NegocioId,
-                Aprovado = true,
-                DtCadastro = agora,
-                DtAprovacao = DateOnly.FromDateTime(agora)
-
-            };
+                Ativo = false //Implementação futura da aprovação do e-mail 
+            }; 
 
             _dbContext.Administradores.Add(administrador);
             await _dbContext.SaveChangesAsync();
@@ -122,16 +102,16 @@ namespace ApiJobfy.Services
                     if (await EstaBloqueadoPorEmailCandidato(email))
                         throw new InvalidOperationException("Este candidato está temporariamente bloqueado por várias tentativas falhas.");
 
-                    bool senhaValidaCandidato = VerifyPassword(senha, candidato.SenhaHash);
-                    await RegistrarLogCandidato(candidato.Id, senhaValidaCandidato);
+                    bool senhaValidaCandidato = VerifyPassword(senha, candidato.Senha);
+                    await RegistrarLogCandidato(candidato.CandidatoId, senhaValidaCandidato);
 
                     if (!senhaValidaCandidato)
                     {
-                        int restantes = await TentativasRestantesCandidato(candidato.Id);
+                        int restantes = await TentativasRestantesCandidato(candidato.CandidatoId);
                         throw new InvalidOperationException($"Credenciais inválidas. Tentativas restantes: {restantes}");
                     }
 
-                    await LimparTentativasFalhasCandidato(candidato.Id);
+                    await LimparTentativasFalhasCandidato(candidato.CandidatoId);
                     return GenerateJwtToken(candidato);
 
                 case "administrador":
@@ -143,19 +123,19 @@ namespace ApiJobfy.Services
                         throw new InvalidOperationException("Administrador bloqueado por muitas tentativas falhas.");
 
                     bool senhaValidaAdmin = VerifyPassword(senha, administrador.Senha);
-                    await RegistrarLogAdministrador(administrador.Id, senhaValidaAdmin);
+                    await RegistrarLogAdministrador(administrador.AdminId, senhaValidaAdmin);
 
                     if (!senhaValidaAdmin)
                     {
-                        int restantes = await TentativasRestantesAdministrador(administrador.Id);
+                        int restantes = await TentativasRestantesAdministrador(administrador.AdminId);
                         throw new InvalidOperationException($"Credenciais inválidas. Tentativas restantes: {restantes}");
                     }
 
-                    await LimparTentativasFalhasAdministrador(administrador.Id);
+                    await LimparTentativasFalhasAdministrador(administrador.AdminId);
                     return GenerateJwtToken(administrador);
 
                 case "funcionario":
-                    var funcionario = await _dbContext.Funcionarios.FirstOrDefaultAsync(f => f.Email == email);
+                    var funcionario = await _dbContext.Recrutadores.FirstOrDefaultAsync(f => f.Email == email);
                     if (funcionario == null)
                         throw new InvalidOperationException("Funcionário não encontrado.");
 
@@ -163,15 +143,15 @@ namespace ApiJobfy.Services
                         throw new InvalidOperationException("Funcionário bloqueado temporariamente.");
 
                     bool senhaValidaFunc = VerifyPassword(senha, funcionario.Senha);
-                    await RegistrarLogFuncionario(funcionario.Id, senhaValidaFunc);
+                    await RegistrarLogFuncionario(funcionario.RecrutadorId, senhaValidaFunc);
 
                     if (!senhaValidaFunc)
                     {
-                        int restantes = await TentativasRestantesFuncionario(funcionario.Id);
+                        int restantes = await TentativasRestantesFuncionario(funcionario.RecrutadorId);
                         throw new InvalidOperationException($"Credenciais inválidas. Tentativas restantes: {restantes}");
                     }
 
-                    await LimparTentativasFalhasFuncionario(funcionario.Id);
+                    await LimparTentativasFalhasFuncionario(funcionario.RecrutadorId);
                     return GenerateJwtToken(funcionario);
 
                 default:
@@ -179,7 +159,7 @@ namespace ApiJobfy.Services
             }
         }
 
-        private async Task RegistrarLogCandidato(int candidatoId, bool sucesso)
+        private async Task RegistrarLogCandidato(Guid candidatoId, bool sucesso)
         {
             if (sucesso)
             {
@@ -194,7 +174,7 @@ namespace ApiJobfy.Services
                 {
                     CandidatoId = candidatoId,
                     Acao = "Login bem-sucedido",
-                    DataAcao = DateTime.UtcNow
+                    DtAcao = DateTime.UtcNow
                 });
             }
             else
@@ -203,36 +183,36 @@ namespace ApiJobfy.Services
                 {
                     CandidatoId = candidatoId,
                     Acao = "Login falhou",
-                    DataAcao = DateTime.UtcNow
+                    DtAcao = DateTime.UtcNow
                 });
             }
 
             await _dbContext.SaveChangesAsync();
         }
 
-        private async Task RegistrarLogAdministrador(int adminId, bool sucesso)
+        private async Task RegistrarLogAdministrador(Guid adminId, bool sucesso)
         {
             if (sucesso)
             {
-                var logsSucesso = await _dbContext.LogAdministrador
-                    .Where(l => l.AdministradorId == adminId && l.Acao == "Login bem-sucedido")
+                var logsSucesso = await _dbContext.LogAdministradores
+                    .Where(l => l.AdminId == adminId && l.Acao == "Login bem-sucedido")
                     .ToListAsync();
 
                 if (logsSucesso.Any())
-                    _dbContext.LogAdministrador.RemoveRange(logsSucesso);
+                    _dbContext.LogAdministradores.RemoveRange(logsSucesso);
 
-                _dbContext.LogAdministrador.Add(new LogAdministrador
+                _dbContext.LogAdministradores.Add(new LogAdministrador
                 {
-                    AdministradorId = adminId,
+                    AdminId = adminId,
                     Acao = "Login bem-sucedido",
                     DtAcao = DateTime.UtcNow
                 });
             }
             else
             {
-                _dbContext.LogAdministrador.Add(new LogAdministrador
+                _dbContext.LogAdministradores.Add(new LogAdministrador
                 {
-                    AdministradorId = adminId,
+                    AdminId = adminId,
                     Acao = "Login falhou",
                     DtAcao = DateTime.UtcNow
                 });
@@ -242,29 +222,29 @@ namespace ApiJobfy.Services
         }
 
 
-        private async Task RegistrarLogFuncionario(int funcionarioId, bool sucesso)
+        private async Task RegistrarLogFuncionario(Guid funcionarioId, bool sucesso)
         {
             if (sucesso)
             {
-                var logsSucesso = await _dbContext.LogFuncionarios
-                    .Where(l => l.FuncionarioId == funcionarioId && l.Acao == "Login bem-sucedido")
+                var logsSucesso = await _dbContext.LogRecrutadores
+                    .Where(l => l.RecrutadorId == funcionarioId && l.Acao == "Login bem-sucedido")
                     .ToListAsync();
 
                 if (logsSucesso.Any())
-                    _dbContext.LogFuncionarios.RemoveRange(logsSucesso);
+                    _dbContext.LogRecrutadores.RemoveRange(logsSucesso);
 
-                _dbContext.LogFuncionarios.Add(new LogFuncionarios
+                _dbContext.LogRecrutadores.Add(new LogRecrutador
                 {
-                    FuncionarioId = funcionarioId,
+                    RecrutadorId = funcionarioId,
                     Acao = "Login bem-sucedido",
                     DtAcao = DateTime.UtcNow
                 });
             }
             else
             {
-                _dbContext.LogFuncionarios.Add(new LogFuncionarios
+                _dbContext.LogRecrutadores.Add(new LogRecrutador
                 {
-                    FuncionarioId = funcionarioId,
+                    RecrutadorId = funcionarioId,
                     Acao = "Login falhou",
                     DtAcao = DateTime.UtcNow
                 });
@@ -281,7 +261,7 @@ namespace ApiJobfy.Services
 
             var limite = DateTime.UtcNow.AddMinutes(-15);
             var falhas = await _dbContext.LogCandidatos
-                .Where(l => l.CandidatoId == candidato.Id && l.DataAcao >= limite && l.Acao == "Login falhou")
+                .Where(l => l.CandidatoId == candidato.CandidatoId && l.DtAcao >= limite && l.Acao == "Login falhou")
                 .CountAsync();
 
             return falhas >= 5;
@@ -295,8 +275,8 @@ namespace ApiJobfy.Services
 
             var limite = DateTime.UtcNow.AddMinutes(-15);
 
-            var logs = await _dbContext.LogAdministrador
-                .Where(l => l.AdministradorId == admin.Id && l.DtAcao >= limite && l.Acao.Contains("Login falhou"))
+            var logs = await _dbContext.LogAdministradores
+                .Where(l => l.AdminId == admin.AdminId && l.DtAcao >= limite && l.Acao.Contains("Login falhou"))
                 .OrderByDescending(l => l.DtAcao)
                 .Take(5)
                 .ToListAsync();
@@ -306,47 +286,47 @@ namespace ApiJobfy.Services
 
         private async Task<bool> EstaBloqueadoPorEmailFuncionario(string email)
         {
-            var func = await _dbContext.Funcionarios.FirstOrDefaultAsync(c => c.Email.ToLower() == email.ToLower());
+            var func = await _dbContext.Recrutadores.FirstOrDefaultAsync(c => c.Email.ToLower() == email.ToLower());
             if (func == null)
                 return false;
             var limite = DateTime.UtcNow.AddMinutes(-15);
 
-            var logs = await _dbContext.LogFuncionarios
-                .Where(l => l.FuncionarioId == func.Id && l.DtAcao >= limite && l.Acao.Contains("Login falhou"))
+            var logs = await _dbContext.LogRecrutadores
+                .Where(l => l.RecrutadorId == func.RecrutadorId && l.DtAcao >= limite && l.Acao.Contains("Login falhou"))
                 .OrderByDescending(l => l.DtAcao)
                 .Take(5)
                 .ToListAsync();
 
             return logs.Count >= 5;
         }
-        private async Task<int> TentativasRestantesCandidato(int candidatoId)
+        private async Task<int> TentativasRestantesCandidato(Guid candidatoId)
         {
             var desde = DateTime.UtcNow.AddMinutes(-15);
             var falhas = await _dbContext.LogCandidatos
-                .CountAsync(l => l.CandidatoId == candidatoId && l.DataAcao >= desde && l.Acao == "Login falhou");
+                .CountAsync(l => l.CandidatoId == candidatoId && l.DtAcao >= desde && l.Acao == "Login falhou");
 
             return Math.Max(0, 5 - falhas);
         }
 
-        private async Task<int> TentativasRestantesAdministrador(int adminId)
+        private async Task<int> TentativasRestantesAdministrador(Guid adminId)
         {
             var desde = DateTime.UtcNow.AddMinutes(-15);
-            var falhas = await _dbContext.LogAdministrador
-                .CountAsync(l => l.AdministradorId == adminId && l.DtAcao >= desde && l.Acao.Contains("Login falhou"));
+            var falhas = await _dbContext.LogAdministradores
+                .CountAsync(l => l.AdminId == adminId && l.DtAcao >= desde && l.Acao.Contains("Login falhou"));
 
             return Math.Max(0, 5 - falhas);
         }
 
-        private async Task<int> TentativasRestantesFuncionario(int funcionarioId)
+        private async Task<int> TentativasRestantesFuncionario(Guid funcionarioId)
         {
             var desde = DateTime.UtcNow.AddMinutes(-15);
-            var falhas = await _dbContext.LogFuncionarios
-                .CountAsync(l => l.FuncionarioId == funcionarioId && l.DtAcao >= desde && l.Acao.Contains("Login falhou"));
+            var falhas = await _dbContext.LogRecrutadores
+                .CountAsync(l => l.RecrutadorId == funcionarioId && l.DtAcao >= desde && l.Acao.Contains("Login falhou"));
 
             return Math.Max(0, 5 - falhas);
         }
 
-        private async Task LimparTentativasFalhasCandidato(int candidatoId)
+        private async Task LimparTentativasFalhasCandidato(Guid candidatoId)
         {
             var logsFalhos = _dbContext.LogCandidatos
                 .Where(l => l.CandidatoId == candidatoId && l.Acao == "Login falhou");
@@ -355,21 +335,21 @@ namespace ApiJobfy.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        private async Task LimparTentativasFalhasAdministrador(int adminId)
+        private async Task LimparTentativasFalhasAdministrador(Guid adminId)
         {
-            var logsFalhos = _dbContext.LogAdministrador
-                .Where(l => l.AdministradorId == adminId && l.Acao == "Login falhou");
+            var logsFalhos = _dbContext.LogAdministradores
+                .Where(l => l.AdminId == adminId && l.Acao == "Login falhou");
 
-            _dbContext.LogAdministrador.RemoveRange(logsFalhos);
+            _dbContext.LogAdministradores.RemoveRange(logsFalhos);
             await _dbContext.SaveChangesAsync();
         }
 
-        private async Task LimparTentativasFalhasFuncionario(int funcionarioId)
+        private async Task LimparTentativasFalhasFuncionario(Guid funcionarioId)
         {
-            var logsFalhos = _dbContext.LogFuncionarios
-                .Where(l => l.FuncionarioId == funcionarioId && l.Acao == "Login falhou");
+            var logsFalhos = _dbContext.LogRecrutadores
+                .Where(l => l.RecrutadorId == funcionarioId && l.Acao == "Login falhou");
 
-            _dbContext.LogFuncionarios.RemoveRange(logsFalhos);
+            _dbContext.LogRecrutadores.RemoveRange(logsFalhos);
             await _dbContext.SaveChangesAsync();
         }
         // Hash password with salt using PBKDF2
@@ -393,13 +373,12 @@ namespace ApiJobfy.Services
             return Convert.ToBase64String(result);
         }
 
-        // Verify a password with the hashed stored password
         private bool VerifyPassword(string password, string storedHash)
         {
             password = password.Trim();
-
             try
             {
+                //Verifica os hashs entre a senha do banco de dados e a senha inserida no site
                 var decoded = Convert.FromBase64String(storedHash);
 
                 if (decoded.Length != 49 || decoded[0] != 0x00)
@@ -418,15 +397,13 @@ namespace ApiJobfy.Services
                     iterationCount: 10000,
                     numBytesRequested: 32);
 
-                Console.WriteLine($"Salt: {BitConverter.ToString(salt)}");
-                Console.WriteLine($"Stored Hash: {BitConverter.ToString(hash)}");
-                Console.WriteLine($"Test Hash:   {BitConverter.ToString(testHash)}");
+   
 
                 bool matches = CryptographicOperations.FixedTimeEquals(hash, testHash);
 
                 if (!matches)
                 {
-                    Console.WriteLine("❌ Hashes não coincidem.");
+                    Console.WriteLine("Hashes não coincidem.");
                 }
 
                 return matches;
@@ -437,7 +414,6 @@ namespace ApiJobfy.Services
                 return false;
             }
         }
-        // Encrypt data symmetrically using AES with a fixed key (must be safe key)
         private byte[] EncryptData(byte[] data)
         {
             var key = Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"].PadRight(32).Substring(0, 32));
@@ -463,19 +439,19 @@ namespace ApiJobfy.Services
 
             if (usuario is Candidato candidato)
             {
-                claims.Add(new Claim(ClaimTypes.NameIdentifier, candidato.Id.ToString()));
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, candidato.CandidatoId.ToString()));
                 claims.Add(new Claim(ClaimTypes.Email, candidato.Email));
                 claims.Add(new Claim(ClaimTypes.Role, "Candidato"));
             }
             else if (usuario is Administrador administrador)
             {
-                claims.Add(new Claim(ClaimTypes.NameIdentifier, administrador.Id.ToString()));
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, administrador.AdminId.ToString()));
                 claims.Add(new Claim(ClaimTypes.Email, administrador.Email));
                 claims.Add(new Claim(ClaimTypes.Role, "Administrador"));
             }
-            else if (usuario is Funcionario funcionario)
+            else if (usuario is Recrutador funcionario)
             {
-                claims.Add(new Claim(ClaimTypes.NameIdentifier, funcionario.Id.ToString()));
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, funcionario.RecrutadorId.ToString()));
                 claims.Add(new Claim(ClaimTypes.Email, funcionario.Email));
                 claims.Add(new Claim(ClaimTypes.Role, "Funcionario"));
             }
@@ -503,29 +479,33 @@ namespace ApiJobfy.Services
 
             var usuario = await BuscarUsuarioPorEmail(email);
             if (usuario == null)
-                return; // Não revela se existe
+                return; 
 
             var token = Guid.NewGuid().ToString().Substring(0, 6).ToUpper();
 
-            var entidade = new CodigoRecuperacaoSenha
+            var entidade = new TokenTemporario
             {
                 Email = email,
+                Tipo = TipoToken.RecuperacaoSenha,
                 Codigo = token,
                 CriadoEm = DateTime.UtcNow,
                 ExpiraEm = DateTime.UtcNow.AddMinutes(15),
                 Utilizado = false
             };
 
-            _dbContext.CodigosRecuperacaoSenha.Add(entidade);
+            _dbContext.TokenTemporario.Add(entidade);
             await _dbContext.SaveChangesAsync();
 
-            // Simule envio de e-mail
-            await _emailService.EnviarEmailAsync(email, "Recuperação de Senha", $"Seu código de verificação é: {token}");
+            await _emailService.EnviarEmailAsync(
+                email,
+                "Recuperação de Senha",
+                $"Seu código de verificação é: {token}"
+            );
         }
 
         public async Task RedefinirSenhaAsync(string email, string token, string novaSenha)
         {
-            var recuperacao = await _dbContext.CodigosRecuperacaoSenha
+            var recuperacao = await _dbContext.TokenTemporario
                 .Where(r => r.Email == email && r.Codigo == token)
                 .OrderByDescending(r => r.ExpiraEm)
                 .FirstOrDefaultAsync();
@@ -540,16 +520,15 @@ namespace ApiJobfy.Services
             var senhaHash = HashPassword(novaSenha);
 
             if (usuario is Candidato candidato)
-                candidato.SenhaHash = senhaHash;
+                candidato.Senha = senhaHash;
             else if (usuario is Administrador admin)
                 admin.Senha = senhaHash;
-            else if (usuario is Funcionario func)
+            else if (usuario is Recrutador func)
                 func.Senha = senhaHash;
 
-            _dbContext.CodigosRecuperacaoSenha.Remove(recuperacao);
+            _dbContext.TokenTemporario.Remove(recuperacao);
             await _dbContext.SaveChangesAsync();
         }
-
         // Retorna um dos tipos de usuário
         public async Task<object?> BuscarUsuarioPorEmail(string email)
         {
@@ -561,7 +540,7 @@ namespace ApiJobfy.Services
             var admin = await _dbContext.Administradores.FirstOrDefaultAsync(a => a.Email == email);
             if (admin != null) return admin;
 
-            var funcionario = await _dbContext.Funcionarios.FirstOrDefaultAsync(f => f.Email == email);
+            var funcionario = await _dbContext.Recrutadores.FirstOrDefaultAsync(f => f.Email == email);
             if (funcionario != null) return funcionario;
 
             return null;

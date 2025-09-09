@@ -19,7 +19,7 @@ namespace ApiJobfy.Data
 
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-            optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            optionsBuilder.UseNpgsql(connectionString);
 
             return new AppDbContext(optionsBuilder.Options);
         }

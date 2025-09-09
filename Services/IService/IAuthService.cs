@@ -7,7 +7,7 @@ namespace ApiJobfy.Services.IService
     {
         Task<Candidato> RegisterCandidatoAsync(RegisterCandidatoDto dto);
         Task<Administrador> RegisterAdministradorAsync(RegisterAdminDto dto);
-        Task<Funcionario> RegisterFuncionarioAsync(RegisterFuncionarioDto dto);
+        Task<Recrutador> RegisterFuncionarioAsync(RegisterFuncionarioDto dto);
         Task EnviarTokenRecuperacaoAsync(string email);
         Task RedefinirSenhaAsync(string email, string token, string novaSenha);
         Task<string?> LoginAsync(string email, string senha, string tipo);

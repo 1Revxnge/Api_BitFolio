@@ -16,7 +16,7 @@ namespace ApiJobfy.Services
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<Empresas>> GetEmpresasAsync(int page, int pageSize)
+        public async Task<IEnumerable<Empresa>> GetEmpresasAsync(int page, int pageSize)
         {
             return await _dbContext.Empresas
                 .Where(e => e.Ativo) 
@@ -25,51 +25,39 @@ namespace ApiJobfy.Services
                 .ToListAsync();
         }
 
-        public async Task<Empresas?> GetEmpresaByIdAsync(int id)
+        public async Task<Empresa?> GetEmpresaByIdAsync(Guid id)
         {
             return await _dbContext.Empresas
-                .FirstOrDefaultAsync(e => e.Id == id && e.Ativo);
+                .FirstOrDefaultAsync(e => e.EmpresaId == id && e.Ativo);
         }
 
-        public async Task<Empresas> AddEmpresaAsync(Empresas empresa)
+        public async Task<Empresa> AddEmpresaAsync(Empresa empresa)
         {
             empresa.Ativo = true;
-            empresa.DtCadastro = DateTime.UtcNow;
-            empresa.DtAprovacao = DateTime.UtcNow;
             _dbContext.Empresas.Add(empresa);
             await _dbContext.SaveChangesAsync();
             return empresa;
         }
 
-        public async Task<bool> UpdateEmpresaAsync(Empresas empresa)
+        public async Task<bool> UpdateEmpresaAsync(Empresa empresa)
         {
             var existingEmpresa = await _dbContext.Empresas
-                .FirstOrDefaultAsync(e => e.Id == empresa.Id);
+                .FirstOrDefaultAsync(e => e.EmpresaId == empresa.EmpresaId);
 
             if (existingEmpresa == null)
                 return false;
 
             existingEmpresa.Nome = empresa.Nome;
             existingEmpresa.Email = empresa.Email;
-            existingEmpresa.Cnpj = empresa.Cnpj;
+            existingEmpresa.CNPJ = empresa.CNPJ;
             existingEmpresa.Descricao = empresa.Descricao;
             existingEmpresa.LogoUrl = empresa.LogoUrl;
-            existingEmpresa.DtAprovacao = empresa.DtAprovacao;
             existingEmpresa.EnderecoId = empresa.EnderecoId;
 
             await _dbContext.SaveChangesAsync();
             return true;
         }
 
-        public async Task<bool> SoftDeleteEmpresaAsync(int id)
-        {
-            var empresa = await _dbContext.Empresas.FirstOrDefaultAsync(e => e.Id == id);
-            if (empresa == null)
-                return false;
-
-            empresa.Ativo = false;
-            await _dbContext.SaveChangesAsync();
-            return true;
-        }
+       
     }
 }

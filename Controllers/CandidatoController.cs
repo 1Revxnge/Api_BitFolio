@@ -23,7 +23,7 @@ namespace ApiJobfy.Controllers
         }
 
         [HttpGet("getCandidatoById/{id}")]
-        public async Task<IActionResult> GetCandidatoById(int id)
+        public async Task<IActionResult> GetCandidatoById(Guid id)
         {
             var candidato = await _candidatoService.GetCandidatoByIdAsync(id);
             if (candidato == null)
@@ -44,14 +44,6 @@ namespace ApiJobfy.Controllers
             return NoContent();
         }
 
-        [HttpDelete("deleteCandidato/{id}")]
-        public async Task<IActionResult> DeleteCandidato(int id)
-        {
-            var resultado = await _candidatoService.SoftDeleteCandidatoAsync(id);
-            if (!resultado)
-                return NotFound();
-
-            return NoContent();
-        }
+       
     }
 }

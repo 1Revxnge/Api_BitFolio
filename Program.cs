@@ -11,11 +11,9 @@ using ApiJobfy.Services.IService;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        new MySqlServerVersion(new Version(8, 0, 36))  // Certifique-se de que a versão do MySQL está correta
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection")
     ));
 
 // Add controllers
@@ -25,14 +23,13 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAll",
         policy =>
         {
-            policy.AllowAnyOrigin() // Permite qualquer origem
-                .AllowAnyHeader() // Permite qualquer cabeçalho
-                .AllowAnyMethod(); // Permite qualquer método HTTP
+            policy.AllowAnyOrigin()
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
         });
 });
-// Add AutoMapper if needed (not added now for simplicity)
 
-// Add custom services
+// Custom services
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -41,9 +38,7 @@ builder.Services.AddScoped<ICandidatoService, CandidatoService>();
 builder.Services.AddScoped<IEnderecoService, EnderecoService>();
 builder.Services.AddScoped<IEmpresaService, EmpresaService>();
 
-
-// Configure Authentication with JWT
-var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+// JWT Config
 var secretKey = builder.Configuration["JwtSettings:SecretKey"];
 
 builder.Services.AddAuthentication(options =>
@@ -53,7 +48,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.RequireHttpsMetadata = false; // For dev only
+    options.RequireHttpsMetadata = false; // Somente em DEV
     options.SaveToken = true;
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -65,7 +60,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Add authorization policy (RBAC)
+// Authorization Policies
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
@@ -74,12 +69,10 @@ builder.Services.AddAuthorization(options =>
 });
 
 var app = builder.Build();
-app.UseCors("AllowAll"); // Aplica a política de CORS
-
-// Configure the HTTP request pipeline.
+app.UseCors("AllowAll");
 
 app.UseRouting();
-app.MapGet("/", () => "API funcionando!"); // Esta linha mapeia a raiz "/".
+app.MapGet("/", () => "API funcionando!");
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -87,3 +80,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+

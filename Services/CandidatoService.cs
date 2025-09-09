@@ -28,16 +28,16 @@ namespace ApiJobfy.Services
                 .ToListAsync();
         }
 
-        public async Task<Candidato?> GetCandidatoByIdAsync(int id)
+        public async Task<Candidato?> GetCandidatoByIdAsync(Guid id)
         {
             return await _dbContext.Candidatos
-                .FirstOrDefaultAsync(c => c.Id == id);
+                .FirstOrDefaultAsync(c => c.CandidatoId == id);
         }
 
         public async Task<bool> UpdateCandidatoAsync(Candidato candidato)
         {
             var existingCandidato = await _dbContext.Candidatos
-                .FirstOrDefaultAsync(c => c.Id == candidato.Id);
+                .FirstOrDefaultAsync(c => c.CandidatoId == candidato.CandidatoId);
 
             DateTime agora = DateTime.Now;
             if (existingCandidato == null)
@@ -46,26 +46,11 @@ namespace ApiJobfy.Services
             existingCandidato.Nome = candidato.Nome;
             existingCandidato.Email = candidato.Email;
             existingCandidato.Telefone = candidato.Telefone;
-            existingCandidato.CurriculoCriptografado = candidato.CurriculoCriptografado;
-            candidato.DtAtualizacao = agora;
-            // Atualize outros campos conforme necessário
 
             await _dbContext.SaveChangesAsync();
             return true;
         }
 
-        public async Task<bool> SoftDeleteCandidatoAsync(int id)
-        {
-            var candidato = await _dbContext.Candidatos
-                .FirstOrDefaultAsync(c => c.Id == id);
-
-            if (candidato == null)
-                return false;
-
-            candidato.Ativo = false; 
-            await _dbContext.SaveChangesAsync();
-            return true;
-        }
     }
 }
 

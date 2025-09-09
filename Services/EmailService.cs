@@ -18,7 +18,7 @@ namespace ApiJobfy.Services
         public async Task EnviarEmailAsync(string para, string assunto, string corpo)
         {
             var mensagem = new MimeMessage();
-            mensagem.From.Add(new MailboxAddress("JobFY", "contato.jobfy@gmail.com")); // Substitua pelo seu e-mail
+            mensagem.From.Add(new MailboxAddress("JobFY", "contato.jobfy@gmail.com")); 
             mensagem.To.Add(new MailboxAddress("", para));
             mensagem.Subject = assunto;
 

@@ -23,13 +23,8 @@ namespace ApiJobfy.models.DTOs
         public DateOnly DataNascimento { get; set; }
 
         [Required]
-        public string Cargo { get; set; } = string.Empty;
+        public Guid EmpresaId { get; set; }
 
-        [Required]
-        public int NegocioId { get; set; }
-
-        [Required]
-        public DateOnly DtAdmissao { get; set; }
 
         [Required]
         public bool Ativo { get; set; }

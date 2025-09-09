@@ -25,14 +25,14 @@ namespace ApiJobfy.Controllers
         }
 
         [HttpGet("getVagasByNegocio/{empresaId}")]
-        public async Task<IActionResult> GetVagasByNegocio(int empresaId)
+        public async Task<IActionResult> GetVagasByNegocio(Guid empresaId)
         {
             var vagas = await _vagaService.GetVagasByEmpresaIdAsync(empresaId);
             return Ok(vagas);
         }
 
         [HttpGet("getVagasById/{id}")]
-        public async Task<IActionResult> GetVagaById(int id)
+        public async Task<IActionResult> GetVagaById(Guid id)
         {
             var vagas = await _vagaService.GetVagaByIdAsync(id);
             if (vagas == null)
@@ -41,17 +41,17 @@ namespace ApiJobfy.Controllers
         }
 
         [HttpPost("criarVaga")]
-        public async Task<IActionResult> CriarVaga([FromBody] Vagas vaga)
+        public async Task<IActionResult> CriarVaga([FromBody] Vaga vaga)
         {
             if (vaga == null)
                 return BadRequest("Vaga não pode ser nula.");
 
             var vagaCriada = await _vagaService.AddVagaAsync(vaga);
-            return CreatedAtAction(nameof(GetVagaById), new { id = vagaCriada.Id }, vagaCriada);
+            return CreatedAtAction(nameof(GetVagaById), new { id = vagaCriada.VagaId }, vagaCriada);
         }
 
         [HttpPut("updateVaga")]
-        public async Task<IActionResult> UpdateVaga([FromBody] Vagas vaga)
+        public async Task<IActionResult> UpdateVaga([FromBody] Vaga vaga)
         {
             if (vaga == null)
                 return BadRequest("Vaga não pode ser nula.");
@@ -64,7 +64,7 @@ namespace ApiJobfy.Controllers
         }
 
         [HttpDelete("deleteVaga/{id}")]
-        public async Task<IActionResult> DeleteVaga(int id)
+        public async Task<IActionResult> DeleteVaga(Guid id)
         {
             var deletado = await _vagaService.DeleteVagaAsync(id);
             if (!deletado)

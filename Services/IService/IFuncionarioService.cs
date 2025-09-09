@@ -6,11 +6,10 @@ namespace ApiJobfy.Services
     {
         public interface IFuncionarioService
         {
-            Task<IEnumerable<Funcionario>> GetFuncionariosAsync(int page, int pageSize);
-            Task<Funcionario?> GetFuncionarioByIdAsync(int id);
-            Task<bool> UpdateFuncionarioAsync(Funcionario funcionario);
-            Task<Funcionario> AddFuncionarioAsync(Funcionario funcionario);
-            Task<bool> SoftDeleteFuncionarioAsync(int id);
+            Task<IEnumerable<Recrutador>> GetFuncionariosAsync(int page, int pageSize);
+            Task<Recrutador?> GetFuncionarioByIdAsync(Guid id);
+            Task<bool> UpdateFuncionarioAsync(Recrutador funcionario);
+            Task<bool> DeleteFuncionarioAsync(Guid id);
         }
     }
 }

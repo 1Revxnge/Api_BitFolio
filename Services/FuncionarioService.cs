@@ -15,67 +15,54 @@ namespace ApiJobfy.Services.ApiJobfy.Services
             _configuration = configuration;
         }
 
-        // Obter todos os Funcionarios com paginação
-        public async Task<IEnumerable<Funcionario>> GetFuncionariosAsync(int page, int pageSize)
+        public async Task<IEnumerable<Recrutador>> GetFuncionariosAsync(int page, int pageSize)
         {
-            return await _dbContext.Funcionarios
-                .Skip((page - 1) * pageSize)  // Paginação
-                .Take(pageSize)              // Limita os resultados
+            return await _dbContext.Recrutadores
+                .Skip((page - 1) * pageSize)  
+                .Take(pageSize)              
                 .ToListAsync();
         }
 
-        // Obter um Funcionario pelo ID
-        public async Task<Funcionario?> GetFuncionarioByIdAsync(int id)
+        public async Task<Recrutador?> GetFuncionarioByIdAsync(Guid id)
         {
-            return await _dbContext.Funcionarios
-                .FirstOrDefaultAsync(f => f.Id == id);
+            return await _dbContext.Recrutadores
+                .FirstOrDefaultAsync(f => f.RecrutadorId == id);
         }
 
-        // Atualizar um Funcionario
-        public async Task<bool> UpdateFuncionarioAsync(Funcionario funcionario)
+        public async Task<bool> UpdateFuncionarioAsync(Recrutador funcionario)
         {
-            var existingFuncionario = await _dbContext.Funcionarios
-                .FirstOrDefaultAsync(f => f.Id == funcionario.Id);
+            var existingFuncionario = await _dbContext.Recrutadores
+                .FirstOrDefaultAsync(f => f.RecrutadorId == funcionario.RecrutadorId);
 
             if (existingFuncionario == null)
-                return false; // Retorna falso se não encontrar o Funcionario
+                return false; 
 
-            // Atualiza os dados do Funcionario
             existingFuncionario.Nome = funcionario.Nome;
             existingFuncionario.Email = funcionario.Email;
             existingFuncionario.Telefone = funcionario.Telefone;
-            existingFuncionario.Cargo = funcionario.Cargo;
 
-            // Salva as alterações no banco de dados
             await _dbContext.SaveChangesAsync();
             return true;
         }
 
-        // Adicionar um novo Funcionario
-        public async Task<Funcionario> AddFuncionarioAsync(Funcionario funcionario)
+        public async Task<Recrutador> AddFuncionarioAsync(Recrutador funcionario)
         {
-            // Adiciona o novo Funcionario ao DbContext
-            _dbContext.Funcionarios.Add(funcionario);
+            _dbContext.Recrutadores.Add(funcionario);
             await _dbContext.SaveChangesAsync();
 
-            // Retorna o Funcionario adicionado com o ID gerado
             return funcionario;
         }
-
-        // Excluir um Funcionario (soft delete)
-        public async Task<bool> SoftDeleteFuncionarioAsync(int id)
+        public async Task<bool> DeleteFuncionarioAsync(Guid id)
         {
-            var funcionario = await _dbContext.Funcionarios
-                .FirstOrDefaultAsync(f => f.Id == id);
+            var funcionario = await _dbContext.Recrutadores
+                .FirstOrDefaultAsync(f => f.RecrutadorId == id);
 
             if (funcionario == null)
-                return false; // Retorna falso se não encontrar o Funcionario
+                return false;
 
-            // Marca o Funcionario como "não ativo" (soft delete)
-            funcionario.Ativo = false;  // Supondo que "Ativo" é um campo que controla a exclusão lógica
-
-            // Salva as alterações no banco de dados
+            _dbContext.Recrutadores.Remove(funcionario);
             await _dbContext.SaveChangesAsync();
+
             return true;
         }
     }

@@ -18,9 +18,8 @@ namespace ApiJobfy.Services
 
         public async Task<Endereco> AddEnderecoAsync(Endereco endereco)
         {
-            endereco.DtCriacao = DateTime.UtcNow;
 
-            _dbContext.Endereco.Add(endereco);
+            _dbContext.Enderecos.Add(endereco);
             await _dbContext.SaveChangesAsync();
 
             return endereco;
@@ -28,8 +27,8 @@ namespace ApiJobfy.Services
 
         public async Task<bool> UpdateEnderecoAsync(Endereco endereco)
         {
-            var existingEndereco = await _dbContext.Endereco
-                .FirstOrDefaultAsync(e => e.Id == endereco.Id);
+            var existingEndereco = await _dbContext.Enderecos
+                .FirstOrDefaultAsync(e => e.EnderecoId == endereco.EnderecoId);
 
             if (existingEndereco == null)
                 return false;
@@ -41,29 +40,33 @@ namespace ApiJobfy.Services
             existingEndereco.Cidade = endereco.Cidade;
             existingEndereco.Estado = endereco.Estado;
             existingEndereco.Cep = endereco.Cep;
-            existingEndereco.DtAtualizacao = DateTime.UtcNow;
 
             await _dbContext.SaveChangesAsync();
             return true;
         }
 
-        public async Task<bool> DeleteEnderecoAsync(int id)
+        public async Task<bool> DeleteEnderecoAsync(Guid id)
         {
-            var endereco = await _dbContext.Endereco
-                .FirstOrDefaultAsync(e => e.Id == id);
+            var endereco = await _dbContext.Enderecos
+                .FirstOrDefaultAsync(e => e.EnderecoId == id);
 
             if (endereco == null)
                 return false;
 
-            _dbContext.Endereco.Remove(endereco);
+            _dbContext.Enderecos.Remove(endereco);
             await _dbContext.SaveChangesAsync();
             return true;
         }
 
-        public async Task<Endereco?> GetEnderecoByIdAsync(int id)
+        public async Task<Endereco> GetEnderecoByIdAsync(Guid id)
         {
-            return await _dbContext.Endereco
-                .FirstOrDefaultAsync(e => e.Id == id);
+            var endereco = await _dbContext.Enderecos
+                .FirstOrDefaultAsync(e => e.EnderecoId == id);
+
+            if (endereco == null)
+                throw new Exception("Endereço não encontrado.");
+
+            return endereco;
         }
     }
 }

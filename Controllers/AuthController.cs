@@ -32,7 +32,7 @@ namespace ApiJobfy.Controllers
 
             var user = await _authService.RegisterCandidatoAsync(dto);
 
-            return Ok(new { user.Id, user.Nome, user.Email });
+            return Ok(new { user.CandidatoId, user.Nome, user.Email });
         }
         [HttpPost("register/funcionario")]
         [AllowAnonymous]
@@ -47,7 +47,7 @@ namespace ApiJobfy.Controllers
 
             var user = await _authService.RegisterFuncionarioAsync(dto);
 
-            return Ok(new { user.Id, user.Nome, user.Email });
+            return Ok(new { user.RecrutadorId, user.Nome, user.Email });
         }
 
         [HttpPost("register/admin")]
@@ -63,7 +63,7 @@ namespace ApiJobfy.Controllers
 
             var user = await _authService.RegisterAdministradorAsync(dto);
 
-            return Ok(new { user.Id, user.Nome, user.Email });
+            return Ok(new { user.AdminId, user.Nome, user.Email });
         }
 
         [HttpPost("login")]

@@ -6,10 +6,9 @@ namespace ApiJobfy.Services.IService
 {
     public interface IEmpresaService
     {
-        Task<Empresas> AddEmpresaAsync(Empresas empresa);
-        Task<IEnumerable<Empresas>> GetEmpresasAsync(int page, int pageSize);
-        Task<Empresas?> GetEmpresaByIdAsync(int id);
-        Task<bool> UpdateEmpresaAsync(Empresas empresa); 
-        Task<bool> SoftDeleteEmpresaAsync(int id);
+        Task<Empresa> AddEmpresaAsync(Empresa empresa);
+        Task<IEnumerable<Empresa>> GetEmpresasAsync(int page, int pageSize);
+        Task<Empresa?> GetEmpresaByIdAsync(Guid id);
+        Task<bool> UpdateEmpresaAsync(Empresa empresa); 
     }
 }

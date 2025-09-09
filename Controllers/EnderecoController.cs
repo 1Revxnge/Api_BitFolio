@@ -16,7 +16,7 @@ namespace ApiJobfy.Controllers
         }
 
         [HttpGet("getEnderecoById/{id}")]
-        public async Task<IActionResult> GetEnderecoById(int id)
+        public async Task<IActionResult> GetEnderecoById(Guid id)
         {
             var endereco = await _enderecoService.GetEnderecoByIdAsync(id);
             if (endereco == null)
@@ -32,7 +32,7 @@ namespace ApiJobfy.Controllers
                 return BadRequest("Endereço não pode ser nulo.");
 
             var novoEndereco = await _enderecoService.AddEnderecoAsync(endereco);
-            return CreatedAtAction(nameof(GetEnderecoById), new { id = novoEndereco.Id }, novoEndereco);
+            return CreatedAtAction(nameof(GetEnderecoById), new { id = novoEndereco.EnderecoId }, novoEndereco);
         }
 
         [HttpPut("updateEndereco")]
@@ -49,7 +49,7 @@ namespace ApiJobfy.Controllers
         }
 
         [HttpDelete("deleteEndereco/{id}")]
-        public async Task<IActionResult> DeleteEndereco(int id)
+        public async Task<IActionResult> DeleteEndereco(Guid id)
         {
             var resultado = await _enderecoService.DeleteEnderecoAsync(id);
             if (!resultado)

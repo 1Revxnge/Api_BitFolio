@@ -32,7 +32,7 @@ namespace ApiJobfy.Services
                 return true;
 
             // Verifica se o email existe na tabela de Funcionarios
-            bool funcionarioExiste = await _dbContext.Funcionarios
+            bool funcionarioExiste = await _dbContext.Recrutadores
                                                       .AnyAsync(f => f.Email.ToLower() == email.ToLower());
 
             return funcionarioExiste;

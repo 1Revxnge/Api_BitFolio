@@ -11,14 +11,12 @@ namespace ApiJobfy.Services
     {
         private readonly AppDbContext _dbContext;
 
-        public int Empresa { get; private set; }
-
         public VagaService(AppDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<Vagas>> GetVagasAsync(int page, int pageSize)
+        public async Task<IEnumerable<Vaga>> GetVagasAsync(int page, int pageSize)
         {
             return await _dbContext.Vagas
                 .Skip((page - 1) * pageSize)
@@ -26,30 +24,30 @@ namespace ApiJobfy.Services
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Vagas>> GetVagasByEmpresaIdAsync(int Empresas)
+        public async Task<IEnumerable<Vaga>> GetVagasByEmpresaIdAsync(Guid Empresas)
         {
             return await _dbContext.Vagas
-                .Where(v => Empresa == Empresas)
+                .Where(v => v.EmpresaId == Empresas)
                 .ToListAsync();
         }
 
-        public async Task<Vagas?> GetVagaByIdAsync(int id)
+        public async Task<Vaga?> GetVagaByIdAsync(Guid id)
         {
             return await _dbContext.Vagas
-                .FirstOrDefaultAsync(v => v.Id == id);
+                .FirstOrDefaultAsync(v => v.VagaId == id);
         }
 
-        public async Task<Vagas> AddVagaAsync(Vagas vaga)
+        public async Task<Vaga> AddVagaAsync(Vaga vaga)
         {
             _dbContext.Vagas.Add(vaga);
             await _dbContext.SaveChangesAsync();
             return vaga;
         }
 
-        public async Task<bool> UpdateVagaAsync(Vagas vaga)
+        public async Task<bool> UpdateVagaAsync(Vaga vaga)
         {
             var existingVaga = await _dbContext.Vagas
-                .FirstOrDefaultAsync(v => v.Id == vaga.Id);
+                .FirstOrDefaultAsync(v => v.VagaId == vaga.VagaId);
 
             if (existingVaga == null)
                 return false;
@@ -57,17 +55,16 @@ namespace ApiJobfy.Services
             existingVaga.Titulo = vaga.Titulo;
             existingVaga.Descricao = vaga.Descricao;
             existingVaga.Empresa = vaga.Empresa;
-            existingVaga.Localizacao = vaga.Localizacao;
             
             
             await _dbContext.SaveChangesAsync();
             return true;
         }
 
-        public async Task<bool> DeleteVagaAsync(int id)
+        public async Task<bool> DeleteVagaAsync(Guid id)
         {
             var vaga = await _dbContext.Vagas
-                .FirstOrDefaultAsync(v => v.Id == id);
+                .FirstOrDefaultAsync(v => v.VagaId == id);
 
             if (vaga == null)
                 return false;

@@ -6,8 +6,8 @@ namespace ApiJobfy.Services.IService
     {
      Task<Endereco> AddEnderecoAsync(Endereco endereco);
      Task<bool> UpdateEnderecoAsync(Endereco endereco);
-     Task<bool> DeleteEnderecoAsync(int id);
-     Task<Endereco> GetEnderecoByIdAsync(int id);
+     Task<bool> DeleteEnderecoAsync(Guid id);
+     Task<Endereco> GetEnderecoByIdAsync(Guid id);
      }
 }
 

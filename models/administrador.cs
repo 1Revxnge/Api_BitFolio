@@ -2,34 +2,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ApiJobfy.models
 {
-    public class Administrador 
+    public class Administrador
     {
-        public int Id { get; set; } 
-        public int NegocioId { get; set; } 
-        public string Nome { get; set; } 
-        public string Email { get; set; } 
-        public string Senha { get; set; }
-        public decimal Salario { get; set; }
-        public string Telefone { get; set; }
-        public DateOnly DtNascimento { get; set; } 
-        public string Cargo { get; set; } 
-        public bool Aprovado { get; set; } 
-        public DateOnly? DtAprovacao { get; set; } 
-        public DateTime DtCadastro { get; set; }
+        public Guid AdminId { get; set; }
+        public string Nome { get; set; } = string.Empty;
+        public string? Telefone { get; set; }
+        public string Email { get; set; } = string.Empty;
+        public string Senha { get; set; } = string.Empty;
+        public bool Ativo { get; set; } = true;
 
-        public ICollection<LogAdministrador> LogAdministradores { get; set; }
-
-        // Método de anonimização
-        public void Anonimizar()
-        {
-            // Anonimiza dados pessoais (nome, email, telefone, nascimento)
-            Nome = "Anonimizado";
-            Email = $"anonimizado{Id}@example.com";
-            Telefone = "0000000000";
-            Salario = 0m;
-            NegocioId = 0;
-
-
-        }
+        public ICollection<LogAdministrador> Logs { get; set; } = new List<LogAdministrador>();
     }
 }

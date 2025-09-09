@@ -22,7 +22,5 @@ namespace ApiJobfy.models.DTOs
         [Phone]
         public string Telefone { get; set; } = string.Empty;
 
-        [Required]
-        public IFormFile CurriculoPdf { get; set; } = null!;
     }
 }

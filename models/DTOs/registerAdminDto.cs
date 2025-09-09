@@ -20,15 +20,6 @@ namespace ApiJobfy.models.DTOs
         public string Telefone { get; set; } = string.Empty;
 
         [Required]
-        public DateOnly DataNascimento { get; set; }
-
-        [Required]
-        public string Cargo { get; set; } = string.Empty;
-
-        [Required]
-        public int NegocioId { get; set; }
-
-        [Required]
         public bool Aprovado { get; set; }
     }
 }

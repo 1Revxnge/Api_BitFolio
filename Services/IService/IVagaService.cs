@@ -6,12 +6,12 @@ namespace ApiJobfy.Services.IService
 {
     public interface IVagaService
     {
-        Task<IEnumerable<Vagas>> GetVagasAsync(int page, int pageSize);
-        Task<IEnumerable<Vagas>> GetVagasByEmpresaIdAsync(int Empresa);
-        Task<Vagas?> GetVagaByIdAsync(int id);
-        Task<Vagas> AddVagaAsync(Vagas vaga);
-        Task<bool> UpdateVagaAsync(Vagas vaga);
-        Task<bool> DeleteVagaAsync(int id);
+        Task<IEnumerable<Vaga>> GetVagasAsync(int page, int pageSize);
+        Task<IEnumerable<Vaga>> GetVagasByEmpresaIdAsync(Guid Empresa);
+        Task<Vaga?> GetVagaByIdAsync(Guid id);
+        Task<Vaga> AddVagaAsync(Vaga vaga);
+        Task<bool> UpdateVagaAsync(Vaga vaga);
+        Task<bool> DeleteVagaAsync(Guid id);
  
     }
 }

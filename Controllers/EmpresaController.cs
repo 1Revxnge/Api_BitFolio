@@ -24,7 +24,7 @@ namespace ApiJobfy.Controllers
             }
 
             [HttpGet("getEmpresasById/{id}")]
-            public async Task<IActionResult> GetEmpresasById(int id)
+            public async Task<IActionResult> GetEmpresasById(Guid id)
             {
                 var empresas = await _empresaService.GetEmpresaByIdAsync(id);
                 if (empresas == null)
@@ -33,32 +33,22 @@ namespace ApiJobfy.Controllers
             }
 
             [HttpPost("createEmp")]
-            public async Task<IActionResult> CreateEmp([FromBody] Empresas empresas)
+            public async Task<IActionResult> CreateEmp([FromBody] Empresa empresas)
             {
                 if (empresas == null)
                     return BadRequest("Empresa não pode ser nula.");
 
                 var criado = await _empresaService.AddEmpresaAsync(empresas);
-                return CreatedAtAction(nameof(GetEmpresasById), new { id = criado.Id }, criado);
+                return CreatedAtAction(nameof(GetEmpresasById), new { id = criado.EmpresaId }, criado);
             }
 
             [HttpPut("updateEmp")]
-            public async Task<IActionResult> UpdateEmp([FromBody] Empresas empresas)
+            public async Task<IActionResult> UpdateEmp([FromBody] Empresa empresas)
             {
                 if (empresas == null)
                     return BadRequest("Empresa não pode ser nula.");
 
                 var resultado = await _empresaService.UpdateEmpresaAsync(empresas);
-                if (!resultado)
-                    return NotFound();
-
-                return NoContent();
-            }
-
-            [HttpDelete("deleteEmp/{id}")]
-            public async Task<IActionResult> DeleteEmp(int id)
-            {
-                var resultado = await _empresaService.SoftDeleteEmpresaAsync(id);
                 if (!resultado)
                     return NotFound();
 

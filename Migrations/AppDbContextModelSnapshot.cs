@@ -4,6 +4,7 @@ using ApiJobfy.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -16,54 +17,36 @@ namespace ApiJobfy.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("ProductVersion", "9.0.1")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("ApiJobfy.models.Administrador", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("AdminId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uuid");
 
-                    b.Property<bool>("Aprovado")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Cargo")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateOnly?>("DtAprovacao")
-                        .HasColumnType("date");
-
-                    b.Property<DateTime>("DtCadastro")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateOnly>("DtNascimento")
-                        .HasColumnType("date");
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<int>("NegocioId")
-                        .HasColumnType("int");
+                        .HasColumnType("text");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<decimal>("Salario")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Senha")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Telefone")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("AdminId");
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -73,409 +56,438 @@ namespace ApiJobfy.Migrations
 
             modelBuilder.Entity("ApiJobfy.models.Candidato", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("CandidatoId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("Ativo")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
-                    b.Property<byte[]>("CurriculoCriptografado")
-                        .IsRequired()
-                        .HasColumnType("longblob");
+                    b.Property<Guid?>("CurriculoId")
+                        .HasColumnType("uuid");
 
-                    b.Property<DateTime>("DtAtualizacao")
-                        .HasColumnType("datetime(6)");
+                    b.Property<Guid?>("CurriculoId1")
+                        .HasColumnType("uuid");
 
-                    b.Property<DateTime>("DtCriacao")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateOnly>("DtNascimento")
+                    b.Property<DateOnly?>("DataNascimento")
                         .HasColumnType("date");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("varchar(150)");
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("EnderecoId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("varchar(150)");
+                        .HasColumnType("text");
 
-                    b.Property<string>("SenhaHash")
+                    b.Property<string>("Senha")
                         .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Telefone")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
+                        .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.Property<DateTime?>("UltimoAcesso")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("CandidatoId");
+
+                    b.HasIndex("CurriculoId")
+                        .IsUnique();
+
+                    b.HasIndex("CurriculoId1")
+                        .IsUnique();
 
                     b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("EnderecoId")
                         .IsUnique();
 
                     b.ToTable("Candidatos");
                 });
 
-            modelBuilder.Entity("ApiJobfy.models.CodigoRecuperacaoSenha", b =>
+            modelBuilder.Entity("ApiJobfy.models.CandidatoVaga", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("Codigo")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<Guid>("CandidatoId")
+                        .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CriadoEm")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("ExpiraEm")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("Utilizado")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<Guid>("VagaId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.ToTable("CodigosRecuperacaoSenha");
+                    b.HasIndex("CandidatoId");
+
+                    b.HasIndex("VagaId");
+
+                    b.ToTable("CandidatoVagas");
                 });
 
-            modelBuilder.Entity("ApiJobfy.models.Empresas", b =>
+            modelBuilder.Entity("ApiJobfy.models.Curriculo", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("CurriculoId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Certificacoes")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CompetenciasTecnicas")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Experiencias")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Idiomas")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Tecnologias")
+                        .HasColumnType("text");
+
+                    b.HasKey("CurriculoId");
+
+                    b.ToTable("Curriculos");
+                });
+
+            modelBuilder.Entity("ApiJobfy.models.Empresa", b =>
+                {
+                    b.Property<Guid>("EmpresaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("Ativo")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
-                    b.Property<string>("Cnpj")
+                    b.Property<string>("CNPJ")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DataCadastro")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("DtAprovacao")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("DtCadastro")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
-                    b.Property<int?>("EnderecoId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("EnderecoId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("LogoUrl")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.Property<string>("RazaoSocial")
+                        .HasColumnType("text");
 
-                    b.HasIndex("EnderecoId");
+                    b.HasKey("EmpresaId");
+
+                    b.HasIndex("CNPJ")
+                        .IsUnique();
+
+                    b.HasIndex("EnderecoId")
+                        .IsUnique();
 
                     b.ToTable("Empresas");
                 });
 
             modelBuilder.Entity("ApiJobfy.models.Endereco", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("EnderecoId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Bairro")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Cep")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Cidade")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Complemento")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("DtAtualizacao")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("DtCriacao")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Estado")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Numero")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("Rua")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("EnderecoId");
 
-                    b.ToTable("Endereco");
-                });
-
-            modelBuilder.Entity("ApiJobfy.models.Funcionario", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Ativo")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Cargo")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateOnly>("DtAdmissao")
-                        .HasColumnType("date");
-
-                    b.Property<DateTime>("DtAtualizacao")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("DtCriacao")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateOnly?>("DtDemissao")
-                        .HasColumnType("date");
-
-                    b.Property<DateOnly>("DtNascimento")
-                        .HasColumnType("date");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<int>("NegocioId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<decimal>("Salario")
-                        .HasColumnType("decimal(65,30)");
-
-                    b.Property<string>("Senha")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("StatusFunc")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Telefone")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.ToTable("Funcionarios");
+                    b.ToTable("Enderecos");
                 });
 
             modelBuilder.Entity("ApiJobfy.models.LogAdministrador", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("LogId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Acao")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
-                    b.Property<int>("AdministradorId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("AdminId")
+                        .HasColumnType("uuid");
 
-                    b.Property<DateTime>("DtAcao")
-                        .HasColumnType("datetime(6)");
+                    b.Property<DateTime?>("DtAcao")
+                        .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("Id");
+                    b.HasKey("LogId");
 
-                    b.HasIndex("AdministradorId");
+                    b.HasIndex("AdminId");
 
-                    b.ToTable("LogAdministrador");
+                    b.ToTable("LogAdministradores");
                 });
 
             modelBuilder.Entity("ApiJobfy.models.LogCandidato", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("LogId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Acao")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
-                    b.Property<int>("CandidatoId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CandidatoId")
+                        .HasColumnType("uuid");
 
-                    b.Property<DateTime>("DataAcao")
-                        .HasColumnType("datetime(6)");
+                    b.Property<DateTime?>("DtAcao")
+                        .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("Id");
+                    b.HasKey("LogId");
 
                     b.HasIndex("CandidatoId");
 
                     b.ToTable("LogCandidatos");
                 });
 
-            modelBuilder.Entity("ApiJobfy.models.LogFuncionarios", b =>
+            modelBuilder.Entity("ApiJobfy.models.LogRecrutador", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("LogId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Acao")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("DtAcao")
-                        .HasColumnType("datetime(6)");
+                    b.Property<DateTime?>("DtAcao")
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("FuncionarioId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("RecrutadorId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("LogId");
+
+                    b.HasIndex("RecrutadorId");
+
+                    b.ToTable("LogRecrutadores");
+                });
+
+            modelBuilder.Entity("ApiJobfy.models.Recrutador", b =>
+                {
+                    b.Property<Guid>("RecrutadorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("EmpresaId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Senha")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Telefone")
+                        .HasColumnType("text");
+
+                    b.HasKey("RecrutadorId");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("EmpresaId");
+
+                    b.ToTable("Recrutadores");
+                });
+
+            modelBuilder.Entity("ApiJobfy.models.TokenTemporario", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Codigo")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CriadoEm")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("ExpiraEm")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Tipo")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("Utilizado")
+                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FuncionarioId");
-
-                    b.ToTable("LogFuncionarios");
+                    b.ToTable("TokenTemporario");
                 });
 
-            modelBuilder.Entity("ApiJobfy.models.Permissoes", b =>
+            modelBuilder.Entity("ApiJobfy.models.Vaga", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("VagaId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("CandidatoId")
-                        .HasColumnType("int");
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("boolean");
 
-                    b.Property<DateTime>("DtPermissao")
-                        .HasColumnType("datetime(6)");
+                    b.Property<DateTime?>("DataAbertura")
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("NomePermissao")
+                    b.Property<DateTime?>("DataFechamento")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Descricao")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("EmpresaId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Escolaridade")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Modelo")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Nivel")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Requisitos")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Titulo")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
+
+                    b.HasKey("VagaId");
+
+                    b.HasIndex("EmpresaId");
+
+                    b.ToTable("Vagas");
+                });
+
+            modelBuilder.Entity("ApiJobfy.models.VagaFavorita", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CandidatoId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("VagaId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("VagaId1")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CandidatoId");
 
-                    b.ToTable("Permissoes");
+                    b.HasIndex("VagaId");
+
+                    b.HasIndex("VagaId1");
+
+                    b.ToTable("VagasFavoritas");
                 });
 
-            modelBuilder.Entity("ApiJobfy.models.Vagas", b =>
+            modelBuilder.Entity("ApiJobfy.models.Candidato", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.HasOne("ApiJobfy.models.Curriculo", "Curriculo")
+                        .WithOne()
+                        .HasForeignKey("ApiJobfy.models.Candidato", "CurriculoId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
-                    b.Property<bool>("Ativo")
-                        .HasColumnType("tinyint(1)");
+                    b.HasOne("ApiJobfy.models.Curriculo", null)
+                        .WithOne("Candidato")
+                        .HasForeignKey("ApiJobfy.models.Candidato", "CurriculoId1");
 
-                    b.Property<string>("Beneficios")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.HasOne("ApiJobfy.models.Endereco", "Endereco")
+                        .WithOne("Candidato")
+                        .HasForeignKey("ApiJobfy.models.Candidato", "EnderecoId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
-                    b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Navigation("Curriculo");
 
-                    b.Property<DateTime>("DtAtualizacao")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("DtCadastro")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<TimeOnly>("DtFim")
-                        .HasColumnType("time(6)");
-
-                    b.Property<TimeOnly>("DtInicio")
-                        .HasColumnType("time(6)");
-
-                    b.Property<string>("Escolaridade")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Localizacao")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Modalidade")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("NegocioId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantidade")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Requisitos")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Titulo")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NegocioId");
-
-                    b.ToTable("Vagas");
+                    b.Navigation("Endereco");
                 });
 
-            modelBuilder.Entity("CandidatoVagas", b =>
+            modelBuilder.Entity("ApiJobfy.models.CandidatoVaga", b =>
                 {
-                    b.Property<int>("CandidatosInscritosId")
-                        .HasColumnType("int");
+                    b.HasOne("ApiJobfy.models.Candidato", "Candidato")
+                        .WithMany("CandidatoVagas")
+                        .HasForeignKey("CandidatoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<int>("VagasInscritasId")
-                        .HasColumnType("int");
+                    b.HasOne("ApiJobfy.models.Vaga", "Vaga")
+                        .WithMany("CandidatoVagas")
+                        .HasForeignKey("VagaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasKey("CandidatosInscritosId", "VagasInscritasId");
+                    b.Navigation("Candidato");
 
-                    b.HasIndex("VagasInscritasId");
-
-                    b.ToTable("CandidatosVagas", (string)null);
+                    b.Navigation("Vaga");
                 });
 
-            modelBuilder.Entity("ApiJobfy.models.Empresas", b =>
+            modelBuilder.Entity("ApiJobfy.models.Empresa", b =>
                 {
                     b.HasOne("ApiJobfy.models.Endereco", "Endereco")
-                        .WithMany("Empresas")
-                        .HasForeignKey("EnderecoId")
+                        .WithOne("Empresa")
+                        .HasForeignKey("ApiJobfy.models.Empresa", "EnderecoId")
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Endereco");
@@ -484,8 +496,8 @@ namespace ApiJobfy.Migrations
             modelBuilder.Entity("ApiJobfy.models.LogAdministrador", b =>
                 {
                     b.HasOne("ApiJobfy.models.Administrador", "Administrador")
-                        .WithMany("LogAdministradores")
-                        .HasForeignKey("AdministradorId")
+                        .WithMany("Logs")
+                        .HasForeignKey("AdminId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -495,7 +507,7 @@ namespace ApiJobfy.Migrations
             modelBuilder.Entity("ApiJobfy.models.LogCandidato", b =>
                 {
                     b.HasOne("ApiJobfy.models.Candidato", "Candidato")
-                        .WithMany("LogCandidatos")
+                        .WithMany("Logs")
                         .HasForeignKey("CandidatoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -503,79 +515,103 @@ namespace ApiJobfy.Migrations
                     b.Navigation("Candidato");
                 });
 
-            modelBuilder.Entity("ApiJobfy.models.LogFuncionarios", b =>
+            modelBuilder.Entity("ApiJobfy.models.LogRecrutador", b =>
                 {
-                    b.HasOne("ApiJobfy.models.Funcionario", "Funcionario")
-                        .WithMany("LogFuncionarios")
-                        .HasForeignKey("FuncionarioId")
+                    b.HasOne("ApiJobfy.models.Recrutador", "Recrutador")
+                        .WithMany("Logs")
+                        .HasForeignKey("RecrutadorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Funcionario");
+                    b.Navigation("Recrutador");
                 });
 
-            modelBuilder.Entity("ApiJobfy.models.Permissoes", b =>
+            modelBuilder.Entity("ApiJobfy.models.Recrutador", b =>
                 {
-                    b.HasOne("ApiJobfy.models.Candidato", "Candidato")
-                        .WithMany("Permissoes")
-                        .HasForeignKey("CandidatoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("ApiJobfy.models.Empresa", "Empresa")
+                        .WithMany("Recrutadores")
+                        .HasForeignKey("EmpresaId");
 
-                    b.Navigation("Candidato");
+                    b.Navigation("Empresa");
                 });
 
-            modelBuilder.Entity("ApiJobfy.models.Vagas", b =>
+            modelBuilder.Entity("ApiJobfy.models.Vaga", b =>
                 {
-                    b.HasOne("ApiJobfy.models.Empresas", "Empresa")
+                    b.HasOne("ApiJobfy.models.Empresa", "Empresa")
                         .WithMany("Vagas")
-                        .HasForeignKey("NegocioId")
+                        .HasForeignKey("EmpresaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Empresa");
                 });
 
-            modelBuilder.Entity("CandidatoVagas", b =>
+            modelBuilder.Entity("ApiJobfy.models.VagaFavorita", b =>
                 {
-                    b.HasOne("ApiJobfy.models.Candidato", null)
-                        .WithMany()
-                        .HasForeignKey("CandidatosInscritosId")
+                    b.HasOne("ApiJobfy.models.Candidato", "Candidato")
+                        .WithMany("VagasFavoritas")
+                        .HasForeignKey("CandidatoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ApiJobfy.models.Vagas", null)
+                    b.HasOne("ApiJobfy.models.Vaga", "Vaga")
                         .WithMany()
-                        .HasForeignKey("VagasInscritasId")
+                        .HasForeignKey("VagaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("ApiJobfy.models.Vaga", null)
+                        .WithMany("Favoritos")
+                        .HasForeignKey("VagaId1");
+
+                    b.Navigation("Candidato");
+
+                    b.Navigation("Vaga");
                 });
 
             modelBuilder.Entity("ApiJobfy.models.Administrador", b =>
                 {
-                    b.Navigation("LogAdministradores");
+                    b.Navigation("Logs");
                 });
 
             modelBuilder.Entity("ApiJobfy.models.Candidato", b =>
                 {
-                    b.Navigation("LogCandidatos");
+                    b.Navigation("CandidatoVagas");
 
-                    b.Navigation("Permissoes");
+                    b.Navigation("Logs");
+
+                    b.Navigation("VagasFavoritas");
                 });
 
-            modelBuilder.Entity("ApiJobfy.models.Empresas", b =>
+            modelBuilder.Entity("ApiJobfy.models.Curriculo", b =>
                 {
+                    b.Navigation("Candidato");
+                });
+
+            modelBuilder.Entity("ApiJobfy.models.Empresa", b =>
+                {
+                    b.Navigation("Recrutadores");
+
                     b.Navigation("Vagas");
                 });
 
             modelBuilder.Entity("ApiJobfy.models.Endereco", b =>
                 {
-                    b.Navigation("Empresas");
+                    b.Navigation("Candidato");
+
+                    b.Navigation("Empresa");
                 });
 
-            modelBuilder.Entity("ApiJobfy.models.Funcionario", b =>
+            modelBuilder.Entity("ApiJobfy.models.Recrutador", b =>
                 {
-                    b.Navigation("LogFuncionarios");
+                    b.Navigation("Logs");
+                });
+
+            modelBuilder.Entity("ApiJobfy.models.Vaga", b =>
+                {
+                    b.Navigation("CandidatoVagas");
+
+                    b.Navigation("Favoritos");
                 });
 #pragma warning restore 612, 618
         }
