@@ -11,13 +11,7 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("BitFolio")]
-[assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
-[assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+857c0ce73f4fb3abd54cc17df05412ae4d6008e3")]
-[assembly: System.Reflection.AssemblyProductAttribute("BitFolio")]
-[assembly: System.Reflection.AssemblyTitleAttribute("BitFolio")]
-[assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
+[assembly: Microsoft.AspNetCore.Mvc.ApplicationParts.ApplicationPartAttribute("Microsoft.AspNetCore.OpenApi")]
 
 // Gerado pela classe WriteCodeFragment do MSBuild.
 

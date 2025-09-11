@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\BitFolio.csproj": {}
+    "C:\\Users\\Allison_2\\Source\\Repos\\Api_BitFolio\\BitFolio.csproj": {}
   },
   "projects": {
-    "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\BitFolio.csproj": {
+    "C:\\Users\\Allison_2\\Source\\Repos\\Api_BitFolio\\BitFolio.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\BitFolio.csproj",
+        "projectUniqueName": "C:\\Users\\Allison_2\\Source\\Repos\\Api_BitFolio\\BitFolio.csproj",
         "projectName": "BitFolio",
-        "projectPath": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\BitFolio.csproj",
-        "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\obj\\",
+        "projectPath": "C:\\Users\\Allison_2\\Source\\Repos\\Api_BitFolio\\BitFolio.csproj",
+        "packagesPath": "C:\\Users\\Allison_2\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Allison_2\\Source\\Repos\\Api_BitFolio\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Allison_2\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,8 +26,8 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://ppsnugetserver.papersoft.pt/nuget": {}
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {

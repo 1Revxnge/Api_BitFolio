@@ -1,0 +1,122 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Allison_2\\source\\repos\\Api_BitFolio\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\allison_2\\source\\repos\\api_bitfolio\\services\\vagarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:services\\vagarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\allison_2\\source\\repos\\api_bitfolio\\services\\iservice\\ivagarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:services\\iservice\\ivagarepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\allison_2\\source\\repos\\api_bitfolio\\services\\iservice\\ivagaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:services\\iservice\\ivagaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\allison_2\\source\\repos\\api_bitfolio\\models\\vaga.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:models\\vaga.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\allison_2\\source\\repos\\api_bitfolio\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\allison_2\\source\\repos\\api_bitfolio\\services\\vagaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:services\\vagaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "IVagaService.cs",
+              "DocumentMoniker": "C:\\Users\\Allison_2\\source\\repos\\Api_BitFolio\\Services\\IService\\IVagaService.cs",
+              "RelativeDocumentMoniker": "Services\\IService\\IVagaService.cs",
+              "ToolTip": "C:\\Users\\Allison_2\\source\\repos\\Api_BitFolio\\Services\\IService\\IVagaService.cs",
+              "RelativeToolTip": "Services\\IService\\IVagaService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T18:31:40.051Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "IVagaRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Allison_2\\source\\repos\\Api_BitFolio\\Services\\IService\\IVagaRepository.cs",
+              "RelativeDocumentMoniker": "Services\\IService\\IVagaRepository.cs",
+              "ToolTip": "C:\\Users\\Allison_2\\source\\repos\\Api_BitFolio\\Services\\IService\\IVagaRepository.cs",
+              "RelativeToolTip": "Services\\IService\\IVagaRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T18:12:50.543Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "VagaRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Allison_2\\source\\repos\\Api_BitFolio\\Services\\VagaRepository.cs",
+              "RelativeDocumentMoniker": "Services\\VagaRepository.cs",
+              "ToolTip": "C:\\Users\\Allison_2\\source\\repos\\Api_BitFolio\\Services\\VagaRepository.cs",
+              "RelativeToolTip": "Services\\VagaRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T18:01:21.547Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "UserService.cs",
+              "DocumentMoniker": "C:\\Users\\Allison_2\\source\\repos\\Api_BitFolio\\Services\\UserService.cs",
+              "RelativeDocumentMoniker": "Services\\UserService.cs",
+              "ToolTip": "C:\\Users\\Allison_2\\source\\repos\\Api_BitFolio\\Services\\UserService.cs",
+              "RelativeToolTip": "Services\\UserService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T18:02:53.389Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Vaga.cs",
+              "DocumentMoniker": "C:\\Users\\Allison_2\\source\\repos\\Api_BitFolio\\models\\Vaga.cs",
+              "RelativeDocumentMoniker": "models\\Vaga.cs",
+              "ToolTip": "C:\\Users\\Allison_2\\source\\repos\\Api_BitFolio\\models\\Vaga.cs",
+              "RelativeToolTip": "models\\Vaga.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T17:57:46.482Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "VagaService.cs",
+              "DocumentMoniker": "C:\\Users\\Allison_2\\source\\repos\\Api_BitFolio\\Services\\VagaService.cs",
+              "RelativeDocumentMoniker": "Services\\VagaService.cs",
+              "ToolTip": "C:\\Users\\Allison_2\\source\\repos\\Api_BitFolio\\Services\\VagaService.cs",
+              "RelativeToolTip": "Services\\VagaService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T17:56:07.643Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

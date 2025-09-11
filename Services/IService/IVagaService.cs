@@ -12,6 +12,7 @@ namespace ApiJobfy.Services.IService
         Task<Vaga> AddVagaAsync(Vaga vaga);
         Task<bool> UpdateVagaAsync(Vaga vaga);
         Task<bool> DeleteVagaAsync(Guid id);
- 
+      
+
     }
 }
