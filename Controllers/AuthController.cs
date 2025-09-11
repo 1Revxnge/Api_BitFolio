@@ -21,7 +21,7 @@ namespace ApiJobfy.Controllers
 
         [HttpPost("register/candidato")]
         [AllowAnonymous]
-        public async Task<IActionResult> RegisterCandidato([FromForm] RegisterCandidatoDto dto)
+        public async Task<IActionResult> RegisterCandidato([FromBody] RegisterCandidatoDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -110,6 +110,30 @@ namespace ApiJobfy.Controllers
                 return BadRequest(new { mensagem = $"Erro ao enviar código: {ex.Message}" });
             }
         }
+        [HttpPost("validar-2fa")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Validar2FA([FromBody] TokenTemporario dto)
+        {
+            try
+            {
+                // Chama o serviço para validar o código 2FA e obter o JWT
+                var token = await _authService.ValidarToken2FAAsync(dto.Email, dto.Codigo);
+
+                if (string.IsNullOrEmpty(token))
+                {
+                    // Retorna Unauthorized se o código for inválido
+                    return Unauthorized(new { sucesso = false, mensagem = "Código de verificação inválido ou expirado." });
+                }
+
+                // Retorna o token JWT se a validação for bem-sucedida
+                return Ok(new { sucesso = true, token });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { sucesso = false, mensagem = ex.Message });
+            }
+        }
+
         [HttpPost("redefinir-senha")]
         [AllowAnonymous]
         public async Task<IActionResult> RedefinirSenha([FromBody] RedefinirSenhaDto dto)

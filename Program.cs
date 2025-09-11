@@ -37,6 +37,8 @@ builder.Services.AddScoped<IFuncionarioService, FuncionarioService>();
 builder.Services.AddScoped<ICandidatoService, CandidatoService>();
 builder.Services.AddScoped<IEnderecoService, EnderecoService>();
 builder.Services.AddScoped<IEmpresaService, EmpresaService>();
+builder.Services.AddScoped<IVagaService, VagaService>();
+
 
 // JWT Config
 var secretKey = builder.Configuration["JwtSettings:SecretKey"];
@@ -64,7 +66,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("FuncionarioPolicy", policy => policy.RequireRole("Funcionario", "Admin"));
+    options.AddPolicy("FuncionarioPolicy", policy => policy.RequireRole("Funcionario"));
     options.AddPolicy("CandidatoPolicy", policy => policy.RequireRole("Candidato"));
 });
 

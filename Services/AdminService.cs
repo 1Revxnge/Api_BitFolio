@@ -14,11 +14,11 @@ namespace ApiJobfy.Services
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<Administrador>> GetAdministradoresAsync(int page, int pageSize)
+        public async Task<IEnumerable<Administrador>> GetAdministradoresAsync(int page, int take)
         {
             return await _dbContext.Administradores
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
+                .Skip((page - 1) * take)
+                .Take(take)
                 .ToListAsync();
         }
 

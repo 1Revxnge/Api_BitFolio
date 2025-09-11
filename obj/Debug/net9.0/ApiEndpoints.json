@@ -18,41 +18,41 @@
     ]
   },
   {
-    "ContainingType": "ApiJobfy.Controllers.VagasController",
-    "Method": "CriarVaga",
-    "RelativePath": "api_jobfy/Vagas/criarVaga",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "vaga",
-        "Type": "ApiJobfy.models.Vagas",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "ApiJobfy.Controllers.VagasController",
-    "Method": "DeleteVaga",
-    "RelativePath": "api_jobfy/Vagas/deleteVaga/{id}",
+    "ContainingType": "ApiJobfy.Controllers.AdministradorController",
+    "Method": "DeleteAdministrador",
+    "RelativePath": "api/administrador/deleteAdministrador/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "ApiJobfy.Controllers.VagasController",
-    "Method": "GetVagas",
-    "RelativePath": "api_jobfy/Vagas/getVagas",
+    "ContainingType": "ApiJobfy.Controllers.AdministradorController",
+    "Method": "GetAdministradorById",
+    "RelativePath": "api/administrador/getAdministradorById/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ApiJobfy.Controllers.AdministradorController",
+    "Method": "GetAdministradores",
+    "RelativePath": "api/administrador/getAdministradores",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -63,7 +63,7 @@
         "IsRequired": false
       },
       {
-        "Name": "pageSize",
+        "Name": "take",
         "Type": "System.Int32",
         "IsRequired": false
       }
@@ -71,48 +71,16 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "ApiJobfy.Controllers.VagasController",
-    "Method": "GetVagaById",
-    "RelativePath": "api_jobfy/Vagas/getVagasById/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "ApiJobfy.Controllers.VagasController",
-    "Method": "GetVagasByNegocio",
-    "RelativePath": "api_jobfy/Vagas/getVagasByNegocio/{empresaId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "empresaId",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "ApiJobfy.Controllers.VagasController",
-    "Method": "UpdateVaga",
-    "RelativePath": "api_jobfy/Vagas/updateVaga",
+    "ContainingType": "ApiJobfy.Controllers.AdministradorController",
+    "Method": "UpdateAdministrador",
+    "RelativePath": "api/administrador/updateAdministrador",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "vaga",
-        "Type": "ApiJobfy.models.Vagas",
+        "Name": "administrador",
+        "Type": "ApiJobfy.models.Administrador",
         "IsRequired": true
       }
     ],
@@ -191,34 +159,9 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "Nome",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "Email",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "Senha",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "DataNascimento",
-        "Type": "System.DateOnly",
-        "IsRequired": false
-      },
-      {
-        "Name": "Telefone",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "CurriculoPdf",
-        "Type": "Microsoft.AspNetCore.Http.IFormFile",
-        "IsRequired": false
+        "Name": "dto",
+        "Type": "ApiJobfy.models.DTOs.RegisterCandidatoDto",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
@@ -240,16 +183,16 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "ApiJobfy.Controllers.CandidatoController",
-    "Method": "DeleteCandidato",
-    "RelativePath": "api/candidato/deleteCandidato/{id}",
-    "HttpMethod": "DELETE",
+    "ContainingType": "ApiJobfy.Controllers.AuthController",
+    "Method": "Validar2FA",
+    "RelativePath": "api/auth/validar-2fa",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
-        "Type": "System.Int32",
+        "Name": "dto",
+        "Type": "ApiJobfy.models.TokenTemporario",
         "IsRequired": true
       }
     ],
@@ -265,7 +208,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
@@ -318,23 +261,7 @@
     "Parameters": [
       {
         "Name": "empresas",
-        "Type": "ApiJobfy.models.Empresas",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "ApiJobfy.Controllers.EmpresaController",
-    "Method": "DeleteEmp",
-    "RelativePath": "api/empresa/deleteEmp/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
+        "Type": "ApiJobfy.models.Empresa",
         "IsRequired": true
       }
     ],
@@ -371,7 +298,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
@@ -387,7 +314,7 @@
     "Parameters": [
       {
         "Name": "empresas",
-        "Type": "ApiJobfy.models.Empresas",
+        "Type": "ApiJobfy.models.Empresa",
         "IsRequired": true
       }
     ],
@@ -419,7 +346,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
@@ -435,7 +362,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.Int32",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
@@ -452,6 +379,22 @@
       {
         "Name": "endereco",
         "Type": "ApiJobfy.models.Endereco",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ApiJobfy.Controllers.FuncionarioController",
+    "Method": "DeleteFuncionario",
+    "RelativePath": "api/funcionario/deleteFuncionario/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
@@ -488,7 +431,156 @@
     "Parameters": [
       {
         "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ApiJobfy.Controllers.FuncionarioController",
+    "Method": "UpdateFuncionario",
+    "RelativePath": "api/funcionario/updateFuncionario",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "funcionario",
+        "Type": "ApiJobfy.models.Recrutador",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ApiJobfy.Controllers.VagasController",
+    "Method": "CriarVaga",
+    "RelativePath": "api/vagas/criarVaga",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "vaga",
+        "Type": "ApiJobfy.models.Vaga",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ApiJobfy.Controllers.VagasController",
+    "Method": "DeleteVaga",
+    "RelativePath": "api/vagas/deleteVaga/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ApiJobfy.Controllers.VagasController",
+    "Method": "GetFavoritos",
+    "RelativePath": "api/vagas/favoritos/{candidatoId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "candidatoId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ApiJobfy.Controllers.VagasController",
+    "Method": "GetVagas",
+    "RelativePath": "api/vagas/getVagas",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
         "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ApiJobfy.Controllers.VagasController",
+    "Method": "GetVagaById",
+    "RelativePath": "api/vagas/getVagasById/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ApiJobfy.Controllers.VagasController",
+    "Method": "GetVagasByNegocio",
+    "RelativePath": "api/vagas/getVagasByNegocio/{empresaId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "empresaId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ApiJobfy.Controllers.VagasController",
+    "Method": "ToggleFavorito",
+    "RelativePath": "api/vagas/toggleFavorito",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "BitFolio.models.ToggleFavorito",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ApiJobfy.Controllers.VagasController",
+    "Method": "UpdateVaga",
+    "RelativePath": "api/vagas/updateVaga",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "vaga",
+        "Type": "ApiJobfy.models.Vaga",
         "IsRequired": true
       }
     ],

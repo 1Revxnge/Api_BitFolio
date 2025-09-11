@@ -44,21 +44,25 @@ namespace ApiJobfy.Services
             return vaga;
         }
 
-        public async Task<bool> UpdateVagaAsync(Vaga vaga)
+        public async Task<Vaga?> UpdateVagaAsync(Vaga vaga)
         {
             var existingVaga = await _dbContext.Vagas
                 .FirstOrDefaultAsync(v => v.VagaId == vaga.VagaId);
 
             if (existingVaga == null)
-                return false;
+                return null;
 
             existingVaga.Titulo = vaga.Titulo;
             existingVaga.Descricao = vaga.Descricao;
-            existingVaga.Empresa = vaga.Empresa;
-            
-            
+            existingVaga.Nivel = vaga.Nivel;
+            existingVaga.Modelo = vaga.Modelo;
+            existingVaga.Requisitos = vaga.Requisitos;
+            existingVaga.DataAbertura = vaga.DataAbertura;
+            existingVaga.DataFechamento = vaga.DataFechamento;
+
+
             await _dbContext.SaveChangesAsync();
-            return true;
+            return existingVaga; 
         }
 
         public async Task<bool> DeleteVagaAsync(Guid id)
@@ -74,7 +78,41 @@ namespace ApiJobfy.Services
             return true;
         }
 
+        //Favotirar Vagas + Listagem de Vagas Favoritadas p/ Candidato
+        public async Task<bool> ToggleFavoritoAsync(Guid candidatoId, Guid vagaId)
+        {
+            var favorito = await _dbContext.VagasFavoritas
+                .FirstOrDefaultAsync(f => f.CandidatoId == candidatoId && f.VagaId == vagaId);
 
-       
+            if (favorito != null)
+            {
+                // Se já existe, desfavorita
+                _dbContext.VagasFavoritas.Remove(favorito);
+            }
+            else
+            {
+                // Se não existe, favorita
+                var novoFavorito = new VagaFavorita
+                {
+                    Id = Guid.NewGuid(),
+                    CandidatoId = candidatoId,
+                    VagaId = vagaId
+                };
+                await _dbContext.VagasFavoritas.AddAsync(novoFavorito);
+            }
+
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<IEnumerable<Vaga>> GetFavoritosByCandidatoAsync(Guid candidatoId)
+        {
+            return await _dbContext.VagasFavoritas
+                .Where(f => f.CandidatoId == candidatoId)
+                .Select(f => f.Vaga!)
+                .ToListAsync();
+        }
+
+
     }
 }

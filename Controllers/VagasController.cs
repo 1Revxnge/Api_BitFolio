@@ -3,11 +3,12 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using ApiJobfy.models;
 using ApiJobfy.Services.IService;
+using BitFolio.models;
 
 namespace ApiJobfy.Controllers
 {
     [ApiController]
-    [Route("api_jobfy/[controller]")]
+    [Route("api/vagas")]
     public class VagasController : ControllerBase
     {
         private readonly IVagaService _vagaService;
@@ -56,13 +57,12 @@ namespace ApiJobfy.Controllers
             if (vaga == null)
                 return BadRequest("Vaga não pode ser nula.");
 
-            var atualizado = await _vagaService.UpdateVagaAsync(vaga);
-            if (!atualizado)
+            var vagaAtualizada = await _vagaService.UpdateVagaAsync(vaga);
+            if (vagaAtualizada == null)
                 return NotFound();
 
-            return NoContent();
+            return Ok(vagaAtualizada); 
         }
-
         [HttpDelete("deleteVaga/{id}")]
         public async Task<IActionResult> DeleteVaga(Guid id)
         {
@@ -71,6 +71,22 @@ namespace ApiJobfy.Controllers
                 return NotFound();
 
             return NoContent();
+        }
+
+        [HttpPost("toggleFavorito")]
+        public async Task<IActionResult> ToggleFavorito([FromBody] ToggleFavorito dto)
+        {
+            var result = await _vagaService.ToggleFavoritoAsync(dto.CandidatoId, dto.VagaId);
+            if (!result)
+                return BadRequest("Erro ao favoritar/desfavoritar vaga.");
+            return Ok("Operação realizada com sucesso.");
+        }
+
+        [HttpGet("favoritos/{candidatoId}")]
+        public async Task<IActionResult> GetFavoritos(Guid candidatoId)
+        {
+            var favoritos = await _vagaService.GetFavoritosByCandidatoAsync(candidatoId);
+            return Ok(favoritos);
         }
     }
 }

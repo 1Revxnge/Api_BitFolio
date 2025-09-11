@@ -13,4 +13,9 @@ namespace ApiJobfy.models.DTOs
         [Required]
         public string Tipo { get; set; } = string.Empty;
     }
+    public class LoginResult
+    {
+        public string? Token { get; set; }
+        public bool DoisFatoresNecessario { get; set; }
+    }
 }

@@ -87,7 +87,7 @@ namespace ApiJobfy.Services
             return administrador;
         }
 
-        public async Task<string?> LoginAsync(string email, string senha, string tipo)
+        public async Task<LoginResult> LoginAsync(string email, string senha, string tipo)
         {
             email = email.ToLower().Trim();
             senha = senha.Trim();
@@ -110,9 +110,16 @@ namespace ApiJobfy.Services
                         int restantes = await TentativasRestantesCandidato(candidato.CandidatoId);
                         throw new InvalidOperationException($"Credenciais inválidas. Tentativas restantes: {restantes}");
                     }
-
+                    if (candidato.UltimoAcesso == null || candidato.UltimoAcesso <= DateTime.UtcNow.AddDays(-7))
+                    {
+                        await GerarToken2FAAsync(email);
+                        return new LoginResult{DoisFatoresNecessario = true};
+                    }
+                    // Limpa as tentativas de login e gera o token JWT
                     await LimparTentativasFalhasCandidato(candidato.CandidatoId);
-                    return GenerateJwtToken(candidato);
+                    candidato.UltimoAcesso = DateTime.UtcNow;
+                    await _dbContext.SaveChangesAsync();
+                    return new LoginResult {Token = GenerateJwtToken(candidato),DoisFatoresNecessario = false};
 
                 case "administrador":
                     var administrador = await _dbContext.Administradores.FirstOrDefaultAsync(a => a.Email == email);
@@ -131,8 +138,16 @@ namespace ApiJobfy.Services
                         throw new InvalidOperationException($"Credenciais inválidas. Tentativas restantes: {restantes}");
                     }
 
+                    if (administrador.UltimoAcesso == null || administrador.UltimoAcesso <= DateTime.UtcNow.AddDays(-7))
+                    {
+                        await GerarToken2FAAsync(email);
+                        return new LoginResult { DoisFatoresNecessario = true };
+                    }
+                    // Limpa as tentativas de login e gera o token JWT
                     await LimparTentativasFalhasAdministrador(administrador.AdminId);
-                    return GenerateJwtToken(administrador);
+                    administrador.UltimoAcesso = DateTime.UtcNow;
+                    await _dbContext.SaveChangesAsync();
+                    return new LoginResult { Token = GenerateJwtToken(administrador), DoisFatoresNecessario = false };
 
                 case "funcionario":
                     var funcionario = await _dbContext.Recrutadores.FirstOrDefaultAsync(f => f.Email == email);
@@ -151,8 +166,16 @@ namespace ApiJobfy.Services
                         throw new InvalidOperationException($"Credenciais inválidas. Tentativas restantes: {restantes}");
                     }
 
+                    if (funcionario.UltimoAcesso == null || funcionario.UltimoAcesso <= DateTime.UtcNow.AddDays(-7))
+                    {
+                        await GerarToken2FAAsync(email);
+                        return new LoginResult { DoisFatoresNecessario = true };
+                    }
+                    // Limpa as tentativas de login e gera o token JWT
                     await LimparTentativasFalhasFuncionario(funcionario.RecrutadorId);
-                    return GenerateJwtToken(funcionario);
+                    funcionario.UltimoAcesso = DateTime.UtcNow;
+                    await _dbContext.SaveChangesAsync();
+                    return new LoginResult { Token = GenerateJwtToken(funcionario), DoisFatoresNecessario = false };
 
                 default:
                     throw new InvalidOperationException("Tipo de usuário inválido.");
@@ -414,22 +437,83 @@ namespace ApiJobfy.Services
                 return false;
             }
         }
-        private byte[] EncryptData(byte[] data)
+        public async Task<TokenTemporario> GerarToken2FAAsync(string email)
         {
-            var key = Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"].PadRight(32).Substring(0, 32));
-            using var aes = Aes.Create();
-            aes.Key = key;
-            aes.GenerateIV();
-            using var encryptor = aes.CreateEncryptor();
-            using var ms = new MemoryStream();
-            ms.Write(aes.IV, 0, aes.IV.Length);
-            using var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write);
-            cs.Write(data, 0, data.Length);
-            cs.FlushFinalBlock();
+            // Apaga tokens antigos do mesmo usuário
+            var tokensAntigos = _dbContext.TokenTemporario
+            .Where(t => t.Email == email && t.Tipo == TipoToken.DoisFatores && (t.Utilizado || DateTime.UtcNow > t.ExpiraEm));
+            _dbContext.TokenTemporario.RemoveRange(tokensAntigos);
+            await _dbContext.SaveChangesAsync();
 
-            return ms.ToArray();
+            // Gera código 6 dígitos
+            var codigo = new Random().Next(100000, 999999).ToString();
+
+            var token = new TokenTemporario
+            {
+                Tipo = TipoToken.DoisFatores,
+                Email = email,
+                Codigo = codigo,
+                CriadoEm = DateTime.UtcNow,
+                ExpiraEm = DateTime.UtcNow.AddMinutes(15)
+            };
+
+            _dbContext.TokenTemporario.Add(token);
+            await _dbContext.SaveChangesAsync();
+
+            // Envia o e-mail
+            await _emailService.EnviarEmailAsync(email, "Código de Verificação - BitFolio",
+                $"Seu código de verificação é: {codigo}. Ele expira em 15 minutos.");
+
+            return token;
         }
 
+        public async Task<string?> ValidarToken2FAAsync(string email, string codigo)
+        {
+            var token = await _dbContext.TokenTemporario
+                .FirstOrDefaultAsync(t => t.Email == email && t.Tipo == TipoToken.DoisFatores);
+
+            if (token == null)
+                return null; // Se não encontrar o token, retorna null.
+
+            if (token.Utilizado)
+                return null; // Se o token já foi utilizado, retorna null.
+
+            if (DateTime.UtcNow > token.ExpiraEm)
+            {
+                _dbContext.TokenTemporario.Remove(token);
+                await _dbContext.SaveChangesAsync();
+                return null; // Se o token expirou, retorna null.
+            }
+
+            if (token.Codigo != codigo)
+                return null; // Se o código não é válido, retorna null.
+
+            // Marca o token como utilizado
+            token.Utilizado = true;
+            await _dbContext.SaveChangesAsync();
+
+            // Gerar o JWT após a validação do 2FA
+            var usuario = await _dbContext.Candidatos.FirstOrDefaultAsync(c => c.Email == email);
+            if (usuario != null)
+            {
+                // Gera o JWT para o usuário
+                return GenerateJwtToken(usuario); // Gera o token JWT para o candidato
+            }
+
+            var administrador = await _dbContext.Administradores.FirstOrDefaultAsync(a => a.Email == email);
+            if (administrador != null)
+            {
+                return GenerateJwtToken(administrador); // Gera o token JWT para o administrador
+            }
+
+            var funcionario = await _dbContext.Recrutadores.FirstOrDefaultAsync(f => f.Email == email);
+            if (funcionario != null)
+            {
+                return GenerateJwtToken(funcionario); // Gera o token JWT para o funcionário
+            }
+
+            return null; // Se não encontrar o usuário, retorna null
+        }
         private string GenerateJwtToken(object usuario)
         {
             var tokenHandler = new JwtSecurityTokenHandler();

@@ -1,0 +1,581 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\services\\vagaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:services\\vagaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\controllers\\vagascontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:controllers\\vagascontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\models\\togglefavorito.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:models\\togglefavorito.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\migrations\\20250911233411_fixvagafavoritarelacionamentos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:migrations\\20250911233411_fixvagafavoritarelacionamentos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\models\\vaga.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:models\\vaga.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\migrations\\20250909011734_initialcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:migrations\\20250909011734_initialcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\migrations\\20250911212054_adicionarultimoacessoparafuncionarioadministrador.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:migrations\\20250911212054_adicionarultimoacessoparafuncionarioadministrador.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\models\\vagafavorita.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:models\\vagafavorita.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\services\\empresaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:services\\empresaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\models\\empresa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:models\\empresa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\controllers\\empresacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:controllers\\empresacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\models\\endereco.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:models\\endereco.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\models\\dtos\\registercandidatodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:models\\dtos\\registercandidatodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\controllers\\candidatocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:controllers\\candidatocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\services\\iservice\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:services\\iservice\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\models\\recrutador.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:models\\recrutador.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\models\\candidato.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:models\\candidato.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\models\\administrador.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:models\\administrador.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\services\\iservice\\ivagaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:services\\iservice\\ivagaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\models\\dtos\\logindto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:models\\dtos\\logindto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\models\\tokentemporario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:models\\tokentemporario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\controllers\\enderecocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:controllers\\enderecocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\controllers\\funcionariocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:controllers\\funcionariocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\controllers\\administradorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:controllers\\administradorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\services\\adminservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:services\\adminservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\models\\dtos\\registeradmindto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:models\\dtos\\registeradmindto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\models\\dtos\\registerfuncionariodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:models\\dtos\\registerfuncionariodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|c:\\users\\admin\\source\\repos\\api_jobfy\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{DE1EDFB5-484C-4D27-B0CB-A3AF0FB54F4B}|BitFolio.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ToggleFavorito.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\ToggleFavorito.cs",
+              "RelativeDocumentMoniker": "models\\ToggleFavorito.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\ToggleFavorito.cs",
+              "RelativeToolTip": "models\\ToggleFavorito.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T23:42:04.843Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "20250911233411_FixVagaFavoritaRelacionamentos.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Migrations\\20250911233411_FixVagaFavoritaRelacionamentos.cs",
+              "RelativeDocumentMoniker": "Migrations\\20250911233411_FixVagaFavoritaRelacionamentos.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Migrations\\20250911233411_FixVagaFavoritaRelacionamentos.cs",
+              "RelativeToolTip": "Migrations\\20250911233411_FixVagaFavoritaRelacionamentos.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAxwBQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T23:34:12.589Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "20250911212054_AdicionarUltimoAcessoParaFuncionarioAdministrador.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Migrations\\20250911212054_AdicionarUltimoAcessoParaFuncionarioAdministrador.cs",
+              "RelativeDocumentMoniker": "Migrations\\20250911212054_AdicionarUltimoAcessoParaFuncionarioAdministrador.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Migrations\\20250911212054_AdicionarUltimoAcessoParaFuncionarioAdministrador.cs",
+              "RelativeToolTip": "Migrations\\20250911212054_AdicionarUltimoAcessoParaFuncionarioAdministrador.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T23:29:30.77Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "VagaService.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Services\\VagaService.cs",
+              "RelativeDocumentMoniker": "Services\\VagaService.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Services\\VagaService.cs",
+              "RelativeToolTip": "Services\\VagaService.cs",
+              "ViewState": "AgIAAFQAAAAAAAAAAAAUwF8AAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T18:01:22.864Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "VagasController.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Controllers\\VagasController.cs",
+              "RelativeDocumentMoniker": "Controllers\\VagasController.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Controllers\\VagasController.cs",
+              "RelativeToolTip": "Controllers\\VagasController.cs",
+              "ViewState": "AgIAAEIAAAAAAAAAAAAswE4AAABZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T18:01:27.01Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "20250909011734_InitialCreate.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Migrations\\20250909011734_InitialCreate.cs",
+              "RelativeDocumentMoniker": "Migrations\\20250909011734_InitialCreate.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Migrations\\20250909011734_InitialCreate.cs",
+              "RelativeToolTip": "Migrations\\20250909011734_InitialCreate.cs",
+              "ViewState": "AgIAABQBAAAAAAAAAAAAACQBAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T23:29:38.93Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Vaga.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\Vaga.cs",
+              "RelativeDocumentMoniker": "models\\Vaga.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\Vaga.cs",
+              "RelativeToolTip": "models\\Vaga.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAA/wBMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T22:58:38.153Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "AuthService.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Services\\AuthService.cs",
+              "RelativeDocumentMoniker": "Services\\AuthService.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Services\\AuthService.cs",
+              "RelativeToolTip": "Services\\AuthService.cs",
+              "ViewState": "AgIAAMUBAAAAAAAAAAAYwA4AAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T18:52:26.249Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Empresa.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\Empresa.cs",
+              "RelativeDocumentMoniker": "models\\Empresa.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\Empresa.cs",
+              "RelativeToolTip": "models\\Empresa.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAA1wBQAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-09T12:09:34.593Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\data\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "data\\AppDbContext.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\data\\AppDbContext.cs",
+              "RelativeToolTip": "data\\AppDbContext.cs",
+              "ViewState": "AgIAAGsAAAAAAAAAAAAcwHYAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T18:36:19.17Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "VagaFavorita.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\VagaFavorita.cs",
+              "RelativeDocumentMoniker": "models\\VagaFavorita.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\VagaFavorita.cs",
+              "RelativeToolTip": "models\\VagaFavorita.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T18:08:29.991Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "EmpresaService.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Services\\EmpresaService.cs",
+              "RelativeDocumentMoniker": "Services\\EmpresaService.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Services\\EmpresaService.cs",
+              "RelativeToolTip": "Services\\EmpresaService.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAYwCQAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T23:12:41.25Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "registerCandidatoDto.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\DTOs\\registerCandidatoDto.cs",
+              "RelativeDocumentMoniker": "models\\DTOs\\registerCandidatoDto.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\DTOs\\registerCandidatoDto.cs",
+              "RelativeToolTip": "models\\DTOs\\registerCandidatoDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-09T11:51:35.516Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "CandidatoController.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Controllers\\CandidatoController.cs",
+              "RelativeDocumentMoniker": "Controllers\\CandidatoController.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Controllers\\CandidatoController.cs",
+              "RelativeToolTip": "Controllers\\CandidatoController.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T18:04:10.978Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "EmpresaController.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Controllers\\EmpresaController.cs",
+              "RelativeDocumentMoniker": "Controllers\\EmpresaController.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Controllers\\EmpresaController.cs",
+              "RelativeToolTip": "Controllers\\EmpresaController.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAYwCwAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T18:04:09.721Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Endereco.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\Endereco.cs",
+              "RelativeDocumentMoniker": "models\\Endereco.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\Endereco.cs",
+              "RelativeToolTip": "models\\Endereco.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-09T12:11:36.906Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEQAAABVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T23:03:42.38Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "Controllers\\AuthController.cs",
+              "ViewState": "AgIAADcAAAAAAAAAAAAmwIQAAABXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T18:04:11.697Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "IAuthService.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Services\\IService\\IAuthService.cs",
+              "RelativeDocumentMoniker": "Services\\IService\\IAuthService.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Services\\IService\\IAuthService.cs",
+              "RelativeToolTip": "Services\\IService\\IAuthService.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAADwvw0AAABIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T20:53:20.573Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "Candidato.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\Candidato.cs",
+              "RelativeDocumentMoniker": "models\\Candidato.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\Candidato.cs",
+              "RelativeToolTip": "models\\Candidato.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAxwA0AAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-09T11:42:39.764Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "Recrutador.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\Recrutador.cs",
+              "RelativeDocumentMoniker": "models\\Recrutador.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\Recrutador.cs",
+              "RelativeToolTip": "models\\Recrutador.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T21:17:45.2Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "Administrador.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\Administrador.cs",
+              "RelativeDocumentMoniker": "models\\Administrador.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\Administrador.cs",
+              "RelativeToolTip": "models\\Administrador.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-09T11:42:36.249Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "IVagaService.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Services\\IService\\IVagaService.cs",
+              "RelativeDocumentMoniker": "Services\\IService\\IVagaService.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Services\\IService\\IVagaService.cs",
+              "RelativeToolTip": "Services\\IService\\IVagaService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T19:05:04.762Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "LoginDto.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\DTOs\\LoginDto.cs",
+              "RelativeDocumentMoniker": "models\\DTOs\\LoginDto.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\DTOs\\LoginDto.cs",
+              "RelativeToolTip": "models\\DTOs\\LoginDto.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAvwBMAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T20:24:45.602Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "EmailService.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Services\\EmailService.cs",
+              "RelativeDocumentMoniker": "Services\\EmailService.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Services\\EmailService.cs",
+              "RelativeToolTip": "Services\\EmailService.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAYwDEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T19:17:02.357Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "TokenTemporario.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\TokenTemporario.cs",
+              "RelativeDocumentMoniker": "models\\TokenTemporario.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\TokenTemporario.cs",
+              "RelativeToolTip": "models\\TokenTemporario.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-09T11:40:27.636Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "EnderecoController.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Controllers\\EnderecoController.cs",
+              "RelativeDocumentMoniker": "Controllers\\EnderecoController.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Controllers\\EnderecoController.cs",
+              "RelativeToolTip": "Controllers\\EnderecoController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T18:04:08.961Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "FuncionarioController.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Controllers\\FuncionarioController.cs",
+              "RelativeDocumentMoniker": "Controllers\\FuncionarioController.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Controllers\\FuncionarioController.cs",
+              "RelativeToolTip": "Controllers\\FuncionarioController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-11T18:04:07.112Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "AdminService.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Services\\AdminService.cs",
+              "RelativeDocumentMoniker": "Services\\AdminService.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Services\\AdminService.cs",
+              "RelativeToolTip": "Services\\AdminService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-09T12:19:27.321Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "AdministradorController.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Controllers\\AdministradorController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AdministradorController.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\Controllers\\AdministradorController.cs",
+              "RelativeToolTip": "Controllers\\AdministradorController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAABgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-09T12:19:18.665Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "registerAdminDto.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\DTOs\\registerAdminDto.cs",
+              "RelativeDocumentMoniker": "models\\DTOs\\registerAdminDto.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\DTOs\\registerAdminDto.cs",
+              "RelativeToolTip": "models\\DTOs\\registerAdminDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-09T11:57:56.879Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "registerFuncionarioDto.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\DTOs\\registerFuncionarioDto.cs",
+              "RelativeDocumentMoniker": "models\\DTOs\\registerFuncionarioDto.cs",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\models\\DTOs\\registerFuncionarioDto.cs",
+              "RelativeToolTip": "models\\DTOs\\registerFuncionarioDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-09T11:51:46.856Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\admin\\source\\repos\\Api_Jobfy\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-09-09T11:49:59.678Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

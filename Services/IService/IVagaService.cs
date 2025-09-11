@@ -10,8 +10,9 @@ namespace ApiJobfy.Services.IService
         Task<IEnumerable<Vaga>> GetVagasByEmpresaIdAsync(Guid Empresa);
         Task<Vaga?> GetVagaByIdAsync(Guid id);
         Task<Vaga> AddVagaAsync(Vaga vaga);
-        Task<bool> UpdateVagaAsync(Vaga vaga);
+        Task<Vaga?> UpdateVagaAsync(Vaga vaga);
         Task<bool> DeleteVagaAsync(Guid id);
- 
+        Task<bool> ToggleFavoritoAsync(Guid candidatoId, Guid vagaId);
+        Task<IEnumerable<Vaga>> GetFavoritosByCandidatoAsync(Guid candidatoId);
     }
 }

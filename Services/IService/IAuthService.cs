@@ -10,6 +10,7 @@ namespace ApiJobfy.Services.IService
         Task<Recrutador> RegisterFuncionarioAsync(RegisterFuncionarioDto dto);
         Task EnviarTokenRecuperacaoAsync(string email);
         Task RedefinirSenhaAsync(string email, string token, string novaSenha);
-        Task<string?> LoginAsync(string email, string senha, string tipo);
+        Task<LoginResult> LoginAsync(string email, string senha, string tipo);
+        Task<string?> ValidarToken2FAAsync(string email, string codigo);
     }
 }

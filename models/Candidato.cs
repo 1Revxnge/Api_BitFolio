@@ -13,13 +13,10 @@ namespace ApiJobfy.models
         public DateOnly? DataNascimento { get; set; }
         public DateTime? UltimoAcesso { get; set; }
         public bool Ativo { get; set; } = true;
-
         public Guid? EnderecoId { get; set; }
         public Endereco? Endereco { get; set; }
-
         public Guid? CurriculoId { get; set; }
         public Curriculo? Curriculo { get; set; }
-
         // Relacionamentos N:N e logs
         public ICollection<CandidatoVaga> CandidatoVagas { get; set; } = new List<CandidatoVaga>();
         public ICollection<VagaFavorita> VagasFavoritas { get; set; } = new List<VagaFavorita>();

@@ -110,14 +110,17 @@ namespace ApiJobfy.Data
 
             // VagaFavorita (N:N simplificado)
             modelBuilder.Entity<VagaFavorita>()
-                .HasOne(vf => vf.Candidato)
-                .WithMany(c => c.VagasFavoritas)
-                .HasForeignKey(vf => vf.CandidatoId);
+            .HasOne(vf => vf.Candidato)
+            .WithMany(c => c.VagasFavoritas)
+            .HasForeignKey(vf => vf.CandidatoId)
+            .OnDelete(DeleteBehavior.Cascade);
 
+            // VagaFavorita (N:1 com Vaga)
             modelBuilder.Entity<VagaFavorita>()
                 .HasOne(vf => vf.Vaga)
-                .WithMany()
-                .HasForeignKey(vf => vf.VagaId);
+                .WithMany(v => v.VagasFavoritas)
+                .HasForeignKey(vf => vf.VagaId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
         }

@@ -17,6 +17,7 @@
 
         // Relacionamentos
         public ICollection<CandidatoVaga> CandidatoVagas { get; set; } = new List<CandidatoVaga>();
-        public ICollection<VagaFavorita> Favoritos { get; set; } = new List<VagaFavorita>();
+        public ICollection<VagaFavorita> VagasFavoritas { get; set; } = new List<VagaFavorita>();
+
     }
 }

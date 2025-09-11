@@ -16,9 +16,9 @@ namespace ApiJobfy.Controllers
         }
 
         [HttpGet("getAdministradores")]
-        public async Task<IActionResult> GetAdministradores(int page = 1, int pageSize = 10)
+        public async Task<IActionResult> GetAdministradores(int page = 1, int take = 10)
         {
-            var administradores = await _administradorService.GetAdministradoresAsync(page, pageSize);
+            var administradores = await _administradorService.GetAdministradoresAsync(page, take);
             return Ok(administradores);
         }
 
