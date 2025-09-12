@@ -1,0 +1,22 @@
+# Pastas de build
+bin/
+obj/
+
+# Pastas do Visual Studio
+.vs/
+
+# Arquivos temporários
+*.user
+*.suo
+*.cache
+*.log
+*.pdb
+*.ide
+*.dbmdl
+
+# Arquivos do Visual Studio Code
+.vscode/
+
+# Pacotes NuGet
+*.nupkg
+packages/

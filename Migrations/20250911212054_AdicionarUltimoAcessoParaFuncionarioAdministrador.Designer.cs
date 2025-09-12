@@ -3,6 +3,7 @@ using System;
 using ApiJobfy.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ApiJobfy.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250911212054_AdicionarUltimoAcessoParaFuncionarioAdministrador")]
+    partial class AdicionarUltimoAcessoParaFuncionarioAdministrador
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -435,11 +438,16 @@ namespace ApiJobfy.Migrations
                     b.Property<Guid>("VagaId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("VagaId1")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CandidatoId");
 
                     b.HasIndex("VagaId");
+
+                    b.HasIndex("VagaId1");
 
                     b.ToTable("VagasFavoritas");
                 });
@@ -556,10 +564,14 @@ namespace ApiJobfy.Migrations
                         .IsRequired();
 
                     b.HasOne("ApiJobfy.models.Vaga", "Vaga")
-                        .WithMany("VagasFavoritas")
+                        .WithMany()
                         .HasForeignKey("VagaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("ApiJobfy.models.Vaga", null)
+                        .WithMany("Favoritos")
+                        .HasForeignKey("VagaId1");
 
                     b.Navigation("Candidato");
 
@@ -608,7 +620,7 @@ namespace ApiJobfy.Migrations
                 {
                     b.Navigation("CandidatoVagas");
 
-                    b.Navigation("VagasFavoritas");
+                    b.Navigation("Favoritos");
                 });
 #pragma warning restore 612, 618
         }
