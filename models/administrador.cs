@@ -11,7 +11,7 @@ namespace ApiJobfy.models
         public string Senha { get; set; } = string.Empty;
         public bool Ativo { get; set; } = true;
         public DateTime? UltimoAcesso { get; set; }
-
+        // teste
         public ICollection<LogAdministrador> Logs { get; set; } = new List<LogAdministrador>();
     }
 }
