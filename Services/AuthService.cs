@@ -496,19 +496,21 @@ namespace ApiJobfy.Services
             var usuario = await _dbContext.Candidatos.FirstOrDefaultAsync(c => c.Email == email);
             if (usuario != null)
             {
-                // Gera o JWT para o usuário
+                usuario.UltimoAcesso = DateTime.UtcNow;
                 return GenerateJwtToken(usuario); // Gera o token JWT para o candidato
             }
 
             var administrador = await _dbContext.Administradores.FirstOrDefaultAsync(a => a.Email == email);
             if (administrador != null)
             {
+                administrador.UltimoAcesso = DateTime.UtcNow;
                 return GenerateJwtToken(administrador); // Gera o token JWT para o administrador
             }
 
             var funcionario = await _dbContext.Recrutadores.FirstOrDefaultAsync(f => f.Email == email);
             if (funcionario != null)
             {
+                funcionario.UltimoAcesso = DateTime.UtcNow;
                 return GenerateJwtToken(funcionario); // Gera o token JWT para o funcionário
             }
 
