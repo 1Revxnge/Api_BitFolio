@@ -117,7 +117,7 @@ namespace ApiJobfy.Services
                     }
                     // Limpa as tentativas de login e gera o token JWT
                     await LimparTentativasFalhasCandidato(candidato.CandidatoId);
-                    candidato.UltimoAcesso = DateTime.UtcNow;
+                    candidato.UltimoAcesso = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
                     await _dbContext.SaveChangesAsync();
                     return new LoginResult {Token = GenerateJwtToken(candidato),DoisFatoresNecessario = false};
 
@@ -145,7 +145,7 @@ namespace ApiJobfy.Services
                     }
                     // Limpa as tentativas de login e gera o token JWT
                     await LimparTentativasFalhasAdministrador(administrador.AdminId);
-                    administrador.UltimoAcesso = DateTime.UtcNow;
+                    administrador.UltimoAcesso = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
                     await _dbContext.SaveChangesAsync();
                     return new LoginResult { Token = GenerateJwtToken(administrador), DoisFatoresNecessario = false };
 
@@ -173,7 +173,7 @@ namespace ApiJobfy.Services
                     }
                     // Limpa as tentativas de login e gera o token JWT
                     await LimparTentativasFalhasFuncionario(funcionario.RecrutadorId);
-                    funcionario.UltimoAcesso = DateTime.UtcNow;
+                    funcionario.UltimoAcesso = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
                     await _dbContext.SaveChangesAsync();
                     return new LoginResult { Token = GenerateJwtToken(funcionario), DoisFatoresNecessario = false };
 
@@ -439,9 +439,9 @@ namespace ApiJobfy.Services
         }
         public async Task<TokenTemporario> GerarToken2FAAsync(string email)
         {
-            // Apaga tokens antigos do mesmo usuário
+            // Apaga todos os tokens do mesmo usuário e tipo (2FA)
             var tokensAntigos = _dbContext.TokenTemporario
-            .Where(t => t.Email == email && t.Tipo == TipoToken.DoisFatores && (t.Utilizado || DateTime.UtcNow > t.ExpiraEm));
+                .Where(t => t.Email == email && t.Tipo == TipoToken.DoisFatores);
             _dbContext.TokenTemporario.RemoveRange(tokensAntigos);
             await _dbContext.SaveChangesAsync();
 
@@ -488,33 +488,36 @@ namespace ApiJobfy.Services
             if (token.Codigo != codigo)
                 return null; // Se o código não é válido, retorna null.
 
-            // Marca o token como utilizado
-            token.Utilizado = true;
-            await _dbContext.SaveChangesAsync();
+            // Se chegou até aqui, o token foi validado com sucesso.
+            // Remove o token (uso único)
+            _dbContext.TokenTemporario.Remove(token);
 
             // Gerar o JWT após a validação do 2FA
             var usuario = await _dbContext.Candidatos.FirstOrDefaultAsync(c => c.Email == email);
             if (usuario != null)
             {
-                usuario.UltimoAcesso = DateTime.UtcNow;
-                return GenerateJwtToken(usuario); // Gera o token JWT para o candidato
+                usuario.UltimoAcesso = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
+                await _dbContext.SaveChangesAsync();
+                return GenerateJwtToken(usuario);
             }
 
             var administrador = await _dbContext.Administradores.FirstOrDefaultAsync(a => a.Email == email);
             if (administrador != null)
             {
-                administrador.UltimoAcesso = DateTime.UtcNow;
-                return GenerateJwtToken(administrador); // Gera o token JWT para o administrador
+                administrador.UltimoAcesso = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
+                await _dbContext.SaveChangesAsync();
+                return GenerateJwtToken(administrador);
             }
 
             var funcionario = await _dbContext.Recrutadores.FirstOrDefaultAsync(f => f.Email == email);
             if (funcionario != null)
             {
-                funcionario.UltimoAcesso = DateTime.UtcNow;
-                return GenerateJwtToken(funcionario); // Gera o token JWT para o funcionário
+                funcionario.UltimoAcesso = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
+                await _dbContext.SaveChangesAsync();
+                return GenerateJwtToken(funcionario);
             }
-
-            return null; // Se não encontrar o usuário, retorna null
+           
+            return null;
         }
         private string GenerateJwtToken(object usuario)
         {
