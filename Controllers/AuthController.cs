@@ -133,7 +133,20 @@ namespace ApiJobfy.Controllers
                 return StatusCode(500, new { sucesso = false, mensagem = ex.Message });
             }
         }
-
+        [HttpGet("confirmar-email")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmarEmail([FromQuery] string token)
+        {
+            try
+            {
+                await _authService.ConfirmarEmailAsync(token);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensagem = ex.Message });
+            }
+        }
         [HttpPost("redefinir-senha")]
         [AllowAnonymous]
         public async Task<IActionResult> RedefinirSenha([FromBody] RedefinirSenhaDto dto)

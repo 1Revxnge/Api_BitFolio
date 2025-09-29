@@ -22,7 +22,7 @@ namespace ApiJobfy.Services
             mensagem.To.Add(new MailboxAddress("", para));
             mensagem.Subject = assunto;
 
-            mensagem.Body = new TextPart("plain")
+            mensagem.Body = new TextPart("html") 
             {
                 Text = corpo
             };
