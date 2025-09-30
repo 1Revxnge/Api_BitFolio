@@ -40,7 +40,6 @@ namespace ApiJobfy.Services
                 Telefone = dto.Telefone,
                 Ativo = false
             };
-
             _dbContext.Candidatos.Add(candidato);
             await _dbContext.SaveChangesAsync();
 
