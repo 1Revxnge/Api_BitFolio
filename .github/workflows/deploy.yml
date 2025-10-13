@@ -1,0 +1,44 @@
+name: Deploy .NET API to AWS Elastic Beanstalk
+
+on:
+  push:
+    branches:
+      - main  # Altere se sua branch principal for diferente (ex: master)
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restaurar dependências
+        run: dotnet restore
+
+      - name: Compilar
+        run: dotnet publish -c Release -o ./publish
+
+      - name: Fazer zip do projeto
+        run: zip -r deploy.zip ./publish
+
+      - name: Configurar credenciais AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: sa-east-1  # troque se usar outra região
+
+      - name: Fazer deploy no Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v22
+        with:
+          application_name: BitFolio
+          environment_name: BitFolio-env
+          version_label: v-${{ github.run_number }}
+          region: sa-east-1
+          deployment_package: deploy.zip
