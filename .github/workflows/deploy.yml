@@ -49,7 +49,7 @@ jobs:
           aws elasticbeanstalk create-application-version \
             --application-name ${{ secrets.EB_APP_NAME }} \
             --version-label v-${{ github.run_number }} \
-            --source-bundle S3Bucket=elasticbeanstalk-sa-east-1-196798204412,S3Key=deploy.zip
+            --source-bundle S3Bucket=bitfolio-eb-deploy-sa-east-1,S3Key=deploy.zip
 
           aws elasticbeanstalk update-environment \
             --environment-name ${{ secrets.EB_ENV_NAME }} \
