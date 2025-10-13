@@ -14,7 +14,7 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v4
 
-      # 2️⃣ Verificar arquivos (opcional, só para debug)
+      # 2️⃣ Listar arquivos (opcional)
       - name: Listar arquivos
         run: ls -R
 
@@ -36,7 +36,7 @@ jobs:
       - name: Criar deploy.zip
         run: zip -r deploy.zip ./publish
 
-      # 7️⃣ Upload do zip para S3
+      # 7️⃣ Upload do zip para seu bucket próprio
       - name: Upload deploy.zip para S3
         run: aws s3 cp deploy.zip s3://${{ secrets.EB_S3_BUCKET }}/deploy.zip
         env:
@@ -44,12 +44,13 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
 
+      # 8️⃣ Criar versão da aplicação e atualizar ambiente
       - name: Criar versão e atualizar Beanstalk
         run: |
           aws elasticbeanstalk create-application-version \
             --application-name ${{ secrets.EB_APP_NAME }} \
             --version-label v-${{ github.run_number }} \
-            --source-bundle S3Bucket=bitfolio-eb-deploy-sa-east-1,S3Key=deploy.zip
+            --source-bundle S3Bucket=${{ secrets.EB_S3_BUCKET }},S3Key=deploy.zip
 
           aws elasticbeanstalk update-environment \
             --environment-name ${{ secrets.EB_ENV_NAME }} \
@@ -60,4 +61,3 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
           DOTNET_ROOT: /usr/share/dotnet
-
