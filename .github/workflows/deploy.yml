@@ -26,11 +26,11 @@ jobs:
 
       # 4️⃣ Restaurar dependências
       - name: Restaurar dependências
-        run: dotnet restore Api_BitFolio/BitFolio.csproj
+        run: dotnet restore BitFolio.csproj
 
       # 5️⃣ Compilar e publicar
       - name: Compilar e publicar
-        run: dotnet publish Api_BitFolio/BitFolio.csproj -c Release -o ./publish
+        run: dotnet publish BitFolio.csproj -c Release -o ./publish
 
       # 6️⃣ Criar deploy.zip
       - name: Criar deploy.zip
