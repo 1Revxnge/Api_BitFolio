@@ -3,40 +3,32 @@ name: Deploy .NET API to AWS Elastic Beanstalk
 on:
   push:
     branches:
-      - main  # Branch principal
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout do código
       - name: Checkout código
         uses: actions/checkout@v4
 
-      # 2️⃣ Listar arquivos (opcional)
-      - name: Listar arquivos
-        run: ls -R
-
-      # 3️⃣ Configurar .NET
       - name: Configurar .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 9.0.x  # ou 9.0.x, conforme sua plataforma Beanstalk
 
-      # 4️⃣ Restaurar dependências
       - name: Restaurar dependências
         run: dotnet restore BitFolio.csproj
 
-      # 5️⃣ Compilar e publicar
       - name: Compilar e publicar
         run: dotnet publish BitFolio.csproj -c Release -o ./publish
 
-      # 6️⃣ Criar deploy.zip
       - name: Criar deploy.zip
-        run: zip -r deploy.zip ./publish
+        run: |
+          cd publish
+          zip -r ../deploy.zip .
 
-      # 7️⃣ Upload do zip para seu bucket próprio
       - name: Upload deploy.zip para S3
         run: aws s3 cp deploy.zip s3://${{ secrets.EB_S3_BUCKET }}/deploy.zip
         env:
@@ -44,21 +36,21 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
 
-      # 8️⃣ Criar versão da aplicação e atualizar ambiente
       - name: Criar versão e atualizar Beanstalk
         run: |
+          VERSION_LABEL=v-${{ github.run_number }}-${{ github.sha }}
+
           aws elasticbeanstalk create-application-version \
             --application-name ${{ secrets.EB_APP_NAME }} \
-            --version-label v-${{ github.run_number }} \
+            --version-label $VERSION_LABEL \
             --source-bundle S3Bucket=${{ secrets.EB_S3_BUCKET }},S3Key=deploy.zip
 
           aws elasticbeanstalk update-environment \
             --environment-name ${{ secrets.EB_ENV_NAME }} \
-            --version-label v-${{ github.run_number }}
+            --version-label $VERSION_LABEL
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
           DOTNET_ROOT: /usr/share/dotnet
-          
