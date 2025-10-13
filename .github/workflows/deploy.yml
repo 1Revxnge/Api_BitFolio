@@ -16,7 +16,7 @@ jobs:
       - name: Configurar .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 9.0.x  # ou 9.0.x, conforme sua plataforma Beanstalk
+          dotnet-version: 9.0.x 
 
       - name: Restaurar dependências
         run: dotnet restore BitFolio.csproj
