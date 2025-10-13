@@ -44,15 +44,13 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
 
-      # 8️⃣ Criar versão da aplicação e atualizar environment
       - name: Criar versão e atualizar Beanstalk
         run: |
           aws elasticbeanstalk create-application-version \
             --application-name ${{ secrets.EB_APP_NAME }} \
             --version-label v-${{ github.run_number }} \
-            --source-bundle S3Bucket=${{ secrets.EB_S3_BUCKET }},S3Key=deploy.zip \
-            --auto-create-application
-          
+            --source-bundle S3Bucket=elasticbeanstalk-sa-east-1-196798204412,S3Key=deploy.zip
+
           aws elasticbeanstalk update-environment \
             --environment-name ${{ secrets.EB_ENV_NAME }} \
             --version-label v-${{ github.run_number }}
@@ -62,3 +60,4 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
           DOTNET_ROOT: /usr/share/dotnet
+
