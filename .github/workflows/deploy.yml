@@ -3,7 +3,7 @@ name: Deploy .NET API to AWS Elastic Beanstalk
 on:
   push:
     branches:
-      - main  # Altere se sua branch principal for diferente
+      - main  # Branch principal
 
 jobs:
   deploy:
@@ -14,25 +14,29 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v4
 
-      # 2️⃣ Configurar .NET
+      # 2️⃣ Verificar arquivos (opcional, só para debug)
+      - name: Listar arquivos
+        run: ls -R
+
+      # 3️⃣ Configurar .NET
       - name: Configurar .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
 
-      # 3️⃣ Restaurar dependências
+      # 4️⃣ Restaurar dependências
       - name: Restaurar dependências
-        run: dotnet restore
+        run: dotnet restore Api_BitFolio/BitFolio.csproj
 
-      # 4️⃣ Compilar e publicar
+      # 5️⃣ Compilar e publicar
       - name: Compilar e publicar
         run: dotnet publish Api_BitFolio/BitFolio.csproj -c Release -o ./publish
 
-      # 5️⃣ Fazer zip do projeto
+      # 6️⃣ Criar deploy.zip
       - name: Criar deploy.zip
         run: zip -r deploy.zip ./publish
 
-      # 6️⃣ Upload do zip para S3
+      # 7️⃣ Upload do zip para S3
       - name: Upload deploy.zip para S3
         run: aws s3 cp deploy.zip s3://${{ secrets.EB_S3_BUCKET }}/deploy.zip
         env:
@@ -40,7 +44,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
 
-      # 7️⃣ Criar versão da aplicação e atualizar environment
+      # 8️⃣ Criar versão da aplicação e atualizar environment
       - name: Criar versão e atualizar Beanstalk
         run: |
           aws elasticbeanstalk create-application-version \
