@@ -14,7 +14,7 @@ namespace ApiJobfy.Services.IService
         Task<bool> DeleteVagaAsync(Guid id);
         Task<bool> ToggleFavoritoAsync(Guid candidatoId, Guid vagaId);
         Task<IEnumerable<Vaga>> GetFavoritosByCandidatoAsync(Guid candidatoId);
-        IEnumerable<Vaga> BuscarPorPalavrasChave(string palavrasChave);
+        IQueryable<Vaga> BuscarPorPalavrasChave(string palavrasChave);
 
     }
 }

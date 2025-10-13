@@ -113,21 +113,25 @@ namespace ApiJobfy.Services
                 .ToListAsync();
         }
 
-        public IEnumerable<Vaga> BuscarPorPalavrasChave(string palavrasChave)
+        public IQueryable<Vaga> BuscarPorPalavrasChave(string palavrasChave)
         {
-            if (string.IsNullOrWhiteSpace(palavrasChave))
-                return _dbContext.Vagas.ToList();
-            var termos = palavrasChave.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             var query = _dbContext.Vagas.AsQueryable();
-            foreach (var termo in termos)
+
+            if (!string.IsNullOrWhiteSpace(palavrasChave))
             {
-                var temp = termo.ToLower();
-                query = query.Where(v =>
-                v.Titulo != null && v.Titulo.ToLower().Contains(temp) ||
-                (v.Descricao ?? "").ToLower().Contains(temp));
+                var termos = palavrasChave.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                foreach (var termo in termos)
+                {
+                    var temp = termo.ToLower();
+                    query = query.Where(v =>
+                        (v.Titulo ?? "").ToLower().Contains(temp) ||
+                        (v.Descricao ?? "").ToLower().Contains(temp));
+                }
             }
-            return query.ToList();
+
+            return query;
         }
+
 
 
     }

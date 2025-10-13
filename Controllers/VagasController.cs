@@ -90,10 +90,46 @@ namespace ApiJobfy.Controllers
         }
 
         [HttpGet("buscar")]
-        public IActionResult Buscar([FromQuery] string palavrasChave)
+        public IActionResult Buscar([FromQuery] string palavrasChave, [FromQuery] int page = 1, [FromQuery] int take = 10)
         {
-            var vagas = _vagaService.BuscarPorPalavrasChave(palavrasChave);
-            return Ok(vagas);
+            // Total de registros
+            var query = _vagaService.BuscarPorPalavrasChave(palavrasChave); 
+            var qtd = query.Count();
+
+            // Total de páginas
+            var pages = take != 0 ? (qtd / take) : 1;
+            if (take != 0 && (qtd % take) != 0)
+                pages += 1;
+
+            // Skip/Take
+            int skip = take * (page - 1);
+
+            IEnumerable<Vaga> vagas;
+            if (take != 0)
+                vagas = query.OrderBy(v => v.Titulo).Skip(skip).Take(take).ToList();
+            else
+                vagas = query.OrderBy(v => v.Titulo).ToList();
+
+            // Criar response
+            var response = new ObjectResult(vagas)
+            {
+                StatusCode = StatusCodes.Status200OK
+            };
+
+            // Adicionar headers de paginação
+            Response.Headers.Append("Access-Control-Expose-Headers", "pages, qtd, range");
+            Response.Headers.Append("pages", pages.ToString());
+            Response.Headers.Append("qtd", qtd.ToString());
+
+            if (take != 0)
+                Response.Headers.Append("range", ((skip + take) - qtd) >= 0
+                    ? $"{skip + 1}-{qtd}"
+                    : $"{skip + 1}-{skip + take}");
+            else
+                Response.Headers.Append("range", $"1-{qtd}");
+
+            return response;
         }
+
     }
 }
