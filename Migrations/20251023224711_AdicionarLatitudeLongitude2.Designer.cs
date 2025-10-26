@@ -3,6 +3,7 @@ using System;
 using ApiJobfy.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ApiJobfy.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251023224711_AdicionarLatitudeLongitude2")]
+    partial class AdicionarLatitudeLongitude2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -391,9 +394,6 @@ namespace ApiJobfy.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Area")
-                        .HasColumnType("text");
-
                     b.Property<bool>("Ativo")
                         .HasColumnType("boolean");
 
@@ -419,9 +419,6 @@ namespace ApiJobfy.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Requisitos")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Tecnologias")
                         .HasColumnType("text");
 
                     b.Property<string>("Titulo")

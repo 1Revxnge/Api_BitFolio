@@ -3,6 +3,7 @@ using System;
 using ApiJobfy.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ApiJobfy.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251023220002_AdicionarLatitudeLongitude")]
+    partial class AdicionarLatitudeLongitude
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -228,12 +231,6 @@ namespace ApiJobfy.Migrations
                     b.Property<string>("Estado")
                         .HasColumnType("text");
 
-                    b.Property<double?>("Latitude")
-                        .HasColumnType("double precision");
-
-                    b.Property<double?>("Longitude")
-                        .HasColumnType("double precision");
-
                     b.Property<string>("Numero")
                         .HasColumnType("text");
 
@@ -391,9 +388,6 @@ namespace ApiJobfy.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Area")
-                        .HasColumnType("text");
-
                     b.Property<bool>("Ativo")
                         .HasColumnType("boolean");
 
@@ -419,9 +413,6 @@ namespace ApiJobfy.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Requisitos")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Tecnologias")
                         .HasColumnType("text");
 
                     b.Property<string>("Titulo")

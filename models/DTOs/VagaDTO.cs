@@ -1,8 +1,6 @@
-﻿using BitFolio.models;
-
-namespace ApiJobfy.models
+﻿namespace BitFolio.models.DTOs
 {
-    public class Vaga
+    public class VagaDTO
     {
         public Guid VagaId { get; set; }
         public string Titulo { get; set; } = string.Empty;
@@ -13,16 +11,18 @@ namespace ApiJobfy.models
         public DateTime? DataFechamento { get; set; }
         public string? Requisitos { get; set; }
         public string? Descricao { get; set; }
-        public bool Ativo { get; set; } = true;
-
+        public bool Ativo { get; set; }
         public string? Tecnologias { get; set; }
         public string? Area { get; set; }
-        
-        public Guid EmpresaId { get; set; }
-        public Empresa? Empresa { get; set; }
 
-        public ICollection<CandidatoVaga> CandidatoVagas { get; set; } = new List<CandidatoVaga>();
-        public ICollection<VagaFavorita> VagasFavoritas { get; set; } = new List<VagaFavorita>();
-        public ICollection<HistoricoCandidatura> Historicos { get; set; } = new List<HistoricoCandidatura>();
+        public Guid EmpresaId { get; set; }
+        public string? EmpresaNome { get; set; }
+
+        // Endereço resumido
+        public string? Endereco { get; set; }
+
+        // Distância em km do candidato
+        public double? Distancia { get; set; }
     }
+
 }

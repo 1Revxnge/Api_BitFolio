@@ -7,5 +7,9 @@ namespace ApiJobfy.Services.IService
         Task<IEnumerable<Candidato>> GetCandidatosAsync(int page, int pageSize);
         Task<Candidato?> GetCandidatoByIdAsync(Guid id);
         Task<bool> UpdateCandidatoAsync(Candidato candidato);
+        Curriculo CriarOuAtualizar(Guid candidatoId, Curriculo curriculo);
+        Curriculo? BuscarPorCandidato(Guid candidatoId);
+        Curriculo? Editar(Guid candidatoId, Curriculo curriculo);
+        bool Deletar(Guid candidatoId);
     }
 }

@@ -72,9 +72,18 @@ namespace ApiJobfy.Controllers
         {
             try
             {
-                var token = await _authService.LoginAsync(dto.Email, dto.Senha, dto.Tipo);
-                return Ok(new { Token = token });
-            }
+                var result = await _authService.LoginAsync(dto.Email, dto.Senha, dto.Tipo);
+                if (result.DoisFatoresNecessario)
+                {
+                    return Ok(new { DoisFatoresNecessario = true });
+                }
+
+                return Ok(new
+                {
+                    token = result.Token,              // string JWT
+                    doisFatoresNecessario = false
+                });
+            }            
             catch (InvalidOperationException ex)
             {
                 var mensagem = ex.Message;

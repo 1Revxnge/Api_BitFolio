@@ -43,7 +43,48 @@ namespace ApiJobfy.Controllers
 
             return NoContent();
         }
+        /// <summary>
+        /// Criar ou atualizar currículo de um candidato
+        /// </summary>
+        [HttpPost("createCurriculo/{candidatoId}")]
+        public IActionResult CriarOuAtualizar(Guid candidatoId, [FromBody] Curriculo curriculo)
+        {
+            if (string.IsNullOrWhiteSpace(curriculo.Tecnologias) ||
+                string.IsNullOrWhiteSpace(curriculo.CompetenciasTecnicas) ||
+                string.IsNullOrWhiteSpace(curriculo.Idiomas))
+            {
+                return BadRequest("Os campos Tecnologias, CompetenciasTecnicas e Idiomas são obrigatórios.");
+            }
 
-       
+            var resultado = _candidatoService.CriarOuAtualizar(candidatoId, curriculo);
+            return Ok(resultado);
+        }
+
+        /// <summary>
+        /// Buscar currículo de um candidato
+        /// </summary>
+        [HttpGet("getCurriculo/{candidatoId}")]
+        public IActionResult GetByCandidato(Guid candidatoId)
+        {
+            var curriculo = _candidatoService.BuscarPorCandidato(candidatoId);
+            if (curriculo == null)
+                return NotFound("Currículo não encontrado para este candidato.");
+
+            return Ok(curriculo);
+        }
+
+        /// <summary>
+        /// Deletar currículo de um candidato
+        /// </summary>
+        [HttpDelete("deleteCurriculo/{candidatoId}")]
+        public IActionResult Deletar(Guid candidatoId)
+        {
+            var sucesso = _candidatoService.Deletar(candidatoId);
+            if (!sucesso)
+                return NotFound("Currículo não encontrado para exclusão.");
+
+            return NoContent();
+        }
+
     }
 }

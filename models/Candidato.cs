@@ -1,3 +1,4 @@
+using BitFolio.models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -21,6 +22,8 @@ namespace ApiJobfy.models
         public ICollection<CandidatoVaga> CandidatoVagas { get; set; } = new List<CandidatoVaga>();
         public ICollection<VagaFavorita> VagasFavoritas { get; set; } = new List<VagaFavorita>();
         public ICollection<LogCandidato> Logs { get; set; } = new List<LogCandidato>();
+        public ICollection<HistoricoCandidatura> Historicos { get; set; } = new List<HistoricoCandidatura>();
+
     }
 
 }

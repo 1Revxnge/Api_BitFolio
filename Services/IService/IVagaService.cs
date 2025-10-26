@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ApiJobfy.models;
+using BitFolio.models.DTOs;
 
 namespace ApiJobfy.Services.IService
 {
     public interface IVagaService
     {
         Task<IEnumerable<Vaga>> GetVagasAsync(int page, int pageSize);
+        Task<int> GetTotalVagasAsync();
         Task<IEnumerable<Vaga>> GetVagasByEmpresaIdAsync(Guid Empresa);
         Task<Vaga?> GetVagaByIdAsync(Guid id);
         Task<Vaga> AddVagaAsync(Vaga vaga);
@@ -14,7 +16,10 @@ namespace ApiJobfy.Services.IService
         Task<bool> DeleteVagaAsync(Guid id);
         Task<bool> ToggleFavoritoAsync(Guid candidatoId, Guid vagaId);
         Task<IEnumerable<Vaga>> GetFavoritosByCandidatoAsync(Guid candidatoId);
-        IEnumerable<Vaga> BuscarPorPalavrasChave(string palavrasChave);
+        Task<(IEnumerable<VagaDTO> Vagas, int TotalCount)> BuscarPorFiltros(FiltroVagaDTO filtro, Guid candidatoId);
+        ResultadoCandidaturaDTO Candidatar(Guid candidatoId, Guid vagaId);
+        Task<object> AtualizarStatusAsync(AtualizarStatusRequest request);
+
 
     }
 }
