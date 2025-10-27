@@ -17,7 +17,8 @@ namespace ApiJobfy.models
 
         public string? Tecnologias { get; set; }
         public string? Area { get; set; }
-        
+        public decimal? Salario { get; set; }
+
         public Guid EmpresaId { get; set; }
         public Empresa? Empresa { get; set; }
 

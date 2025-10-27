@@ -19,6 +19,7 @@ namespace ApiJobfy.Services.IService
         Task<(IEnumerable<VagaDTO> Vagas, int TotalCount)> BuscarPorFiltros(FiltroVagaDTO filtro, Guid candidatoId);
         ResultadoCandidaturaDTO Candidatar(Guid candidatoId, Guid vagaId);
         Task<object> AtualizarStatusAsync(AtualizarStatusRequest request);
+        Task<IEnumerable<object>> GetHistoricoAsync(Guid candidatoId);
 
 
     }

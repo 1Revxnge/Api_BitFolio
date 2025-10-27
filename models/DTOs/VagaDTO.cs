@@ -14,7 +14,7 @@
         public bool Ativo { get; set; }
         public string? Tecnologias { get; set; }
         public string? Area { get; set; }
-
+        public decimal? Salario { get; set; }
         public Guid EmpresaId { get; set; }
         public string? EmpresaNome { get; set; }
 

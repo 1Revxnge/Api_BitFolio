@@ -23,14 +23,23 @@ namespace ApiJobfy.Services
 
         public async Task<IEnumerable<Vaga>> GetVagasAsync(int page, int pageSize)
         {
+            var dataAtual = DateTime.UtcNow; // Use UtcNow para consistência se você armazena datas em UTC
+
             return await _dbContext.Vagas
+                .Where(v => v.Ativo && (v.DataFechamento == null || v.DataFechamento >= dataAtual))
+                .OrderByDescending(v => v.DataAbertura) // Opcional: ordenar por data de abertura ou outro critério
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
         }
+
         public async Task<int> GetTotalVagasAsync()
         {
-            return await _dbContext.Vagas.CountAsync();
+            var dataAtual = DateTime.UtcNow;
+
+            return await _dbContext.Vagas
+                .Where(v => v.Ativo && (v.DataFechamento == null || v.DataFechamento >= dataAtual))
+                .CountAsync();
         }
         public async Task<IEnumerable<Vaga>> GetVagasByEmpresaIdAsync(Guid Empresas)
         {
@@ -64,10 +73,12 @@ namespace ApiJobfy.Services
             existingVaga.Descricao = vaga.Descricao;
             existingVaga.Nivel = vaga.Nivel;
             existingVaga.Modelo = vaga.Modelo;
+            existingVaga.Tecnologias = vaga.Tecnologias;
+            existingVaga.Area = vaga.Area;
             existingVaga.Requisitos = vaga.Requisitos;
             existingVaga.DataAbertura = vaga.DataAbertura;
             existingVaga.DataFechamento = vaga.DataFechamento;
-
+            existingVaga.Salario = vaga.Salario;
 
             await _dbContext.SaveChangesAsync();
             return existingVaga; 
@@ -154,6 +165,9 @@ namespace ApiJobfy.Services
                 query = query.Where(v => v.Nivel != null &&
                                          v.Nivel.ToLower() == filtro.Experiencia.ToLower());
 
+            if (!string.IsNullOrWhiteSpace(filtro.Modelo))
+                query = query.Where(v => v.Modelo != null &&
+                                         v.Modelo.ToLower() == filtro.Modelo.ToLower());
             // 🏢 Área
             if (!string.IsNullOrWhiteSpace(filtro.Area))
                 query = query.Where(v => v.Area != null &&
@@ -344,8 +358,8 @@ namespace ApiJobfy.Services
                     .Replace("{{NOME_USUARIO}}", candidatura.Candidato?.Nome ?? "Candidato")
                     .Replace("{{TITULO_VAGA}}", candidatura.Vaga?.Titulo ?? "Vaga")
                     .Replace("{{NOME_EMPRESA}}", candidatura.Vaga?.Empresa?.Nome ?? "Empresa")
-                    .Replace("{{STATUS_ANTERIOR}}", statusAnterior.ToString())
-                    .Replace("{{NOVO_STATUS}}", candidatura.Status.ToString());
+                    .Replace("{{STATUS_ANTERIOR}}", GetStatusLabel(statusAnterior))
+                    .Replace("{{NOVO_STATUS}}", GetStatusLabel(candidatura.Status));
 
                 // envia e-mail
                 await _emailService.EnviarEmailAsync(
@@ -365,6 +379,57 @@ namespace ApiJobfy.Services
                 candidaturaId = candidatura.HistoricoId
             };
         }
+        public async Task<IEnumerable<object>> GetHistoricoAsync(Guid candidatoId)
+        {
+            return await _dbContext.HistoricoCandidaturas
+                .Where(h => h.CandidatoId == candidatoId)
+                .Include(h => h.Vaga)
+                    .ThenInclude(v => v.Empresa) 
+                .AsNoTracking()
+                .Select(h => new
+                {
+                    h.HistoricoId,
+                    h.Status,
+                    h.DtCandidatura,
+                    h.DtAtualizacao,
+                    Vaga = new
+                    {
+                        h.Vaga!.VagaId,
+                        h.Vaga.Titulo,
+                        h.Vaga.Nivel,
+                        h.Vaga.Modelo,
+                        h.Vaga.Area,
+                        h.Vaga.Salario,
+                        h.Vaga.EmpresaId,
+                        h.Vaga.Descricao,
+                        h.Vaga.Tecnologias,
+                        h.Vaga.Escolaridade,
+                        h.Vaga.DataAbertura,
+                        h.Vaga.DataFechamento,
+                        h.Vaga.Ativo,
+                        Empresa = h.Vaga.Empresa == null ? null : new
+                        {
+                            h.Vaga.Empresa.EmpresaId,
+                            h.Vaga.Empresa.Nome,
+                            h.Vaga.Empresa.CNPJ,
+                        }
+                    }
+                })
+                .ToListAsync();
+        }
+        public static string GetStatusLabel(StatusVaga status)
+        {
+            return status switch
+            {
+                StatusVaga.CVRecebido => "Em Análise",
+                StatusVaga.CVRevisado => "Curriculo Revisado",
+                StatusVaga.CVPreSelecionado => "Pré-Selecionado",
+                StatusVaga.CVSelecionado => "Selecionado",
+                StatusVaga.CVNaoSelecionado => "Não Selecionado",
+                _ => "Desconhecido"
+            };
+        }
     }
+
 }
 

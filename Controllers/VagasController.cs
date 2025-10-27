@@ -188,6 +188,33 @@ namespace ApiJobfy.Controllers
                 return BadRequest(new { mensagem = ex.Message });
             }
         }
+        [HttpGet("historico/{candidatoId}")]
+        public async Task<IActionResult> GetHistorico(Guid candidatoId, [FromQuery] int page = 1, [FromQuery] int take = 10)
+        {
+            // Buscar todo o histórico
+            var historico = await _vagaService.GetHistoricoAsync(candidatoId);
+
+            if (historico == null || !historico.Any())
+                return NotFound(new { message = "Nenhum histórico encontrado para este candidato." });
+
+            // Total de registros
+            int totalCount = historico.Count();
+
+            // Total de páginas
+            int totalPages = take != 0 ? (int)Math.Ceiling((double)totalCount / take) : 1;
+
+            // Paginação
+            int skip = (page - 1) * take;
+            var historicoPaginado = historico.Skip(skip).Take(take);
+
+            // Adiciona headers
+            Response.Headers.Append("Access-Control-Expose-Headers", "pages,qtd,range");
+            Response.Headers.Append("pages", totalPages.ToString());
+            Response.Headers.Append("qtd", totalCount.ToString());
+            Response.Headers.Append("range", $"{skip + 1}-{Math.Min(skip + take, totalCount)}");
+
+            return Ok(historicoPaginado);
+        }
 
     }
 }
