@@ -111,9 +111,7 @@ namespace ApiJobfy.Controllers
         public async Task<IActionResult> ToggleFavorito([FromBody] ToggleFavorito dto)
         {
             var result = await _vagaService.ToggleFavoritoAsync(dto.CandidatoId, dto.VagaId);
-            if (!result)
-                return BadRequest("Erro ao favoritar/desfavoritar vaga.");
-            return Ok("Operação realizada com sucesso.");
+            return Ok(new { favoritado = result });
         }
 
         [HttpGet("favoritos/{candidatoId}")]

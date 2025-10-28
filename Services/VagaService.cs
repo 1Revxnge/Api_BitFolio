@@ -102,10 +102,13 @@ namespace ApiJobfy.Services
             var favorito = await _dbContext.VagasFavoritas
                 .FirstOrDefaultAsync(f => f.CandidatoId == candidatoId && f.VagaId == vagaId);
 
+            bool favoritado;
+
             if (favorito != null)
             {
                 // Se já existe, desfavorita
                 _dbContext.VagasFavoritas.Remove(favorito);
+                favoritado = false;
             }
             else
             {
@@ -117,10 +120,13 @@ namespace ApiJobfy.Services
                     VagaId = vagaId
                 };
                 await _dbContext.VagasFavoritas.AddAsync(novoFavorito);
+                favoritado = true;
             }
 
+            // ✅ Agora salva as alterações sempre
             await _dbContext.SaveChangesAsync();
-            return true;
+
+            return favoritado;
         }
 
         public async Task<IEnumerable<Vaga>> GetFavoritosByCandidatoAsync(Guid candidatoId)
