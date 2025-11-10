@@ -267,6 +267,7 @@ namespace ApiJobfy.Controllers
 
             Response.Headers.Append("total", counts.Total.ToString());
             Response.Headers.Append("emAnalise", counts.EmAnalise.ToString());
+            Response.Headers.Append("revisado", counts.Revisado.ToString());
             Response.Headers.Append("entrevista", counts.Entrevista.ToString());
             Response.Headers.Append("aprovados", counts.Aprovados.ToString());
             Response.Headers.Append("rejeitados", counts.Rejeitados.ToString());
