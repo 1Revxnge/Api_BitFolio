@@ -26,12 +26,12 @@ namespace ApiJobfy.Controllers
         }
 
         [HttpPost("createEndereco")]
-        public async Task<IActionResult> CreateEndereco([FromBody] Endereco endereco)
+        public async Task<IActionResult> CreateEndereco([FromBody] Endereco endereco, Guid? candidatoId = null, Guid? empresaId = null)
         {
             if (endereco == null)
                 return BadRequest("Endereço não pode ser nulo.");
 
-            var novoEndereco = await _enderecoService.AddEnderecoAsync(endereco);
+            var novoEndereco = await _enderecoService.AddEnderecoAsync(endereco, candidatoId, empresaId);
             return CreatedAtAction(nameof(GetEnderecoById), new { id = novoEndereco.EnderecoId }, novoEndereco);
         }
 

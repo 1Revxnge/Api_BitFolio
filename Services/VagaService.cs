@@ -23,11 +23,11 @@ namespace ApiJobfy.Services
 
         public async Task<IEnumerable<Vaga>> GetVagasAsync(int page, int pageSize)
         {
-            var dataAtual = DateTime.UtcNow; // Use UtcNow para consistência se você armazena datas em UTC
+            var dataAtual = DateTime.UtcNow; 
 
             return await _dbContext.Vagas
                 .Where(v => v.Ativo && (v.DataFechamento == null || v.DataFechamento >= dataAtual))
-                .OrderByDescending(v => v.DataAbertura) // Opcional: ordenar por data de abertura ou outro critério
+                .OrderByDescending(v => v.DataAbertura) 
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -41,13 +41,22 @@ namespace ApiJobfy.Services
                 .Where(v => v.Ativo && (v.DataFechamento == null || v.DataFechamento >= dataAtual))
                 .CountAsync();
         }
-        public async Task<IEnumerable<Vaga>> GetVagasByEmpresaIdAsync(Guid Empresas)
+        public async Task<IEnumerable<Vaga>> GetVagasByEmpresaIdAsync(Guid empresaId, int page, int pageSize)
         {
+            int skip = (page - 1) * pageSize;
+
             return await _dbContext.Vagas
-                .Where(v => v.EmpresaId == Empresas)
+                .Where(v => v.EmpresaId == empresaId)
+                .OrderByDescending(v => v.DataAbertura) 
+                .Skip(skip)
+                .Take(pageSize)
                 .ToListAsync();
         }
-
+        public async Task<int> GetTotalVagasByEmpresaAsync(Guid empresaId)
+        {
+            return await _dbContext.Vagas
+                .CountAsync(v => v.EmpresaId == empresaId);
+        }
         public async Task<Vaga?> GetVagaByIdAsync(Guid id)
         {
             return await _dbContext.Vagas
@@ -56,10 +65,18 @@ namespace ApiJobfy.Services
 
         public async Task<Vaga> AddVagaAsync(Vaga vaga)
         {
+            if (vaga.DataAbertura.HasValue)
+                vaga.DataAbertura = DateTime.SpecifyKind(vaga.DataAbertura.Value, DateTimeKind.Utc);
+
+            if (vaga.DataFechamento.HasValue)
+                vaga.DataFechamento = DateTime.SpecifyKind(vaga.DataFechamento.Value, DateTimeKind.Utc);
+
             _dbContext.Vagas.Add(vaga);
             await _dbContext.SaveChangesAsync();
             return vaga;
         }
+
+
 
         public async Task<Vaga?> UpdateVagaAsync(Vaga vaga)
         {
@@ -123,7 +140,7 @@ namespace ApiJobfy.Services
                 favoritado = true;
             }
 
-            // ✅ Agora salva as alterações sempre
+            // Agora salva as alterações sempre
             await _dbContext.SaveChangesAsync();
 
             return favoritado;
@@ -146,7 +163,7 @@ namespace ApiJobfy.Services
                 .Where(v => !v.DataFechamento.HasValue || v.DataFechamento >= DateTime.UtcNow) // ainda não fechadas
                 .AsQueryable();
 
-            // 🔎 Palavras-chave
+            // Palavras-chave
             if (!string.IsNullOrWhiteSpace(filtro.PalavrasChave))
             {
                 var termos = filtro.PalavrasChave.Split(' ', StringSplitOptions.RemoveEmptyEntries);
@@ -159,14 +176,13 @@ namespace ApiJobfy.Services
                 }
             }
 
-            // 💻 Linguagens
+            // Linguagens
             if (filtro.Linguagens != null && filtro.Linguagens.Any())
             {
                 query = query.Where(v => filtro.Linguagens.Any(lang =>
                     (v.Tecnologias ?? "").ToLower().Contains(lang.ToLower())));
             }
 
-            // 🧠 Nível de experiência
             if (!string.IsNullOrWhiteSpace(filtro.Experiencia))
                 query = query.Where(v => v.Nivel != null &&
                                          v.Nivel.ToLower() == filtro.Experiencia.ToLower());
@@ -174,12 +190,11 @@ namespace ApiJobfy.Services
             if (!string.IsNullOrWhiteSpace(filtro.Modelo))
                 query = query.Where(v => v.Modelo != null &&
                                          v.Modelo.ToLower() == filtro.Modelo.ToLower());
-            // 🏢 Área
             if (!string.IsNullOrWhiteSpace(filtro.Area))
                 query = query.Where(v => v.Area != null &&
                                          v.Area.ToLower() == filtro.Area.ToLower());
 
-            // 📍 Obter coordenadas do candidato
+            // Obter coordenadas do candidato
             var candidato = await _dbContext.Candidatos
                 .Include(c => c.Endereco)
                 .FirstOrDefaultAsync(c => c.CandidatoId == candidatoId);
@@ -187,7 +202,6 @@ namespace ApiJobfy.Services
             double? usuarioLat = candidato?.Endereco?.Latitude;
             double? usuarioLon = candidato?.Endereco?.Longitude;
 
-            // 🔹 Projeção para DTO com cálculo de distância
             var vagasComDistancia = (await query
                 .Select(v => new VagaDTO
                 {
@@ -221,14 +235,14 @@ namespace ApiJobfy.Services
                         : (double?)null
                 })
                 .ToListAsync())
-                // 🔹 Filtrar pela proximidade
+                // Filtrar pela proximidade
                 .Where(v => !filtro.Proximidade.HasValue || (v.Distancia.HasValue && v.Distancia.Value <= filtro.Proximidade.Value))
                 .OrderBy(v => v.Distancia ?? double.MaxValue)
                 .ToList();
 
             int totalCount = vagasComDistancia.Count;
 
-            // 🔹 Paginação
+            // Paginação
             if (filtro.Take > 0)
             {
                 int skip = (filtro.Page - 1) * filtro.Take;
@@ -242,10 +256,7 @@ namespace ApiJobfy.Services
 
         public ResultadoCandidaturaDTO Candidatar(Guid candidatoId, Guid vagaId)
         {
-            var candidato = _dbContext.Candidatos
-                .Include(c => c.Curriculo)
-                .FirstOrDefault(c => c.CandidatoId == candidatoId);
-
+            var candidato = _dbContext.Candidatos.Include(c => c.Curriculo).FirstOrDefault(c => c.CandidatoId == candidatoId);
             if (candidato == null)
             {
                 return new ResultadoCandidaturaDTO
@@ -255,7 +266,6 @@ namespace ApiJobfy.Services
                     Codigo = 0
                 };
             }
-
             // Verifica se o candidato tem currículo
             if (candidato.Curriculo == null)
             {
@@ -266,7 +276,6 @@ namespace ApiJobfy.Services
                     Codigo = 1
                 };
             }
-
             // Verifica se a vaga existe
             var vaga = _dbContext.Vagas.FirstOrDefault(v => v.VagaId == vagaId);
             if (vaga == null)
@@ -278,11 +287,9 @@ namespace ApiJobfy.Services
                     Codigo = 2
                 };
             }
-
             // Verifica se o candidato já está vinculado a essa vaga
             bool jaCandidatado = _dbContext.CandidatoVagas
                 .Any(cv => cv.CandidatoId == candidatoId && cv.VagaId == vagaId);
-
             if (jaCandidatado)
             {
                 return new ResultadoCandidaturaDTO
@@ -292,7 +299,6 @@ namespace ApiJobfy.Services
                     Codigo = 3
                 };
             }
-
             // Cria vínculo entre candidato e vaga
             var candidatoVaga = new CandidatoVaga
             {
@@ -300,9 +306,7 @@ namespace ApiJobfy.Services
                 CandidatoId = candidatoId,
                 VagaId = vagaId
             };
-
             _dbContext.CandidatoVagas.Add(candidatoVaga);
-
             // Cria histórico de candidatura
             var historico = new HistoricoCandidatura
             {
@@ -325,40 +329,29 @@ namespace ApiJobfy.Services
         }
         public async Task<object> AtualizarStatusAsync(AtualizarStatusRequest request)
         {
-            var candidatura = await _dbContext.HistoricoCandidaturas
-            .Include(c => c.Candidato)
-            .Include(c => c.Vaga)
-            .ThenInclude(v => v.Empresa)
-            .FirstOrDefaultAsync(c =>
-                c.CandidatoId == request.CandidatoId &&
-                c.VagaId == request.VagaId);
+            var candidatura = await _dbContext.HistoricoCandidaturas.Include(c => c.Candidato).Include(c => c.Vaga)
+            .ThenInclude(v => v.Empresa).FirstOrDefaultAsync(c =>c.CandidatoId == request.CandidatoId &&c.VagaId == request.VagaId);
 
             if (candidatura == null)
                 throw new KeyNotFoundException("Candidatura não encontrada.");
-
             //não permitir alterações em status finalizados
             if (candidatura.Status == StatusVaga.CVSelecionado || candidatura.Status == StatusVaga.CVNaoSelecionado)
                 throw new InvalidOperationException("Não é possível alterar o status de uma candidatura finalizada.");
-
             //evitar atualizações redundantes
             if (candidatura.Status == request.NovoStatus)
                 throw new InvalidOperationException("O status informado é igual ao status atual.");
                 
             var statusAnterior = candidatura.Status;
-
             //Atualiza o status e data
             candidatura.Status = request.NovoStatus;
             candidatura.DtAtualizacao = DateTime.UtcNow;
 
             _dbContext.HistoricoCandidaturas.Update(candidatura);
             await _dbContext.SaveChangesAsync();
-
             try
             {
-
                 using var httpClient = new HttpClient();
                 var templateHtml = await httpClient.GetStringAsync(_templateAtualizacaoVaga);
-
                 // substitui placeholders
                 templateHtml = templateHtml
                     .Replace("{{NOME_USUARIO}}", candidatura.Candidato?.Nome ?? "Candidato")
@@ -422,6 +415,102 @@ namespace ApiJobfy.Services
                     }
                 })
                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<object>> GetCandidatosDaVagaAsync(
+     Guid vagaId,
+     int? status,
+     string? search)
+        {
+            var query = _dbContext.CandidatoVagas
+                .Where(cv => cv.VagaId == vagaId)
+                .Include(cv => cv.Candidato)
+                    .ThenInclude(c => c.Curriculo)
+                .Include(cv => cv.Candidato)
+                    .ThenInclude(c => c.Historicos)
+                .AsQueryable();
+
+            if (status.HasValue)
+            {
+                var enumStatus = (StatusVaga)status.Value;
+
+                query = query.Where(cv =>
+                    cv.Candidato.Historicos
+                        .Where(h => h.VagaId == vagaId)
+                        .OrderByDescending(h => h.DtAtualizacao)
+                        .FirstOrDefault()!.Status == enumStatus);
+            }
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                string searchLower = search.ToLower().Trim();
+
+                query = query.Where(cv =>
+                    cv.Candidato.Nome.ToLower().Contains(searchLower) ||
+                    cv.Candidato.Email.ToLower().Contains(searchLower));
+            }
+
+            return await query
+                .AsNoTracking()
+                .Select(cv => new
+                {
+                    cv.CandidatoId,
+
+                    Candidato = new
+                    {
+                        cv.Candidato!.Nome,
+                        cv.Candidato.Telefone,
+                        cv.Candidato.Email,
+
+                        Curriculo = cv.Candidato.Curriculo == null ? null : new
+                        {
+                            cv.Candidato.Curriculo.CurriculoId,
+                            cv.Candidato.Curriculo.Experiencias,
+                            cv.Candidato.Curriculo.Tecnologias,
+                            cv.Candidato.Curriculo.CompetenciasTecnicas,
+                            cv.Candidato.Curriculo.Idiomas,
+                            cv.Candidato.Curriculo.Certificacoes
+                        }
+                    },
+
+                    Historico = cv.Candidato.Historicos
+                        .Where(h => h.VagaId == vagaId)
+                        .OrderByDescending(h => h.DtAtualizacao)
+                        .Select(h => new
+                        {
+                            h.HistoricoId,
+                            h.Status,
+                            h.DtCandidatura,
+                            h.DtAtualizacao
+                        })
+                        .FirstOrDefault()
+                })
+                .ToListAsync();
+        }
+
+        public async Task<CandidatoStatusCountDto> GetCandidatosCountsAsync(Guid vagaId)
+        {
+            var historicos = await _dbContext.HistoricoCandidaturas
+                .Where(h => h.VagaId == vagaId)
+                .GroupBy(h => h.Status)
+                .Select(g => new
+                {
+                    Status = g.Key,
+                    Count = g.Count()
+                })
+                .ToListAsync();
+
+            var dto = new CandidatoStatusCountDto
+            {
+                Total = historicos.Sum(h => h.Count),
+                EmAnalise = historicos.FirstOrDefault(h => h.Status == StatusVaga.CVRecebido)?.Count ?? 0,
+                Revisado = historicos.FirstOrDefault(h => h.Status == StatusVaga.CVSelecionado)?.Count ?? 0,
+                Entrevista = historicos.FirstOrDefault(h => h.Status == StatusVaga.CVPreSelecionado)?.Count ?? 0,
+                Aprovados = historicos.FirstOrDefault(h => h.Status == StatusVaga.CVSelecionado)?.Count ?? 0,
+                Rejeitados = historicos.FirstOrDefault(h => h.Status == StatusVaga.CVNaoSelecionado)?.Count ?? 0
+            };
+
+            return dto;
         }
         public static string GetStatusLabel(StatusVaga status)
         {

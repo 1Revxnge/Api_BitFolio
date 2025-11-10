@@ -28,6 +28,9 @@ namespace ApiJobfy.Services
         public async Task<Empresa?> GetEmpresaByIdAsync(Guid id)
         {
             return await _dbContext.Empresas
+                .Include(e => e.Endereco)       
+                .Include(e => e.Vagas)         
+                .Include(e => e.Recrutadores)  
                 .FirstOrDefaultAsync(e => e.EmpresaId == id && e.Ativo);
         }
 

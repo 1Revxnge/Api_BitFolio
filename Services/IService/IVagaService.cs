@@ -9,7 +9,8 @@ namespace ApiJobfy.Services.IService
     {
         Task<IEnumerable<Vaga>> GetVagasAsync(int page, int pageSize);
         Task<int> GetTotalVagasAsync();
-        Task<IEnumerable<Vaga>> GetVagasByEmpresaIdAsync(Guid Empresa);
+        Task<IEnumerable<Vaga>> GetVagasByEmpresaIdAsync(Guid empresaId, int page, int pageSize);
+        Task<int> GetTotalVagasByEmpresaAsync(Guid empresaId);
         Task<Vaga?> GetVagaByIdAsync(Guid id);
         Task<Vaga> AddVagaAsync(Vaga vaga);
         Task<Vaga?> UpdateVagaAsync(Vaga vaga);
@@ -20,7 +21,8 @@ namespace ApiJobfy.Services.IService
         ResultadoCandidaturaDTO Candidatar(Guid candidatoId, Guid vagaId);
         Task<object> AtualizarStatusAsync(AtualizarStatusRequest request);
         Task<IEnumerable<object>> GetHistoricoAsync(Guid candidatoId);
-
+        Task<IEnumerable<object>> GetCandidatosDaVagaAsync(Guid vagaId, int? status, string? search);
+        Task<CandidatoStatusCountDto> GetCandidatosCountsAsync(Guid vagaId);
 
     }
 }

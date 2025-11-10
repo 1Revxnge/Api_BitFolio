@@ -20,7 +20,7 @@ namespace ApiJobfy.Controllers
         }
 
         [HttpGet("getVagas")]
-        public async Task<IActionResult> GetVagas(int page = 1, int pageSize = 10)
+        public async Task<IActionResult> GetVagas(int page = 1, int pageSize = 5)
         {
             // Obtém o total de vagas
             var qtd = await _vagaService.GetTotalVagasAsync();
@@ -60,10 +60,44 @@ namespace ApiJobfy.Controllers
         }
 
         [HttpGet("getVagasByNegocio/{empresaId}")]
-        public async Task<IActionResult> GetVagasByNegocio(Guid empresaId)
+        public async Task<IActionResult> GetVagasByNegocio(Guid empresaId, int page = 1, int pageSize = 5)
         {
-            var vagas = await _vagaService.GetVagasByEmpresaIdAsync(empresaId);
-            return Ok(vagas);
+            // 1) Obtém total de vagas da empresa
+            var qtd = await _vagaService.GetTotalVagasByEmpresaAsync(empresaId);
+
+            // Cálculo de páginas
+            var pages = pageSize != 0 ? (qtd / pageSize) : 1;
+            int skip = pageSize * (page - 1);
+
+            if (pageSize != 0 && (qtd % pageSize) != 0)
+                pages += 1;
+
+            // 2) Busca paginada
+            var vagas = await _vagaService.GetVagasByEmpresaIdAsync(empresaId, page, pageSize);
+
+            // 3) Monta resposta
+            var response = new ObjectResult(vagas)
+            {
+                StatusCode = StatusCodes.Status200OK
+            };
+
+            // 4) Mesmos headers da outra rota
+            Response.Headers.Append("Access-Control-Expose-Headers", "pages, qtd, range");
+            Response.Headers.Append("pages", pages.ToString());
+            Response.Headers.Append("qtd", qtd.ToString());
+
+            if (pageSize != 0)
+            {
+                var rangeInicio = skip + 1;
+                var rangeFim = ((skip + pageSize) - qtd) >= 0 ? qtd : (skip + pageSize);
+                Response.Headers.Append("range", $"{rangeInicio}-{rangeFim}");
+            }
+            else
+            {
+                Response.Headers.Append("range", $"1-{qtd}");
+            }
+
+            return response;
         }
 
         [HttpGet("getVagasById/{id}")]
@@ -214,5 +248,40 @@ namespace ApiJobfy.Controllers
             return Ok(historicoPaginado);
         }
 
+        [HttpGet("candidatos/{vagaId}")]
+        public async Task<IActionResult> GetCandidatosDaVaga(
+    Guid vagaId,
+    [FromQuery] int? status = null,
+    [FromQuery] string? search = null,
+    [FromQuery] int page = 1,
+    [FromQuery] int take = 10)
+        {
+            var result = await _vagaService.GetCandidatosDaVagaAsync(vagaId, status, search);
+
+            if (result == null || !result.Any())
+                return NotFound(new { message = "Nenhum candidato encontrado para esta vaga." });
+
+            var counts = await _vagaService.GetCandidatosCountsAsync(vagaId);
+
+            Response.Headers.Append("Access-Control-Expose-Headers", "pages,qtd,range,total,emAnalise,entrevista,aprovados,rejeitados");
+
+            Response.Headers.Append("total", counts.Total.ToString());
+            Response.Headers.Append("emAnalise", counts.EmAnalise.ToString());
+            Response.Headers.Append("entrevista", counts.Entrevista.ToString());
+            Response.Headers.Append("aprovados", counts.Aprovados.ToString());
+            Response.Headers.Append("rejeitados", counts.Rejeitados.ToString());
+
+            int totalCount = result.Count();
+            int totalPages = take > 0 ? (int)Math.Ceiling((double)totalCount / take) : 1;
+
+            int skip = (page - 1) * take;
+            var paginado = result.Skip(skip).Take(take);
+
+            Response.Headers.Append("pages", totalPages.ToString());
+            Response.Headers.Append("qtd", totalCount.ToString());
+            Response.Headers.Append("range", $"{skip + 1}-{Math.Min(skip + take, totalCount)}");
+
+            return Ok(paginado);
+        }
     }
 }

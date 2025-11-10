@@ -53,36 +53,45 @@ namespace ApiJobfy.Services
         /// <summary>
         /// Cria ou atualiza o currículo de um candidato (1:1)
         /// </summary>
-        public Curriculo? CriarOuAtualizar(Guid candidatoId, Curriculo curriculo)
+        public Curriculo CriarOuAtualizar(Guid candidatoId, Curriculo curriculo)
         {
             var candidato = _dbContext.Candidatos
-                .Include(c => c.Curriculo)
                 .FirstOrDefault(c => c.CandidatoId == candidatoId);
 
             if (candidato == null)
                 throw new Exception("Candidato não encontrado.");
 
-            if (candidato.Curriculo != null)
+            if (candidato.CurriculoId.HasValue)
             {
-                // Atualiza o currículo existente
-                candidato.Curriculo.Experiencias = curriculo.Experiencias;
-                candidato.Curriculo.Tecnologias = curriculo.Tecnologias;
-                candidato.Curriculo.CompetenciasTecnicas = curriculo.CompetenciasTecnicas;
-                candidato.Curriculo.Idiomas = curriculo.Idiomas;
-                candidato.Curriculo.Certificacoes = curriculo.Certificacoes;
+                var existente = _dbContext.Curriculos
+                    .First(c => c.CurriculoId == candidato.CurriculoId.Value);
 
-                _dbContext.Curriculos.Update(candidato.Curriculo);
+                existente.Experiencias = curriculo.Experiencias;
+                existente.Tecnologias = curriculo.Tecnologias;
+                existente.CompetenciasTecnicas = curriculo.CompetenciasTecnicas;
+                existente.Idiomas = curriculo.Idiomas;
+                existente.Certificacoes = curriculo.Certificacoes;
+
+                _dbContext.SaveChanges();
+                return existente;
             }
-            else
+
+            var novo = new Curriculo
             {
-                // Cria um novo currículo
-                curriculo.CurriculoId = Guid.NewGuid();
-                candidato.Curriculo = curriculo;
-                _dbContext.Curriculos.Add(curriculo);
-            }
+                CurriculoId = Guid.NewGuid(),
+                Experiencias = curriculo.Experiencias,
+                Tecnologias = curriculo.Tecnologias,
+                CompetenciasTecnicas = curriculo.CompetenciasTecnicas,
+                Idiomas = curriculo.Idiomas,
+                Certificacoes = curriculo.Certificacoes
+            };
+
+            _dbContext.Curriculos.Add(novo);
+
+            candidato.CurriculoId = novo.CurriculoId;
 
             _dbContext.SaveChanges();
-            return candidato.Curriculo;
+            return novo;
         }
 
         /// <summary>
@@ -90,52 +99,54 @@ namespace ApiJobfy.Services
         /// </summary>
         public Curriculo? BuscarPorCandidato(Guid candidatoId)
         {
-            return _dbContext.Curriculos
-                .Include(c => c.Candidato)
-                .FirstOrDefault(c => c.Candidato.CandidatoId == candidatoId);
+            // 1) busca o candidato
+            var candidato = _dbContext.Candidatos
+                .AsNoTracking()
+                .FirstOrDefault(c => c.CandidatoId == candidatoId);
+
+            if (candidato == null) return null;
+
+            // 2) se o candidato tiver CurriculoId, retorna o currículo
+            if (candidato.CurriculoId.HasValue)
+            {
+                return _dbContext.Curriculos
+                    .AsNoTracking()
+                    .FirstOrDefault(cur => cur.CurriculoId == candidato.CurriculoId.Value);
+            }
+
+            // sem currículo vinculado
+            return null;
         }
 
-        /// <summary>
-        /// Edita o currículo existente de um candidato
-        /// </summary>
-        public Curriculo? Editar(Guid candidatoId, Curriculo curriculo)
-        {
-            var existente = _dbContext.Curriculos
-                .Include(c => c.Candidato)
-                .FirstOrDefault(c => c.Candidato.CandidatoId == candidatoId);
-
-            if (existente == null)
-                return null;
-
-            existente.Experiencias = curriculo.Experiencias;
-            existente.Tecnologias = curriculo.Tecnologias;
-            existente.CompetenciasTecnicas = curriculo.CompetenciasTecnicas;
-            existente.Idiomas = curriculo.Idiomas;
-            existente.Certificacoes = curriculo.Certificacoes;
-
-            _dbContext.Curriculos.Update(existente);
-            _dbContext.SaveChanges();
-
-            return existente;
-        }
 
         /// <summary>
         /// Deleta o currículo de um candidato
         /// </summary>
         public bool Deletar(Guid candidatoId)
         {
-            var existente = _dbContext.Curriculos
-                .Include(c => c.Candidato)
-                .FirstOrDefault(c => c.Candidato.CandidatoId == candidatoId);
+            var candidato = _dbContext.Candidatos
+                .AsNoTracking()
+                .FirstOrDefault(c => c.CandidatoId == candidatoId);
 
-            if (existente == null)
+            if (candidato == null || !candidato.CurriculoId.HasValue)
                 return false;
 
-            _dbContext.Curriculos.Remove(existente);
-            _dbContext.SaveChanges();
+            var curriculo = _dbContext.Curriculos
+                .FirstOrDefault(c => c.CurriculoId == candidato.CurriculoId.Value);
 
+            if (curriculo == null)
+                return false;
+
+            _dbContext.Curriculos.Remove(curriculo);
+
+            var candidatoUpdate = _dbContext.Candidatos
+                .First(c => c.CandidatoId == candidatoId); 
+            candidatoUpdate.CurriculoId = null;
+
+            _dbContext.SaveChanges();
             return true;
         }
+
     }
 }
 

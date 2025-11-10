@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ApiJobfy.Services.ApiJobfy.Services;
 using ApiJobfy.Services.IService;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     ));
 
 // Add controllers
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.WriteIndented = true; // opcional, para JSON legível
+    });
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
