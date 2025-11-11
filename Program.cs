@@ -45,6 +45,8 @@ builder.Services.AddScoped<ICandidatoService, CandidatoService>();
 builder.Services.AddScoped<IEnderecoService, EnderecoService>();
 builder.Services.AddScoped<IEmpresaService, EmpresaService>();
 builder.Services.AddScoped<IVagaService, VagaService>();
+builder.Services.AddScoped<IAdministradorService, AdministradorService>();
+
 
 
 // JWT Config

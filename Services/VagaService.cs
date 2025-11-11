@@ -13,6 +13,7 @@ namespace ApiJobfy.Services
     {
         private readonly AppDbContext _dbContext;
         private readonly IEmailService _emailService;
+        public Func<HttpClient>? HttpClientFactoryOverride { get; set; }
 
         private static readonly string _templateAtualizacaoVaga = "https://bitfolio-s3.s3.sa-east-1.amazonaws.com/AtualizacaoVagaTemplate.html";
         public VagaService(AppDbContext dbContext, IEmailService emailService)
@@ -20,7 +21,10 @@ namespace ApiJobfy.Services
             _dbContext = dbContext;
             _emailService = emailService;
         }
-
+        private HttpClient CriarHttpClient()
+        {
+            return HttpClientFactoryOverride?.Invoke() ?? new HttpClient();
+        }
         public async Task<IEnumerable<Vaga>> GetVagasAsync(int page, int pageSize)
         {
             var dataAtual = DateTime.UtcNow; 
@@ -159,8 +163,8 @@ namespace ApiJobfy.Services
             var query = _dbContext.Vagas
                 .Include(v => v.Empresa)
                     .ThenInclude(e => e.Endereco)
-                .Where(v => v.Ativo) // apenas vagas ativas
-                .Where(v => !v.DataFechamento.HasValue || v.DataFechamento >= DateTime.UtcNow) // ainda não fechadas
+                .Where(v => v.Ativo)
+                .Where(v => !v.DataFechamento.HasValue || v.DataFechamento >= DateTime.UtcNow) 
                 .AsQueryable();
 
             // Palavras-chave
@@ -329,30 +333,37 @@ namespace ApiJobfy.Services
         }
         public async Task<object> AtualizarStatusAsync(AtualizarStatusRequest request)
         {
-            var candidatura = await _dbContext.HistoricoCandidaturas.Include(c => c.Candidato).Include(c => c.Vaga)
-            .ThenInclude(v => v.Empresa).FirstOrDefaultAsync(c =>c.CandidatoId == request.CandidatoId &&c.VagaId == request.VagaId);
+            var candidatura = await _dbContext.HistoricoCandidaturas
+                .FirstOrDefaultAsync(c =>
+                    c.CandidatoId == request.CandidatoId &&
+                    c.VagaId == request.VagaId);
 
             if (candidatura == null)
                 throw new KeyNotFoundException("Candidatura não encontrada.");
-            //não permitir alterações em status finalizados
-            if (candidatura.Status == StatusVaga.CVSelecionado || candidatura.Status == StatusVaga.CVNaoSelecionado)
-                throw new InvalidOperationException("Não é possível alterar o status de uma candidatura finalizada.");
-            //evitar atualizações redundantes
+
+            // Correção do InMemory EF — carregamento manual
+            await _dbContext.Entry(candidatura).Reference(c => c.Candidato).LoadAsync();
+            await _dbContext.Entry(candidatura).Reference(c => c.Vaga).LoadAsync();
+            if (candidatura.Vaga != null)
+                await _dbContext.Entry(candidatura.Vaga).Reference(v => v.Empresa).LoadAsync();
+
+            // evitar atualizações redundantes
             if (candidatura.Status == request.NovoStatus)
                 throw new InvalidOperationException("O status informado é igual ao status atual.");
-                
+
             var statusAnterior = candidatura.Status;
-            //Atualiza o status e data
+
             candidatura.Status = request.NovoStatus;
             candidatura.DtAtualizacao = DateTime.UtcNow;
 
             _dbContext.HistoricoCandidaturas.Update(candidatura);
             await _dbContext.SaveChangesAsync();
+
             try
             {
-                using var httpClient = new HttpClient();
+                using var httpClient = CriarHttpClient();
                 var templateHtml = await httpClient.GetStringAsync(_templateAtualizacaoVaga);
-                // substitui placeholders
+
                 templateHtml = templateHtml
                     .Replace("{{NOME_USUARIO}}", candidatura.Candidato?.Nome ?? "Candidato")
                     .Replace("{{TITULO_VAGA}}", candidatura.Vaga?.Titulo ?? "Vaga")
@@ -360,7 +371,6 @@ namespace ApiJobfy.Services
                     .Replace("{{STATUS_ANTERIOR}}", GetStatusLabel(statusAnterior))
                     .Replace("{{NOVO_STATUS}}", GetStatusLabel(candidatura.Status));
 
-                // envia e-mail
                 await _emailService.EnviarEmailAsync(
                     candidatura.Candidato?.Email,
                     $"Atualização no status da vaga: {candidatura.Vaga?.Titulo}",
@@ -369,8 +379,9 @@ namespace ApiJobfy.Services
             }
             catch (Exception ex)
             {
-               return(ex, "Erro ao enviar e-mail de atualização de status");
+                return (ex, "Erro ao enviar e-mail de atualização de status");
             }
+
             return new
             {
                 mensagem = "Status atualizado com sucesso.",
@@ -378,49 +389,19 @@ namespace ApiJobfy.Services
                 candidaturaId = candidatura.HistoricoId
             };
         }
-        public async Task<IEnumerable<object>> GetHistoricoAsync(Guid candidatoId)
+
+        public async Task<IEnumerable<HistoricoCandidatura>> GetHistoricoAsync(Guid candidatoId)
         {
             return await _dbContext.HistoricoCandidaturas
                 .Where(h => h.CandidatoId == candidatoId)
                 .Include(h => h.Vaga)
-                    .ThenInclude(v => v.Empresa) 
+                    .ThenInclude(v => v.Empresa)
                 .AsNoTracking()
-                .Select(h => new
-                {
-                    h.HistoricoId,
-                    h.Status,
-                    h.DtCandidatura,
-                    h.DtAtualizacao,
-                    Vaga = new
-                    {
-                        h.Vaga!.VagaId,
-                        h.Vaga.Titulo,
-                        h.Vaga.Nivel,
-                        h.Vaga.Modelo,
-                        h.Vaga.Area,
-                        h.Vaga.Salario,
-                        h.Vaga.EmpresaId,
-                        h.Vaga.Descricao,
-                        h.Vaga.Tecnologias,
-                        h.Vaga.Escolaridade,
-                        h.Vaga.DataAbertura,
-                        h.Vaga.DataFechamento,
-                        h.Vaga.Ativo,
-                        Empresa = h.Vaga.Empresa == null ? null : new
-                        {
-                            h.Vaga.Empresa.EmpresaId,
-                            h.Vaga.Empresa.Nome,
-                            h.Vaga.Empresa.CNPJ,
-                        }
-                    }
-                })
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<object>> GetCandidatosDaVagaAsync(
-     Guid vagaId,
-     int? status,
-     string? search)
+
+        public async Task<IEnumerable<CandidatoVaga>> GetCandidatosDaVagaAsync(Guid vagaId, int? status, string? search)
         {
             var query = _dbContext.CandidatoVagas
                 .Where(cv => cv.VagaId == vagaId)
@@ -433,7 +414,6 @@ namespace ApiJobfy.Services
             if (status.HasValue)
             {
                 var enumStatus = (StatusVaga)status.Value;
-
                 query = query.Where(cv =>
                     cv.Candidato.Historicos
                         .Where(h => h.VagaId == vagaId)
@@ -444,7 +424,6 @@ namespace ApiJobfy.Services
             if (!string.IsNullOrWhiteSpace(search))
             {
                 string searchLower = search.ToLower().Trim();
-
                 query = query.Where(cv =>
                     cv.Candidato.Nome.ToLower().Contains(searchLower) ||
                     cv.Candidato.Email.ToLower().Contains(searchLower));
@@ -452,39 +431,6 @@ namespace ApiJobfy.Services
 
             return await query
                 .AsNoTracking()
-                .Select(cv => new
-                {
-                    cv.CandidatoId,
-
-                    Candidato = new
-                    {
-                        cv.Candidato!.Nome,
-                        cv.Candidato.Telefone,
-                        cv.Candidato.Email,
-
-                        Curriculo = cv.Candidato.Curriculo == null ? null : new
-                        {
-                            cv.Candidato.Curriculo.CurriculoId,
-                            cv.Candidato.Curriculo.Experiencias,
-                            cv.Candidato.Curriculo.Tecnologias,
-                            cv.Candidato.Curriculo.CompetenciasTecnicas,
-                            cv.Candidato.Curriculo.Idiomas,
-                            cv.Candidato.Curriculo.Certificacoes
-                        }
-                    },
-
-                    Historico = cv.Candidato.Historicos
-                        .Where(h => h.VagaId == vagaId)
-                        .OrderByDescending(h => h.DtAtualizacao)
-                        .Select(h => new
-                        {
-                            h.HistoricoId,
-                            h.Status,
-                            h.DtCandidatura,
-                            h.DtAtualizacao
-                        })
-                        .FirstOrDefault()
-                })
                 .ToListAsync();
         }
 

@@ -1,5 +1,6 @@
 using ApiJobfy.models;
 using ApiJobfy.models.DTOs;
+using BitFolio.models.DTOs;
 
 namespace ApiJobfy.Services.IService
 {
@@ -8,6 +9,7 @@ namespace ApiJobfy.Services.IService
         Task<Candidato> RegisterCandidatoAsync(RegisterCandidatoDto dto);
         Task<Administrador> RegisterAdministradorAsync(RegisterAdminDto dto);
         Task<Recrutador> RegisterFuncionarioAsync(RegisterFuncionarioDto dto);
+        Task<Empresa> RegisterEmpresaAsync(RegisterEmpresaDTO dto);
         Task EnviarTokenRecuperacaoAsync(string email);
         Task RedefinirSenhaAsync(string email, string token, string novaSenha);
         Task<LoginResult> LoginAsync(string email, string senha, string tipo);

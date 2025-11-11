@@ -2,7 +2,7 @@
 {
     public class Endereco
     {
-        public Guid EnderecoId { get; set; }
+        public Guid? EnderecoId { get; set; }
         public string? Cep { get; set; }
         public string? Rua { get; set; }
         public string? Numero { get; set; }
@@ -14,6 +14,7 @@
         public double? Longitude { get; set; }
         public Candidato? Candidato { get; set; }
         public Empresa? Empresa { get; set; }
+
 
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ApiJobfy.models;
+using BitFolio.models;
 using BitFolio.models.DTOs;
 
 namespace ApiJobfy.Services.IService
@@ -20,8 +21,8 @@ namespace ApiJobfy.Services.IService
         Task<(IEnumerable<VagaDTO> Vagas, int TotalCount)> BuscarPorFiltros(FiltroVagaDTO filtro, Guid candidatoId);
         ResultadoCandidaturaDTO Candidatar(Guid candidatoId, Guid vagaId);
         Task<object> AtualizarStatusAsync(AtualizarStatusRequest request);
-        Task<IEnumerable<object>> GetHistoricoAsync(Guid candidatoId);
-        Task<IEnumerable<object>> GetCandidatosDaVagaAsync(Guid vagaId, int? status, string? search);
+        Task<IEnumerable<HistoricoCandidatura>> GetHistoricoAsync(Guid candidatoId);
+        Task<IEnumerable<CandidatoVaga>> GetCandidatosDaVagaAsync(Guid vagaId, int? status, string? search);
         Task<CandidatoStatusCountDto> GetCandidatosCountsAsync(Guid vagaId);
 
     }

@@ -9,6 +9,12 @@ namespace ApiJobfy.Services.IService
         Task<Empresa> AddEmpresaAsync(Empresa empresa);
         Task<IEnumerable<Empresa>> GetEmpresasAsync(int page, int pageSize);
         Task<Empresa?> GetEmpresaByIdAsync(Guid id);
-        Task<bool> UpdateEmpresaAsync(Empresa empresa); 
+        Task<bool> UpdateEmpresaAsync(Empresa empresa);
+        Task<bool> ExistsByCnpjAsync(string cnpj);
+        Task<IEnumerable<Empresa>> GetTodasEmpresasAsync(int page, int take);
+        Task<Empresa?> AprovarEmpresaAsync(Guid empresaId);
+        Task<bool> ReprovarEmpresaAsync(Guid empresaId);
+        Task<int> GetTotalEmpresasAsync();
+
     }
 }

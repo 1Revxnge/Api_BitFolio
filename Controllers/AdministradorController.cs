@@ -1,4 +1,5 @@
 ﻿using ApiJobfy.models;
+using ApiJobfy.Services;
 using ApiJobfy.Services.IService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +10,13 @@ namespace ApiJobfy.Controllers
     public class AdministradorController : ControllerBase
     {
         private readonly IAdministradorService _administradorService;
+        private readonly IEmpresaService _empresaService;
 
-        public AdministradorController(IAdministradorService administradorService)
+        public AdministradorController(IAdministradorService administradorService, IEmpresaService empresaService)
         {
             _administradorService = administradorService;
+            _empresaService = empresaService;
+
         }
 
         [HttpGet("getAdministradores")]
@@ -56,5 +60,28 @@ namespace ApiJobfy.Controllers
 
             return NoContent();
         }
+
+        [HttpPut("empresa/aprovar/{id}")]
+        public async Task<IActionResult> AprovarEmpresa(Guid id)
+        {
+            var empresa = await _empresaService.AprovarEmpresaAsync(id);
+
+            if (empresa == null)
+                return NotFound();
+
+            return Ok(new { Message = "Empresa aprovada com sucesso", empresa });
+        }
+
+        [HttpDelete("empresa/reprovar/{id}")]
+        public async Task<IActionResult> ReprovarEmpresa(Guid id)
+        {
+            var sucesso = await _empresaService.ReprovarEmpresaAsync(id);
+
+            if (!sucesso)
+                return NotFound();
+
+            return Ok(new { Message = "Empresa reprovada e removida com sucesso" });
+        }
+
     }
 }

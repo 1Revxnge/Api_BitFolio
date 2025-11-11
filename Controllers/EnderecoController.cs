@@ -36,14 +36,19 @@ namespace ApiJobfy.Controllers
         }
 
         [HttpPut("updateEndereco")]
-        public async Task<IActionResult> UpdateEndereco([FromBody] Endereco endereco)
+        public async Task<IActionResult> UpdateEndereco([FromBody] Endereco endereco, Guid? candidatoId = null, Guid? empresaId = null)
         {
             if (endereco == null)
                 return BadRequest("Endereço não pode ser nulo.");
+            var enderecoId = endereco.EnderecoId;
+            if (enderecoId != null)
+            {
+                var resultado = await _enderecoService.UpdateEnderecoAsync(endereco);
+            } else
+            {
+                var resultado = await _enderecoService.AddEnderecoAsync(endereco, candidatoId, empresaId);
 
-            var resultado = await _enderecoService.UpdateEnderecoAsync(endereco);
-            if (!resultado)
-                return NotFound();
+            }
 
             return NoContent();
         }

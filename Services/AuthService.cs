@@ -9,6 +9,7 @@ using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using ApiJobfy.Services.IService;
+using BitFolio.models.DTOs;
 
 namespace ApiJobfy.Services
 {
@@ -73,6 +74,26 @@ namespace ApiJobfy.Services
             return candidato;
         }
 
+        public async Task<Empresa> RegisterEmpresaAsync(RegisterEmpresaDTO dto)
+        {
+            var empresa = new Empresa
+            {
+                EmpresaId = Guid.NewGuid(),
+                Nome = dto.Nome,
+                RazaoSocial = dto.RazaoSocial,
+                CNPJ = dto.CNPJ,
+                Email = dto.Email,
+                Descricao = dto.Descricao,
+                Ativo = false, // empresa precisa ser validada pelo admin
+                DataCadastro = DateTime.UtcNow,
+                EnderecoId = null
+            };
+
+            _dbContext.Empresas.Add(empresa);
+            await _dbContext.SaveChangesAsync();
+
+            return empresa;
+        }
 
         public async Task<Recrutador> RegisterFuncionarioAsync(RegisterFuncionarioDto dto)
         {

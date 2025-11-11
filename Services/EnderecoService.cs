@@ -50,20 +50,24 @@ namespace ApiJobfy.Services
                 .FirstOrDefaultAsync(e => e.EnderecoId == endereco.EnderecoId);
 
             if (existingEndereco == null)
+            {
                 return false;
+            }
+           
 
-            existingEndereco.Rua = endereco.Rua;
-            existingEndereco.Numero = endereco.Numero;
-            existingEndereco.Complemento = endereco.Complemento;
-            existingEndereco.Bairro = endereco.Bairro;
-            existingEndereco.Cidade = endereco.Cidade;
-            existingEndereco.Estado = endereco.Estado;
-            existingEndereco.Cep = endereco.Cep;
-            existingEndereco.Latitude = endereco.Latitude;
-            existingEndereco.Longitude = endereco.Longitude;
+                existingEndereco.Rua = endereco.Rua;
+                existingEndereco.Numero = endereco.Numero;
+                existingEndereco.Complemento = endereco.Complemento;
+                existingEndereco.Bairro = endereco.Bairro;
+                existingEndereco.Cidade = endereco.Cidade;
+                existingEndereco.Estado = endereco.Estado;
+                existingEndereco.Cep = endereco.Cep;
+                existingEndereco.Latitude = endereco.Latitude;
+                existingEndereco.Longitude = endereco.Longitude;
 
-            await _dbContext.SaveChangesAsync();
-            return true;
+                await _dbContext.SaveChangesAsync();
+                return true;
+            
         }
 
         public async Task<bool> DeleteEnderecoAsync(Guid enderecoId)
