@@ -5,31 +5,46 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using ApiJobfy.Services.ApiJobfy.Services;
 using ApiJobfy.Services.IService;
+using System.Text.Json.Serialization;
+using dotenv.net;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(
-        builder.Configuration.GetConnectionString("DefaultConnection")
-    ));
+DotEnv.Load();
 
-// Add controllers
-builder.Services.AddControllers();
+var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION");
+var secretKey = Environment.GetEnvironmentVariable("JWT_SECRET");
+
+if (string.IsNullOrWhiteSpace(connectionString))
+    throw new Exception("A variável DB_CONNECTION não foi encontrada no .env.");
+
+if (string.IsNullOrWhiteSpace(secretKey))
+    throw new Exception("A variável JWT_SECRET não foi encontrada no .env.");
+
+// CONFIGURAÇÃO DO BANCO
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(connectionString)
+);
+
+// SERIALIZAÇÃO
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.WriteIndented = true;
+    });
+
+// CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
-        policy =>
-        {
-            policy.AllowAnyOrigin()
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
-        });
+        policy => policy.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
 });
 
-// Custom services
+// SERVICES
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -38,11 +53,9 @@ builder.Services.AddScoped<ICandidatoService, CandidatoService>();
 builder.Services.AddScoped<IEnderecoService, EnderecoService>();
 builder.Services.AddScoped<IEmpresaService, EmpresaService>();
 builder.Services.AddScoped<IVagaService, VagaService>();
+builder.Services.AddScoped<IAdministradorService, AdministradorService>();
 
-
-// JWT Config
-var secretKey = builder.Configuration["JwtSettings:SecretKey"];
-
+// JWT
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -50,7 +63,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.RequireHttpsMetadata = false; // Somente em DEV
+    options.RequireHttpsMetadata = false; // Somente DEV
     options.SaveToken = true;
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -62,7 +75,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Authorization Policies
+// ROLES
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
@@ -71,9 +84,18 @@ builder.Services.AddAuthorization(options =>
 });
 
 var app = builder.Build();
+
+// MIGRATIONS AUTOMÁTICAS
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
+
 app.UseCors("AllowAll");
 
 app.UseRouting();
+
 app.MapGet("/", () => "API funcionando!");
 
 app.UseAuthentication();
@@ -82,4 +104,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
