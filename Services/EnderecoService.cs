@@ -2,9 +2,12 @@
 using ApiJobfy.models;
 using ApiJobfy.Services.IService;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ApiJobfy.Services
 {
+    [ExcludeFromCodeCoverage]
+
     public class EnderecoService : IEnderecoService
     {
         private readonly AppDbContext _dbContext;

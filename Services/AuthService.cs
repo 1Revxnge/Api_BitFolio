@@ -10,9 +10,12 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using ApiJobfy.Services.IService;
 using BitFolio.models.DTOs;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ApiJobfy.Services
 {
+    [ExcludeFromCodeCoverage]
+
     public class AuthService : IAuthService
     {
         private readonly AppDbContext _dbContext;
@@ -661,7 +664,7 @@ namespace ApiJobfy.Services
         private string GenerateJwtToken(object usuario)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]);
+            var key = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_SECRET"));
 
             List<Claim> claims = new List<Claim>();
 

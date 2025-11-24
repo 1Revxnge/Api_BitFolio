@@ -1,5 +1,6 @@
 ﻿namespace BitFolio.models.DTOs
 {
+
     public class ResultadoCandidaturaDTO
     {
         public bool Sucesso { get; set; }

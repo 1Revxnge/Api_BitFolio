@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using ApiJobfy.Services;
 using ApiJobfy.models;
-using ApiJobfy.Services.ApiJobfy.Services;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ApiJobfy.Controllers
 {
-
-        [ApiController]
+    [ExcludeFromCodeCoverage]
+    [ApiController]
         [Route("api/funcionario")]
         public class FuncionarioController : ControllerBase
         {
@@ -57,7 +56,47 @@ namespace ApiJobfy.Controllers
 
                 return NoContent();
             }
+        [HttpGet("getLogsRecrutador/{recrutadorId}")]
+        public async Task<IActionResult> GetLogsRecrutador(Guid recrutadorId, int page = 1, int pageSize = 10)
+        {
+            // 1 — total de logs
+            var qtd = await _funcionarioService.GetTotalLogsRecrutadorAsync(recrutadorId);
 
+            // cálculo de páginas
+            var pages = pageSize != 0 ? (qtd / pageSize) : 1;
+            int skip = pageSize * (page - 1);
 
+            if (pageSize != 0 && (qtd % pageSize) != 0)
+                pages += 1;
+
+            // 2 — dados paginados
+            var logs = await _funcionarioService.GetLogsRecrutadorAsync(recrutadorId, page, pageSize);
+
+            // 3 — resposta padrão
+            var response = new ObjectResult(logs)
+            {
+                StatusCode = StatusCodes.Status200OK
+            };
+
+            // 4 — Headers
+            Response.Headers.Append("Access-Control-Expose-Headers", "pages, qtd, range");
+            Response.Headers.Append("pages", pages.ToString());
+            Response.Headers.Append("qtd", qtd.ToString());
+
+            if (pageSize != 0)
+            {
+                var rangeInicio = skip + 1;
+                var rangeFim = ((skip + pageSize) - qtd) >= 0 ? qtd : (skip + pageSize);
+                Response.Headers.Append("range", $"{rangeInicio}-{rangeFim}");
+            }
+            else
+            {
+                Response.Headers.Append("range", $"1-{qtd}");
+            }
+
+            return response;
         }
+
+
     }
+}

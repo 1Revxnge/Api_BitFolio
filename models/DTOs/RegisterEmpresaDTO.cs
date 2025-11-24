@@ -1,5 +1,8 @@
-﻿namespace BitFolio.models.DTOs
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace BitFolio.models.DTOs
 {
+    [ExcludeFromCodeCoverage]
     public class RegisterEmpresaDTO
     {
         public string Nome { get; set; } = string.Empty;

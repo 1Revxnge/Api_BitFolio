@@ -1,6 +1,9 @@
 ﻿
+using System.Diagnostics.CodeAnalysis;
+
 namespace ApiJobfy.models
-{ 
+{
+
     public class Empresa
     {
         public Guid EmpresaId { get; set; }

@@ -1,9 +1,12 @@
 using BitFolio.models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ApiJobfy.models
 {
+    [ExcludeFromCodeCoverage]
+
     public class Candidato
     {
         public Guid CandidatoId { get; set; }

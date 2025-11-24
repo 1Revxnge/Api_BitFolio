@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Runtime.Intrinsics.X86;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ApiJobfy.Services
 {
+    [ExcludeFromCodeCoverage]
 
     public class CandidatoService : ICandidatoService
     {
@@ -146,6 +148,38 @@ namespace ApiJobfy.Services
             _dbContext.SaveChanges();
             return true;
         }
+
+        public async Task<int> GetTotalLogsCandidatoAsync(Guid candidatoId)
+        {
+            return await _dbContext.LogCandidatos
+        .Where(l =>
+            l.CandidatoId == candidatoId &&
+            l.Acao != "Login bem-sucedido" &&
+            l.Acao != "Login falhou"
+        )
+        .CountAsync();
+        }
+
+        public async Task<List<LogCandidato>> GetLogsCandidatoAsync(Guid candidatoId, int page, int pageSize)
+        {
+            return await _dbContext.LogCandidatos
+        .Where(l =>
+            l.CandidatoId == candidatoId &&
+            l.Acao != "Login bem-sucedido" &&
+            l.Acao != "Login falhou"
+        )
+        .OrderByDescending(l => l.DtAcao)
+        .Skip((page - 1) * pageSize)
+        .Take(pageSize)
+        .Select(l => new LogCandidato
+        {
+            LogId = l.LogId,
+            Acao = l.Acao,
+            DtAcao = l.DtAcao
+        })
+        .ToListAsync();
+        }
+
 
     }
 }

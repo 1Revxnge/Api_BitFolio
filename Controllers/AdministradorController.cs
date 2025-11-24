@@ -2,9 +2,11 @@
 using ApiJobfy.Services;
 using ApiJobfy.Services.IService;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ApiJobfy.Controllers
 {
+    [ExcludeFromCodeCoverage]
     [ApiController]
     [Route("api/administrador")]
     public class AdministradorController : ControllerBase

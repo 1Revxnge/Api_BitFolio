@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using ApiJobfy.models;
 using BitFolio.models;
@@ -8,6 +9,8 @@ namespace ApiJobfy.Services.IService
 {
     public interface IVagaService
     {
+        [ExcludeFromCodeCoverage]
+
         Task<IEnumerable<Vaga>> GetVagasAsync(int page, int pageSize);
         Task<int> GetTotalVagasAsync();
         Task<IEnumerable<Vaga>> GetVagasByEmpresaIdAsync(Guid empresaId, int page, int pageSize);

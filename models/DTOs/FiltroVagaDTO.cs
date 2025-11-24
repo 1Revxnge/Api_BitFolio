@@ -1,5 +1,9 @@
-﻿namespace BitFolio.models.DTOs
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace BitFolio.models.DTOs
 {
+    [ExcludeFromCodeCoverage]
+
     public class FiltroVagaDTO
     {
         public string? PalavrasChave { get; set; }

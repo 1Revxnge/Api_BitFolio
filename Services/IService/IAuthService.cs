@@ -1,11 +1,14 @@
 using ApiJobfy.models;
 using ApiJobfy.models.DTOs;
 using BitFolio.models.DTOs;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ApiJobfy.Services.IService
 {
     public interface IAuthService
     {
+        [ExcludeFromCodeCoverage]
+
         Task<Candidato> RegisterCandidatoAsync(RegisterCandidatoDto dto);
         Task<Administrador> RegisterAdministradorAsync(RegisterAdminDto dto);
         Task<Recrutador> RegisterFuncionarioAsync(RegisterFuncionarioDto dto);

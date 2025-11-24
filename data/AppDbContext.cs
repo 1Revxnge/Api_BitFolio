@@ -5,7 +5,7 @@ using System.Diagnostics.Metrics;
 
 namespace ApiJobfy.Data
 
-    {
+    {   
         public class AppDbContext : DbContext
         {
             public DbSet<Candidato> Candidatos => Set<Candidato>();

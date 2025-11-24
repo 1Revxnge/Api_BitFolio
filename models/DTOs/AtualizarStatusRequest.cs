@@ -1,4 +1,6 @@
-﻿namespace BitFolio.models.DTOs
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace BitFolio.models.DTOs
 {
     public class AtualizarStatusRequest
     {

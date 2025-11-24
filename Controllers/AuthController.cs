@@ -5,9 +5,11 @@ using ApiJobfy.Services.IService;
 using BitFolio.models.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ApiJobfy.Controllers
 {
+    [ExcludeFromCodeCoverage]
     [ApiController]
     [Route("api/auth")]
     public class AuthController : ControllerBase

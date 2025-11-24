@@ -1,5 +1,8 @@
-﻿namespace ApiJobfy.models
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace ApiJobfy.models
 {
+
     public class Endereco
     {
         public Guid? EnderecoId { get; set; }

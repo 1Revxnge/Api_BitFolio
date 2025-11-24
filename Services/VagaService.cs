@@ -324,6 +324,18 @@ namespace ApiJobfy.Services
 
             _dbContext.HistoricoCandidaturas.Add(historico);
             _dbContext.SaveChanges();
+            var empresa = _dbContext.Empresas
+    .FirstOrDefault(e => e.EmpresaId == vaga.EmpresaId);
+
+            var log = new LogCandidato
+            {
+                LogId = Guid.NewGuid(),
+                CandidatoId = candidatoId,
+                Acao = $"Candidatura enviada para {vaga.Titulo} na {empresa?.Nome ?? "Empresa Desconhecida"}",
+                DtAcao = DateTime.UtcNow
+            };
+
+            _dbContext.LogCandidatos.Add(log);
 
             return new ResultadoCandidaturaDTO
             {
@@ -381,6 +393,33 @@ namespace ApiJobfy.Services
             {
                 return (ex, "Erro ao enviar e-mail de atualização de status");
             }
+
+            var logCandidato = new LogCandidato
+            {
+                LogId = Guid.NewGuid(),
+                CandidatoId = candidatura.CandidatoId,
+                Acao = $"Status alterado de {GetStatusLabel(statusAnterior)} para {GetStatusLabel(candidatura.Status)} na vaga {candidatura.Vaga?.Titulo}",
+                DtAcao = DateTime.UtcNow
+            };
+
+            _dbContext.LogCandidatos.Add(logCandidato);
+
+            var recrutador = await _dbContext.Recrutadores
+            .FirstOrDefaultAsync(r => r.EmpresaId == candidatura.Vaga.EmpresaId);
+
+            if (recrutador != null)
+            {
+                var logRecrutador = new LogRecrutador
+                {
+                    LogId = Guid.NewGuid(),
+                    RecrutadorId = recrutador.RecrutadorId,
+                    Acao = $"O candidato {candidatura.Candidato?.Nome} teve o status alterado de {GetStatusLabel(statusAnterior)} para {GetStatusLabel(candidatura.Status)} na vaga {candidatura.Vaga?.Titulo}",
+                    DtAcao = DateTime.UtcNow
+                };
+
+                _dbContext.LogRecrutadores.Add(logRecrutador);
+            }
+
 
             return new
             {

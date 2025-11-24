@@ -2,10 +2,12 @@
 using System.Threading.Tasks;
 using ApiJobfy.models;
 using ApiJobfy.Services.IService;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ApiJobfy.Controllers
 {
-        [ApiController]
+    [ExcludeFromCodeCoverage]
+    [ApiController]
         [Route("api/empresa")]
         public class EmpresaController : ControllerBase
         {

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
 	<TargetFramework>net9.0</TargetFramework>
@@ -6,10 +6,12 @@
 	<ImplicitUsings>enable</ImplicitUsings>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   	<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+		<UserSecretsId>49ddfd0a-e198-4e30-9d1a-991a35405b8a</UserSecretsId>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<!-- ASP.NET Core e JWT -->
+		<PackageReference Include="dotenv.net" Version="4.0.0" />
 		<PackageReference Include="MailKit" Version="4.12.1" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.4" />
@@ -37,7 +39,12 @@
 		<PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
 	</ItemGroup>
 
-
+	<ItemGroup>
+		<None Update=".env">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+	
 	<ItemGroup>
 	  <Folder Include="Migrations\" />
 	  <Folder Include="tests\Api_BitFolio.Tests\" />

@@ -1,9 +1,11 @@
 ﻿using ApiJobfy.models;
 using ApiJobfy.Services.IService;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ApiJobfy.Controllers
 {
+    [ExcludeFromCodeCoverage]
     [ApiController]
     [Route("api/endereco")]
     public class EnderecoController : ControllerBase

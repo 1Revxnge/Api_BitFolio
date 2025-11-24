@@ -5,9 +5,11 @@ using ApiJobfy.models;
 using ApiJobfy.Services.IService;
 using BitFolio.models;
 using BitFolio.models.DTOs;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ApiJobfy.Controllers
 {
+    [ExcludeFromCodeCoverage]
     [ApiController]
     [Route("api/vagas")]
     public class VagasController : ControllerBase

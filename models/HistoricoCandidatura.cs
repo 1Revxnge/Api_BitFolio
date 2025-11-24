@@ -1,7 +1,9 @@
 ﻿using ApiJobfy.models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace BitFolio.models
 {
+
     public class HistoricoCandidatura
     {
 
