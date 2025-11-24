@@ -12,7 +12,6 @@ using dotenv.net;
 var builder = WebApplication.CreateBuilder(args);
 
 DotEnv.Load();
-
 var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION");
 var secretKey = Environment.GetEnvironmentVariable("JWT_SECRET");
 
