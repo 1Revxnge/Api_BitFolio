@@ -24,26 +24,29 @@ jobs:
       - name: Compilar e publicar
         run: dotnet publish BitFolio.csproj -c Release -o ./publish
 
-      - name: Criar deploy.zip
+      - name: Criar arquivo ZIP único
         run: |
+          VERSION_LABEL=v-${{ github.run_number }}-${{ github.sha }}
           cd publish
-          zip -r ../deploy.zip .
+          zip -r ../${VERSION_LABEL}.zip .
+        env:
+          VERSION_LABEL: v-${{ github.run_number }}-${{ github.sha }}
 
-      - name: Upload deploy.zip para S3
-        run: aws s3 cp deploy.zip s3://${{ secrets.EB_S3_BUCKET }}/deploy.zip
+      - name: Upload ZIP para S3
+        run: |
+          aws s3 cp $VERSION_LABEL.zip s3://${{ secrets.EB_S3_BUCKET }}/$VERSION_LABEL.zip
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
+          VERSION_LABEL: v-${{ github.run_number }}-${{ github.sha }}
 
       - name: Criar versão e atualizar Beanstalk
         run: |
-          VERSION_LABEL=v-${{ github.run_number }}-${{ github.sha }}
-
           aws elasticbeanstalk create-application-version \
             --application-name ${{ secrets.EB_APP_NAME }} \
             --version-label $VERSION_LABEL \
-            --source-bundle S3Bucket=${{ secrets.EB_S3_BUCKET }},S3Key=deploy.zip
+            --source-bundle S3Bucket=${{ secrets.EB_S3_BUCKET }},S3Key=$VERSION_LABEL.zip
 
           aws elasticbeanstalk update-environment \
             --environment-name ${{ secrets.EB_ENV_NAME }} \
@@ -52,5 +55,4 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
-          DOTNET_ROOT: /usr/share/dotnet
+          VERSION_LABEL: v-${{ github.run_number }}-${{ github.sha }}
