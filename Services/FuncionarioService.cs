@@ -1,9 +1,13 @@
 ﻿using ApiJobfy.Data;
 using ApiJobfy.models;
+using ApiJobfy.models.DTOs;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
 
-namespace ApiJobfy.Services.ApiJobfy.Services
+namespace ApiJobfy.Services
 {
+    [ExcludeFromCodeCoverage]
+
     public class FuncionarioService : IFuncionarioService
     {
         private readonly AppDbContext _dbContext;
@@ -64,6 +68,37 @@ namespace ApiJobfy.Services.ApiJobfy.Services
             await _dbContext.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<int> GetTotalLogsRecrutadorAsync(Guid recrutadorId)
+        {
+            return await _dbContext.LogRecrutadores
+         .Where(l =>
+             l.RecrutadorId == recrutadorId &&
+             l.Acao != "Login bem-sucedido" &&
+             l.Acao != "Login falhou"
+         )
+         .CountAsync();
+        }
+
+        public async Task<List<LogRecrutador>> GetLogsRecrutadorAsync(Guid recrutadorId, int page, int pageSize)
+        {
+            return await _dbContext.LogRecrutadores
+                .Where(l =>
+            l.RecrutadorId == recrutadorId &&
+            l.Acao != "Login bem-sucedido" &&
+            l.Acao != "Login falhou"
+        )
+                .OrderByDescending(l => l.DtAcao)
+                .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+                .Select(l => new LogRecrutador
+                {
+                    LogId = l.LogId,
+                    Acao = l.Acao,
+                    DtAcao = l.DtAcao
+                })
+                .ToListAsync();
         }
     }
 }

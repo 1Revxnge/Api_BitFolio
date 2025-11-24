@@ -1,7 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ApiJobfy.models.DTOs
 {
+    [ExcludeFromCodeCoverage]
+
     public class RegisterCandidatoDto
     {
         [Required]

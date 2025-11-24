@@ -4,8 +4,11 @@ using Microsoft.Extensions.Logging;
 using MimeKit;
 using MailKit.Net.Smtp;
 using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 namespace ApiJobfy.Services
 {
+    [ExcludeFromCodeCoverage]
+
     public class EmailService : IEmailService
     {
         private readonly ILogger<EmailService> _logger;

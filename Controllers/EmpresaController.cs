@@ -2,10 +2,12 @@
 using System.Threading.Tasks;
 using ApiJobfy.models;
 using ApiJobfy.Services.IService;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ApiJobfy.Controllers
 {
-        [ApiController]
+    [ExcludeFromCodeCoverage]
+    [ApiController]
         [Route("api/empresa")]
         public class EmpresaController : ControllerBase
         {
@@ -54,5 +56,46 @@ namespace ApiJobfy.Controllers
 
                 return NoContent();
             }
+
+        [HttpGet("GetAllEmpresas")]
+        public async Task<IActionResult> GetAllEmpresas(int page = 1, int take = 10)
+        {
+            // Obtém o total de empresas
+            var qtd = await _empresaService.GetTotalEmpresasAsync();
+
+            // Cálculo de páginas
+            var pages = take != 0 ? (qtd / take) : 1;
+            int skip = take * (page - 1);
+
+            if (take != 0 && (qtd % take) != 0)
+                pages += 1;
+
+            // Aplica paginação
+            var empresas = await _empresaService.GetTodasEmpresasAsync(page, take);
+
+            // Monta resposta com headers
+            var response = new ObjectResult(empresas)
+            {
+                StatusCode = StatusCodes.Status200OK
+            };
+
+            Response.Headers.Append("Access-Control-Expose-Headers", "pages, qtd, range");
+            Response.Headers.Append("pages", pages.ToString());
+            Response.Headers.Append("qtd", qtd.ToString());
+
+            if (take != 0)
+            {
+                var rangeInicio = skip + 1;
+                var rangeFim = ((skip + take) - qtd) >= 0 ? qtd : (skip + take);
+                Response.Headers.Append("range", $"{rangeInicio}-{rangeFim}");
+            }
+            else
+            {
+                Response.Headers.Append("range", $"1-{qtd}");
+            }
+
+            return response;
+        }
+
     }
 }

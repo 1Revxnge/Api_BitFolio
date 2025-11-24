@@ -1,22 +1,27 @@
 using ApiJobfy.models;
 using ApiJobfy.models.DTOs;
+using ApiJobfy.Services;
 using ApiJobfy.Services.IService;
+using BitFolio.models.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ApiJobfy.Controllers
 {
+    [ExcludeFromCodeCoverage]
     [ApiController]
     [Route("api/auth")]
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
         private readonly IUserService _userService;
-
-        public AuthController(IAuthService authService, IUserService userService)
+        private readonly IEmpresaService _empresaService;
+        public AuthController(IAuthService authService, IUserService userService, IEmpresaService empresaService)
         {
             _authService = authService;
             _userService = userService;
+            _empresaService = empresaService;
         }
 
         [HttpPost("register/candidato")]
@@ -65,6 +70,33 @@ namespace ApiJobfy.Controllers
 
             return Ok(new { user.AdminId, user.Nome, user.Email });
         }
+        [HttpPost("register/empresa")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RegisterEmpresa([FromBody] RegisterEmpresaDTO dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var exists = await _userService.ExistsByEmailAsync(dto.Email);
+            if (exists)
+                return Conflict("Email já cadastrado");
+
+            var empresaExists = await _empresaService.ExistsByCnpjAsync(dto.CNPJ);
+            if (empresaExists)
+                return Conflict("CNPJ já cadastrado");
+
+            var empresa = await _authService.RegisterEmpresaAsync(dto);
+
+            return Ok(new
+            {
+                empresa.EmpresaId,
+                empresa.Nome,
+                empresa.CNPJ,
+                empresa.Email,
+                empresa.Ativo
+            });
+        }
+
 
         [HttpPost("login")]
         [AllowAnonymous]
@@ -72,9 +104,18 @@ namespace ApiJobfy.Controllers
         {
             try
             {
-                var token = await _authService.LoginAsync(dto.Email, dto.Senha, dto.Tipo);
-                return Ok(new { Token = token });
-            }
+                var result = await _authService.LoginAsync(dto.Email, dto.Senha, dto.Tipo);
+                if (result.DoisFatoresNecessario)
+                {
+                    return Ok(new { DoisFatoresNecessario = true });
+                }
+
+                return Ok(new
+                {
+                    token = result.Token,              // string JWT
+                    doisFatoresNecessario = false
+                });
+            }            
             catch (InvalidOperationException ex)
             {
                 var mensagem = ex.Message;

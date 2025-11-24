@@ -1,7 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ApiJobfy.models
 {
+    [ExcludeFromCodeCoverage]
+
     public class Administrador
     {
         public Guid AdminId { get; set; }

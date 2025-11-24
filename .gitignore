@@ -4,7 +4,7 @@ obj/
 
 # Pastas do Visual Studio
 .vs/
-
+.env
 # Arquivos temporários
 *.user
 *.suo

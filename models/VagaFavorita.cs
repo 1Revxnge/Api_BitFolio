@@ -1,5 +1,9 @@
-﻿namespace ApiJobfy.models
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace ApiJobfy.models
 {
+    [ExcludeFromCodeCoverage]
+
     public class VagaFavorita
     {
         public Guid Id { get; set; }

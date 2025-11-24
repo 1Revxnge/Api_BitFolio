@@ -22,6 +22,7 @@ if (string.IsNullOrWhiteSpace(connectionString))
 if (string.IsNullOrWhiteSpace(secretKey))
     throw new Exception("A variável JWT_SECRET não foi encontrada no .env.");
 
+
 // CONFIGURAÇÃO DO BANCO
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString)

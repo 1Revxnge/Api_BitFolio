@@ -1,5 +1,9 @@
-﻿namespace ApiJobfy.models.DTOs
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace ApiJobfy.models.DTOs
 {
+    [ExcludeFromCodeCoverage]
+
     public class RedefinirSenhaDto
     {
         public string Email { get; set; }

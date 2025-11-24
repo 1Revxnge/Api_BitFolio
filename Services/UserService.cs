@@ -1,10 +1,13 @@
 using ApiJobfy.Data;
 using ApiJobfy.Services.IService;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
 
 
 namespace ApiJobfy.Services
 {
+    [ExcludeFromCodeCoverage]
+
     public class UserService : IUserService
     {
         private readonly AppDbContext _dbContext;

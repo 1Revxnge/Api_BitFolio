@@ -1,8 +1,12 @@
+using BitFolio.models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ApiJobfy.models
 {
+    [ExcludeFromCodeCoverage]
+
     public class Candidato
     {
         public Guid CandidatoId { get; set; }
@@ -21,6 +25,8 @@ namespace ApiJobfy.models
         public ICollection<CandidatoVaga> CandidatoVagas { get; set; } = new List<CandidatoVaga>();
         public ICollection<VagaFavorita> VagasFavoritas { get; set; } = new List<VagaFavorita>();
         public ICollection<LogCandidato> Logs { get; set; } = new List<LogCandidato>();
+        public ICollection<HistoricoCandidatura> Historicos { get; set; } = new List<HistoricoCandidatura>();
+
     }
 
 }

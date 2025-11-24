@@ -9,15 +9,22 @@ using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using ApiJobfy.Services.IService;
+using BitFolio.models.DTOs;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ApiJobfy.Services
 {
+    [ExcludeFromCodeCoverage]
+
     public class AuthService : IAuthService
     {
         private readonly AppDbContext _dbContext;
         private readonly IConfiguration _configuration;
         private readonly IEmailService _emailService;
-
+        private static readonly string _templateValidacaoConta = "https://bitfolio-s3.s3.sa-east-1.amazonaws.com/ValidacaoContaTemplateBitfolio.html";
+        private static readonly string _template2FA = "https://bitfolio-s3.s3.sa-east-1.amazonaws.com/2FATemplateBitfolio.html";
+        private static readonly string _templateRecuperarSenha = "https://bitfolio-s3.s3.sa-east-1.amazonaws.com/TemplateRecuperarSenha.html";
+        private static readonly string _templateSolicitacaoFuncionario = "https://bitfolio-s3.s3.sa-east-1.amazonaws.com/ValidacaoContaFuncionario.html";
         public AuthService(AppDbContext dbContext, IConfiguration configuration, IEmailService emailservice)
         {
             _dbContext = dbContext;
@@ -27,9 +34,7 @@ namespace ApiJobfy.Services
 
         public async Task<Candidato> RegisterCandidatoAsync(RegisterCandidatoDto dto)
         {
-            // Hash password
             string senhaHash = HashPassword(dto.Senha);
-            DateTime agora = DateTime.Now;
 
             var candidato = new Candidato
             {
@@ -40,10 +45,11 @@ namespace ApiJobfy.Services
                 Telefone = dto.Telefone,
                 Ativo = false
             };
+
             _dbContext.Candidatos.Add(candidato);
             await _dbContext.SaveChangesAsync();
 
-            // Gerar token de validação
+            // Gerar token
             var token = Guid.NewGuid().ToString("N");
             var tokenEmail = new TokenTemporario
             {
@@ -57,16 +63,10 @@ namespace ApiJobfy.Services
             _dbContext.TokenTemporario.Add(tokenEmail);
             await _dbContext.SaveChangesAsync();
 
-            // Montar link e corpo do e-mail
-            var link = $"http://localhost:5272/api/auth/confirmar-email?token={token}";
-            var corpoEmail = $@"
-        <h2>Confirme seu cadastro no BitFolio</h2>
-        <p>Olá {candidato.Nome}, clique no botão abaixo para ativar sua conta:</p>
-        <a href='{link}' 
-           style='display:inline-block;padding:10px 20px;
-                  color:white;background:#28a745;text-decoration:none;
-                  border-radius:5px;'>Validar Cadastramento</a>
-        <p>Se você não solicitou este cadastro, ignore este e-mail.</p>";
+            // Montar link e carregar template do S3
+            var link = $"https://bitfolio-s3.s3.sa-east-1.amazonaws.com/ConfirmacaoCadastroBitFolio.html?token={token}";
+            var templateHtml = await CarregarTemplateEmailAsync(_templateValidacaoConta);
+            var corpoEmail = SubstituirPlaceholders(templateHtml, candidato.Nome, link);
 
             await _emailService.EnviarEmailAsync(
                 candidato.Email,
@@ -77,10 +77,30 @@ namespace ApiJobfy.Services
             return candidato;
         }
 
+        public async Task<Empresa> RegisterEmpresaAsync(RegisterEmpresaDTO dto)
+        {
+            var empresa = new Empresa
+            {
+                EmpresaId = Guid.NewGuid(),
+                Nome = dto.Nome,
+                RazaoSocial = dto.RazaoSocial,
+                CNPJ = dto.CNPJ,
+                Email = dto.Email,
+                Descricao = dto.Descricao,
+                Ativo = false, // empresa precisa ser validada pelo admin
+                DataCadastro = DateTime.UtcNow,
+                EnderecoId = null
+            };
+
+            _dbContext.Empresas.Add(empresa);
+            await _dbContext.SaveChangesAsync();
+
+            return empresa;
+        }
+
         public async Task<Recrutador> RegisterFuncionarioAsync(RegisterFuncionarioDto dto)
         {
             string senhaHash = HashPassword(dto.Senha);
-            DateTime agora = DateTime.Now;
 
             var funcionario = new Recrutador
             {
@@ -95,12 +115,19 @@ namespace ApiJobfy.Services
             _dbContext.Recrutadores.Add(funcionario);
             await _dbContext.SaveChangesAsync();
 
-            // Gerar token de validação
+            // Buscar empresa
+            var empresa = await _dbContext.Empresas
+                .FirstOrDefaultAsync(e => e.EmpresaId == dto.EmpresaId);
+
+            if (empresa == null)
+                throw new Exception("Empresa não encontrada");
+
+            // Gerar token
             var token = Guid.NewGuid().ToString("N");
             var tokenEmail = new TokenTemporario
             {
                 Tipo = TipoToken.ValidacaoEmail,
-                Email = funcionario.Email,
+                Email = empresa.Email,
                 Codigo = token,
                 CriadoEm = DateTime.UtcNow,
                 ExpiraEm = DateTime.UtcNow.AddHours(24),
@@ -109,30 +136,38 @@ namespace ApiJobfy.Services
             _dbContext.TokenTemporario.Add(tokenEmail);
             await _dbContext.SaveChangesAsync();
 
-            // Montar link e corpo do e-mail
-            var link = $"http://localhost:5272/api/auth/confirmar-email?token={token}";
-            var corpoEmail = $@"
-        <h2>Confirme seu cadastro no BitFolio</h2>
-        <p>Olá {funcionario.Nome}, clique no botão abaixo para ativar sua conta:</p>
-        <a href='{link}' 
-           style='display:inline-block;padding:10px 20px;
-                  color:white;background:#28a745;text-decoration:none;
-                  border-radius:5px;'>Validar Cadastramento</a>
-        <p>Se você não solicitou este cadastro, ignore este e-mail.</p>";
+            // Link de confirmação
+            var link = $"https://bitfolio-s3.s3.sa-east-1.amazonaws.com/ConfirmacaoCadastroBitFolio.html?token={token}";
 
-            await _emailService.EnviarEmailAsync(
+            // Carregar template novo
+            var templateHtml = await CarregarTemplateEmailAsync(_templateSolicitacaoFuncionario);
+
+            // Substituir placeholders
+            var corpoEmail = SubstituirPlaceholdersNovaSolicitacao(
+                templateHtml,
+                empresa.Nome,
+                funcionario.Nome,
                 funcionario.Email,
-                "Confirmação de Cadastro - BitFolio",
+                funcionario.Telefone,
+                DateTime.UtcNow.ToString("dd/MM/yyyy HH:mm"),
+                link
+            );
+
+            // Enviar para o email da empresa
+            await _emailService.EnviarEmailAsync(
+                empresa.Email,
+                "Nova Solicitação de Funcionário - BitFolio",
                 corpoEmail
             );
 
             return funcionario;
         }
 
+
+
         public async Task<Administrador> RegisterAdministradorAsync(RegisterAdminDto dto)
         {
             string senhaHash = HashPassword(dto.Senha);
-            DateTime agora = DateTime.Now;
 
             var administrador = new Administrador
             {
@@ -146,7 +181,7 @@ namespace ApiJobfy.Services
             _dbContext.Administradores.Add(administrador);
             await _dbContext.SaveChangesAsync();
 
-            // Gerar token de validação
+            // Gerar token
             var token = Guid.NewGuid().ToString("N");
             var tokenEmail = new TokenTemporario
             {
@@ -160,16 +195,10 @@ namespace ApiJobfy.Services
             _dbContext.TokenTemporario.Add(tokenEmail);
             await _dbContext.SaveChangesAsync();
 
-            // Montar link e corpo do e-mail
-            var link = $"http://localhost:5272/api/auth/confirmar-email?token={token}";
-            var corpoEmail = $@"
-        <h2>Confirme seu cadastro no BitFolio</h2>
-        <p>Olá {administrador.Nome}, clique no botão abaixo para ativar sua conta:</p>
-        <a href='{link}' 
-           style='display:inline-block;padding:10px 20px;
-                  color:white;background:#28a745;text-decoration:none;
-                  border-radius:5px;'>Validar Cadastramento</a>
-        <p>Se você não solicitou este cadastro, ignore este e-mail.</p>";
+            // Montar link e carregar template
+            var link = $"https://bitfolio-s3.s3.sa-east-1.amazonaws.com/ConfirmacaoCadastroBitFolio.html?token={token}";
+            var templateHtml = await CarregarTemplateEmailAsync(_templateValidacaoConta);
+            var corpoEmail = SubstituirPlaceholders(templateHtml, administrador.Nome, link);
 
             await _emailService.EnviarEmailAsync(
                 administrador.Email,
@@ -179,6 +208,7 @@ namespace ApiJobfy.Services
 
             return administrador;
         }
+
 
 
         public async Task<LoginResult> LoginAsync(string email, string senha, string tipo)
@@ -531,15 +561,16 @@ namespace ApiJobfy.Services
                 return false;
             }
         }
+
         public async Task<TokenTemporario> GerarToken2FAAsync(string email)
         {
-            // Apaga todos os tokens do mesmo usuário e tipo (2FA)
+            // Remove tokens antigos de 2FA para o mesmo usuário
             var tokensAntigos = _dbContext.TokenTemporario
                 .Where(t => t.Email == email && t.Tipo == TipoToken.DoisFatores);
             _dbContext.TokenTemporario.RemoveRange(tokensAntigos);
             await _dbContext.SaveChangesAsync();
 
-            // Gera código 6 dígitos
+            // Gera novo código de 6 dígitos
             var codigo = new Random().Next(100000, 999999).ToString();
 
             var token = new TokenTemporario
@@ -548,30 +579,53 @@ namespace ApiJobfy.Services
                 Email = email,
                 Codigo = codigo,
                 CriadoEm = DateTime.UtcNow,
-                ExpiraEm = DateTime.UtcNow.AddMinutes(15)
+                ExpiraEm = DateTime.UtcNow.AddMinutes(15),
+                Utilizado = false
             };
 
             _dbContext.TokenTemporario.Add(token);
             await _dbContext.SaveChangesAsync();
 
-            // Envia o e-mail
-            await _emailService.EnviarEmailAsync(email, "Código de Verificação - BitFolio",
-                $"Seu código de verificação é: {codigo}. Ele expira em 15 minutos.");
+            // Busca nome do usuário (Candidato, Recrutador ou Administrador)
+            string nomeUsuario = await _dbContext.Candidatos
+                .Where(c => c.Email == email)
+                .Select(c => c.Nome)
+                .FirstOrDefaultAsync() ??
+                await _dbContext.Recrutadores
+                .Where(r => r.Email == email)
+                .Select(r => r.Nome)
+                .FirstOrDefaultAsync() ??
+                await _dbContext.Administradores
+                .Where(a => a.Email == email)
+                .Select(a => a.Nome)
+                .FirstOrDefaultAsync() ?? "Usuário";
+
+            // Carrega template do S3 e substitui placeholders diretamente
+            var httpClient = new HttpClient();
+            var templateHtml = await httpClient.GetStringAsync(_template2FA);
+            templateHtml = templateHtml
+                .Replace("{{NOME_USUARIO}}", nomeUsuario)
+                .Replace("{{CODIGO_2FA}}", codigo);
+
+            // Envia o e-mail com template renderizado
+            await _emailService.EnviarEmailAsync(
+                email,
+                "Código de Verificação - BitFolio",
+                templateHtml
+            );
 
             return token;
         }
+
 
         public async Task<string?> ValidarToken2FAAsync(string email, string codigo)
         {
             var token = await _dbContext.TokenTemporario
                 .FirstOrDefaultAsync(t => t.Email == email && t.Tipo == TipoToken.DoisFatores);
-
             if (token == null)
                 return null; // Se não encontrar o token, retorna null.
-
             if (token.Utilizado)
                 return null; // Se o token já foi utilizado, retorna null.
-
             if (DateTime.UtcNow > token.ExpiraEm)
             {
                 _dbContext.TokenTemporario.Remove(token);
@@ -581,11 +635,8 @@ namespace ApiJobfy.Services
 
             if (token.Codigo != codigo)
                 return null; // Se o código não é válido, retorna null.
-
-            // Se chegou até aqui, o token foi validado com sucesso.
             // Remove o token (uso único)
             _dbContext.TokenTemporario.Remove(token);
-
             // Gerar o JWT após a validação do 2FA
             var usuario = await _dbContext.Candidatos.FirstOrDefaultAsync(c => c.Email == email);
             if (usuario != null)
@@ -594,7 +645,6 @@ namespace ApiJobfy.Services
                 await _dbContext.SaveChangesAsync();
                 return GenerateJwtToken(usuario);
             }
-
             var administrador = await _dbContext.Administradores.FirstOrDefaultAsync(a => a.Email == email);
             if (administrador != null)
             {
@@ -602,7 +652,6 @@ namespace ApiJobfy.Services
                 await _dbContext.SaveChangesAsync();
                 return GenerateJwtToken(administrador);
             }
-
             var funcionario = await _dbContext.Recrutadores.FirstOrDefaultAsync(f => f.Email == email);
             if (funcionario != null)
             {
@@ -610,13 +659,12 @@ namespace ApiJobfy.Services
                 await _dbContext.SaveChangesAsync();
                 return GenerateJwtToken(funcionario);
             }
-           
             return null;
         }
         private string GenerateJwtToken(object usuario)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]);
+            var key = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_SECRET"));
 
             List<Claim> claims = new List<Claim>();
 
@@ -662,8 +710,9 @@ namespace ApiJobfy.Services
 
             var usuario = await BuscarUsuarioPorEmail(email);
             if (usuario == null)
-                return; 
+                return;
 
+            // Gera token de 6 caracteres
             var token = Guid.NewGuid().ToString().Substring(0, 6).ToUpper();
 
             var entidade = new TokenTemporario
@@ -679,10 +728,22 @@ namespace ApiJobfy.Services
             _dbContext.TokenTemporario.Add(entidade);
             await _dbContext.SaveChangesAsync();
 
+            // Carrega o template do S3
+            var templateHtml = await new HttpClient().GetStringAsync(_templateRecuperarSenha);
+
+            string nomeUsuario = usuario is Candidato c ? c.Nome :
+                     usuario is Recrutador r ? r.Nome :
+                     usuario is Administrador a ? a.Nome : "Usuário";
+            // Substitui os placeholders pelo nome do usuário e código
+            templateHtml = templateHtml
+                .Replace("{{NOME_USUARIO}}", nomeUsuario)
+                .Replace("{{CODIGO_RECUPERACAO}}", token);
+
+            // Envia o e-mail com o template
             await _emailService.EnviarEmailAsync(
                 email,
-                "Recuperação de Senha",
-                $"Seu código de verificação é: {token}"
+                "Recuperação de Senha - BitFolio",
+                templateHtml
             );
         }
 
@@ -783,7 +844,35 @@ namespace ApiJobfy.Services
 
             await _dbContext.SaveChangesAsync();
         }
-
-
+        private async Task<string> CarregarTemplateEmailAsync(string url)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                return await httpClient.GetStringAsync(url);
+            }
+        }
+        private string SubstituirPlaceholders(string template, string nomeUsuario, string linkConfirmacao)
+        {
+            return template
+                .Replace("{{NOME_USUARIO}}", nomeUsuario)
+                .Replace("{{LINK_CONFIRMACAO}}", linkConfirmacao);
+        }
+        private string SubstituirPlaceholdersNovaSolicitacao(
+    string template,
+    string nomeEmpresa,
+    string nomeFuncionario,
+    string emailFuncionario,
+    string telefoneFuncionario,
+    string dataSolicitacao,
+    string linkConfirmacao)
+        {
+            return template
+                .Replace("{{NOME_EMPRESA}}", nomeEmpresa)
+                .Replace("{{NOME_FUNCIONARIO}}", nomeFuncionario)
+                .Replace("{{EMAIL_FUNCIONARIO}}", emailFuncionario)
+                .Replace("{{TELEFONE_FUNCIONARIO}}", telefoneFuncionario)
+                .Replace("{{DATA_SOLICITACAO}}", dataSolicitacao)
+                .Replace("{{LINK_CONFIRMACAO}}", linkConfirmacao);
+        }
     }
 }
