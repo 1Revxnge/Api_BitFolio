@@ -88,7 +88,6 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("CandidatoPolicy", policy => policy.RequireRole("Candidato"));
 });
 
-
 var app = builder.Build();
 
 // MIGRATIONS AUTOMÁTICAS
