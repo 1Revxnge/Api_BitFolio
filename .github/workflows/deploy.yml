@@ -27,6 +27,7 @@ jobs:
       - name: Criar ZIP
         run: |
           VERSION_LABEL=v-${{ github.run_number }}-${{ github.sha }}
+          # Supondo que o projeto principal seja BitFolio.csproj e a saída esteja em ./publish
           cd publish
           zip -r ../$VERSION_LABEL.zip .
         env:
@@ -41,16 +42,27 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           VERSION_LABEL: v-${{ github.run_number }}-${{ github.sha }}
 
-      - name: Criar versão e atualizar Beanstalk
+      - name: Criar versão, aguardar processamento e atualizar Beanstalk 🚀
         run: |
+          VERSION_LABEL=v-${{ github.run_number }}-${{ github.sha }}
+          
+          # 1. Cria a nova versão da aplicação (aponta o EB para o ZIP no S3)
           aws elasticbeanstalk create-application-version \
             --application-name ${{ secrets.EB_APP_NAME }} \
             --version-label $VERSION_LABEL \
             --source-bundle S3Bucket=${{ secrets.EB_S3_BUCKET }},S3Key=$VERSION_LABEL.zip
-
+            
+          # 2. AGUARDA até que o EB termine de processar e validar o ZIP.
+          # Isso é essencial para que o 'update-environment' encontre a versão no estado Ready/Processed.
+          aws elasticbeanstalk wait application-version-updated \
+            --application-name ${{ secrets.EB_APP_NAME }} \
+            --version-label $VERSION_LABEL
+            
+          # 3. Atualiza o ambiente com a nova versão, agora processada.
           aws elasticbeanstalk update-environment \
             --environment-name ${{ secrets.EB_ENV_NAME }} \
             --version-label $VERSION_LABEL
+
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
