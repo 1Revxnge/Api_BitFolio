@@ -8,6 +8,7 @@ using System.Text;
 using ApiJobfy.Services.IService;
 using System.Text.Json.Serialization;
 using dotenv.net;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,12 +16,16 @@ DotEnv.Load();
 var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION");
 var secretKey = Environment.GetEnvironmentVariable("JWT_SECRET");
 
+// No EB, isso é opcional
 if (string.IsNullOrWhiteSpace(connectionString))
-    throw new Exception("A variável DB_CONNECTION não foi encontrada no .env.");
+{
+    connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+}
 
 if (string.IsNullOrWhiteSpace(secretKey))
-    throw new Exception("A variável JWT_SECRET não foi encontrada no .env.");
-
+{
+    secretKey = builder.Configuration["JWT_SECRET"];
+}
 
 // CONFIGURAÇÃO DO BANCO
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -92,21 +97,25 @@ builder.WebHost.UseUrls("http://*:5000");
 var app = builder.Build();
 
 // MIGRATIONS AUTOMÁTICAS
-using (var scope = app.Services.CreateScope())
+try
 {
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.Migrate();
+    using (var scope = app.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        db.Database.Migrate();
+    }
 }
+catch (Exception ex)
+{
+    Consol
 
 app.UseCors("AllowAll");
 
 app.UseRouting();
-
-app.MapGet("/", () => "API funcionando!");
-
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapGet("/", () => "API funcionando!");
 
 app.Run();
