@@ -7,59 +7,59 @@ using BitFolio.models;
 using BitFolio.models.DTOs;
 using System.Diagnostics.CodeAnalysis;
 
-namespace ApiJobfy.Controllers
-{
-    [ExcludeFromCodeCoverage]
-    [ApiController]
-    [Route("api/vagas")]
-    public class VagasController : ControllerBase
+    namespace ApiJobfy.Controllers
     {
-        private readonly IVagaService _vagaService;
-
-        public VagasController(IVagaService vagaService)
+        [ExcludeFromCodeCoverage]
+        [ApiController]
+        [Route("api/vagas")]
+        public class VagasController : ControllerBase
         {
-            _vagaService = vagaService;
-        }
+            private readonly IVagaService _vagaService;
 
-        [HttpGet("getVagas")]
-        public async Task<IActionResult> GetVagas(int page = 1, int pageSize = 5)
-        {
-            // Obtém o total de vagas
-            var qtd = await _vagaService.GetTotalVagasAsync();
-
-            // Cálculo de páginas
-            var pages = pageSize != 0 ? (qtd / pageSize) : 1;
-            int skip = pageSize * (page - 1);
-
-            if (pageSize != 0 && (qtd % pageSize) != 0)
-                pages += 1;
-
-            // Aplica paginação
-            var vagas = await _vagaService.GetVagasAsync(page, pageSize);
-
-            // Monta resposta com headers
-            var response = new ObjectResult(vagas)
+            public VagasController(IVagaService vagaService)
             {
-                StatusCode = StatusCodes.Status200OK
-            };
-
-            Response.Headers.Append("Access-Control-Expose-Headers", "pages, qtd, range");
-            Response.Headers.Append("pages", pages.ToString());
-            Response.Headers.Append("qtd", qtd.ToString());
-
-            if (pageSize != 0)
-            {
-                var rangeInicio = skip + 1;
-                var rangeFim = ((skip + pageSize) - qtd) >= 0 ? qtd : (skip + pageSize);
-                Response.Headers.Append("range", $"{rangeInicio}-{rangeFim}");
-            }
-            else
-            {
-                Response.Headers.Append("range", $"1-{qtd}");
+                _vagaService = vagaService;
             }
 
-            return response;
-        }
+            [HttpGet("getVagas")]
+            public async Task<IActionResult> GetVagas(int page = 1, int pageSize = 5)
+            {
+                // Obtém o total de vagas
+                var qtd = await _vagaService.GetTotalVagasAsync();
+
+                // Cálculo de páginas
+                var pages = pageSize != 0 ? (qtd / pageSize) : 1;
+                int skip = pageSize * (page - 1);
+
+                if (pageSize != 0 && (qtd % pageSize) != 0)
+                    pages += 1;
+
+                // Aplica paginação
+                var vagas = await _vagaService.GetVagasAsync(page, pageSize);
+
+                // Monta resposta com headers
+                var response = new ObjectResult(vagas)
+                {
+                    StatusCode = StatusCodes.Status200OK
+                };
+
+                Response.Headers.Append("Access-Control-Expose-Headers", "pages, qtd, range");
+                Response.Headers.Append("pages", pages.ToString());
+                Response.Headers.Append("qtd", qtd.ToString());
+
+                if (pageSize != 0)
+                {
+                    var rangeInicio = skip + 1;
+                    var rangeFim = ((skip + pageSize) - qtd) >= 0 ? qtd : (skip + pageSize);
+                    Response.Headers.Append("range", $"{rangeInicio}-{rangeFim}");
+                }
+                else
+                {
+                    Response.Headers.Append("range", $"1-{qtd}");
+                }
+
+                return response;
+            }
 
         [HttpGet("getVagasByNegocio/{empresaId}")]
         public async Task<IActionResult> GetVagasByNegocio(Guid empresaId, int page = 1, int pageSize = 5)

@@ -9,6 +9,8 @@ using ApiJobfy.Services.IService;
 using System.Text.Json.Serialization;
 using dotenv.net;
 using System;
+// NECESSÁRIO para configurar o proxy reverso Nginx/Elastic Beanstalk
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -90,11 +92,6 @@ builder.Services.AddAuthorization(options =>
 
 var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
 
-// Garante que o Kestrel ouça a porta correta
-builder.WebHost.ConfigureKestrel(options =>
-{
-    options.ListenAnyIP(int.Parse(port));
-});
 
 var app = builder.Build();
 
@@ -112,6 +109,15 @@ catch (Exception ex)
     Console.WriteLine("Erro na migration: " + ex.Message);
 }
 
+// --- CORREÇÃO OBRIGATÓRIA PARA AWS E NGINX ---
+// Permite que o Kestrel confie nos cabeçalhos de proxy (X-Forwarded-For, X-Forwarded-Proto)
+// enviados pelo Nginx. Isso resolve problemas de roteamento (404) e protocolo (HTTPS/HTTP).
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
+// --------------------------------------------------
+
 
 app.UseCors("AllowAll");
 
@@ -122,4 +128,4 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapGet("/", () => "API funcionando!");
 
-app.Run($"http://0.0.0.0:{port}");
+app.Run();
