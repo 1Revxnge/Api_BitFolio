@@ -15,7 +15,6 @@ namespace ApiJobfy.Controllers
             {
                 _funcionarioService = funcionarioService;
             }
-
             [HttpGet("getFunc")]
             public async Task<IActionResult> GetFunc(int page = 1, int pageSize = 10)
             {
