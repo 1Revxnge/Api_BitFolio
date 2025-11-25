@@ -25,15 +25,39 @@ jobs:
       - name: Compilar e publicar
         run: dotnet publish BitFolio.csproj -c Release -o publish
 
-      # --- A MÁGICA ACONTECE AQUI ---
-      # Criamos a configuração do Nginx dinamicamente no Linux (sem erro de .txt)
-      - name: Criar Configuração do Nginx
-        run: |
-          mkdir -p .platform/nginx/conf.d/elasticbeanstalk
-          echo 'upstream app_server { server 127.0.0.1:5000; }' > .platform/nginx/conf.d/elasticbeanstalk/kestrel.conf
-          
-          # Verificação visual para garantir que o arquivo foi criado
-          cat .platform/nginx/conf.d/elasticbeanstalk/kestrel.conf
+     - name: Criar Configuração do Nginx
+  run: |
+    mkdir -p .platform/nginx/conf.d/elasticbeanstalk
+    cat > .platform/nginx/conf.d/elasticbeanstalk/kestrel.conf << 'EOF'
+    upstream app_server { 
+        server 127.0.0.1:5000; 
+    }
+
+    server {
+        listen 80;
+
+        location / {
+            proxy_pass http://app_server;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection keep-alive;
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+        }
+
+        location /api {
+            proxy_pass http://app_server;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection keep-alive;
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+        }
+    }
+    EOF
+
+    # Verificação visual para garantir que o arquivo foi criado
+    cat .platform/nginx/conf.d/elasticbeanstalk/kestrel.conf
 
       # Mover a configuração para dentro da pasta publish para zipar tudo junto
       - name: Preparar ZIP
