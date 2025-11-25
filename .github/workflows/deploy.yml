@@ -41,26 +41,26 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           VERSION_LABEL: v-${{ github.run_number }}-${{ github.sha }}
 
-      - name: Criar versão, aguardar processamento e atualizar Beanstalk 🚀
+      - name: Criar versão e atualizar Beanstalk
         run: |
           VERSION_LABEL=v-${{ github.run_number }}-${{ github.sha }}
           
           # 1. Cria a nova versão no Elastic Beanstalk
+          # O Beanstalk fará o processamento em background.
           aws elasticbeanstalk create-application-version \
             --application-name ${{ secrets.EB_APP_NAME }} \
             --version-label $VERSION_LABEL \
             --source-bundle S3Bucket=${{ secrets.EB_S3_BUCKET }},S3Key=$VERSION_LABEL.zip
             
-          # 2. AGUARDA (wait) que a versão exista e tenha sido processada (Status: PROCESSED).
-          # Isso resolve o erro "Must be Ready".
-          aws elasticbeanstalk wait application-version-exists \
-            --application-name ${{ secrets.EB_APP_NAME }} \
-            --version-label $VERSION_LABEL
-            
-          # 3. Atualiza o ambiente com a nova versão, agora validada.
+          # 2. Atualiza o ambiente com a nova versão.
           aws elasticbeanstalk update-environment \
             --environment-name ${{ secrets.EB_ENV_NAME }} \
             --version-label $VERSION_LABEL
+            
+          # 3. AGUARDA que o ambiente termine a atualização e volte ao estado Ready/OK.
+          # Isso é essencial para que futuras execuções do pipeline não falhem.
+          aws elasticbeanstalk wait environment-updated \
+            --environment-name ${{ secrets.EB_ENV_NAME }}
 
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
