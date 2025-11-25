@@ -26,6 +26,5 @@ namespace ApiJobfy.Services.IService
         Task<IEnumerable<HistoricoCandidatura>> GetHistoricoAsync(Guid candidatoId);
         Task<IEnumerable<CandidatoVaga>> GetCandidatosDaVagaAsync(Guid vagaId, int? status, string? search);
         Task<CandidatoStatusCountDto> GetCandidatosCountsAsync(Guid vagaId);
-
     }
 }
