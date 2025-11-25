@@ -21,18 +21,35 @@ jobs:
       - name: Restaurar dependências
         run: dotnet restore BitFolio.csproj
 
+      # Compila e joga os arquivos na pasta 'publish'
       - name: Compilar e publicar
-        run: dotnet publish BitFolio.csproj -c Release -o ./publish
+        run: dotnet publish BitFolio.csproj -c Release -o publish
 
-      - name: Criar arquivo ZIP único
+      # --- A MÁGICA ACONTECE AQUI ---
+      # Criamos a configuração do Nginx dinamicamente no Linux (sem erro de .txt)
+      - name: Criar Configuração do Nginx
+        run: |
+          mkdir -p .platform/nginx/conf.d/elasticbeanstalk
+          echo 'upstream app_server { server 127.0.0.1:5000; }' > .platform/nginx/conf.d/elasticbeanstalk/kestrel.conf
+          
+          # Verificação visual para garantir que o arquivo foi criado
+          cat .platform/nginx/conf.d/elasticbeanstalk/kestrel.conf
+
+      # Mover a configuração para dentro da pasta publish para zipar tudo junto
+      - name: Preparar ZIP
+        run: |
+          # Move a pasta .platform para dentro de publish
+          mv .platform publish/
+
+      - name: Criar arquivo ZIP final
         run: |
           VERSION_LABEL=v-${{ github.run_number }}-${{ github.sha }}
           
-          # Move os arquivos da pasta 'publish' para a raiz temporária
-          cp -r publish/. .
+          # Entra na pasta publish (onde agora estão o app E a pasta .platform)
+          cd publish
           
-          zip -r $VERSION_LABEL.zip . -x "publish/*"
-          
+          # Zipa tudo que está ali dentro para a raiz do zip
+          zip -r ../$VERSION_LABEL.zip .
         env:
           VERSION_LABEL: v-${{ github.run_number }}-${{ github.sha }}
 
@@ -45,24 +62,22 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           VERSION_LABEL: v-${{ github.run_number }}-${{ github.sha }}
 
-      - name: Criar versão e atualizar Beanstalk
+      - name: Atualizar Beanstalk
         run: |
           VERSION_LABEL=v-${{ github.run_number }}-${{ github.sha }}
           
-          # 1. Cria a nova versão no Elastic Beanstalk
-          # O Beanstalk fará o processamento em background.
+          # 1. Cria a versão
           aws elasticbeanstalk create-application-version \
             --application-name ${{ secrets.EB_APP_NAME }} \
             --version-label $VERSION_LABEL \
             --source-bundle S3Bucket=${{ secrets.EB_S3_BUCKET }},S3Key=$VERSION_LABEL.zip
             
-          # 2. Atualiza o ambiente com a nova versão.
+          # 2. Atualiza o ambiente
           aws elasticbeanstalk update-environment \
             --environment-name ${{ secrets.EB_ENV_NAME }} \
             --version-label $VERSION_LABEL
             
-          # 3. AGUARDA que o ambiente termine a atualização e volte ao estado Ready/OK.
-          # Isso é essencial para que futuras execuções do pipeline não falhem.
+          # 3. Aguarda o ambiente ficar pronto (Isso evita erros em deploys seguidos)
           aws elasticbeanstalk wait environment-updated \
             --environment-name ${{ secrets.EB_ENV_NAME }}
 
