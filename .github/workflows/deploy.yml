@@ -27,8 +27,10 @@ jobs:
       - name: Criar arquivo ZIP único
         run: |
           VERSION_LABEL=v-${{ github.run_number }}-${{ github.sha }}
-          cd publish
-          zip -r ../$VERSION_LABEL.zip . # Sintaxe corrigida (removendo chaves)
+          # Mude para a raiz do workspace antes de zipar
+          
+          # Empacota a pasta 'publish' (aplicativo) e a pasta '.platform' (configuração)
+          zip -r $VERSION_LABEL.zip publish .platform
         env:
           VERSION_LABEL: v-${{ github.run_number }}-${{ github.sha }}
 
