@@ -7,6 +7,7 @@ namespace ApiJobfy.Controllers
 {
     [ExcludeFromCodeCoverage]
     [ApiController]
+
         [Route("api/funcionario")]
         public class FuncionarioController : ControllerBase
         {
