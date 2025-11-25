@@ -89,7 +89,6 @@ builder.Services.AddAuthorization(options =>
 });
 
 
-
 var app = builder.Build();
 
 // MIGRATIONS AUTOMÁTICAS
