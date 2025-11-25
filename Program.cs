@@ -107,7 +107,9 @@ try
 }
 catch (Exception ex)
 {
-    Consol
+    Console.WriteLine("Erro na migration: " + ex.Message);
+}
+
 
 app.UseCors("AllowAll");
 
