@@ -25,54 +25,33 @@ jobs:
       - name: Compilar e publicar
         run: dotnet publish BitFolio.csproj -c Release -o publish
 
-      - name: Criar Configuração do Nginx
+      - name: Criar Configurações (Procfile e Nginx)
         run: |
-          mkdir -p .platform/nginx/conf.d/elasticbeanstalk
-          cat > .platform/nginx/conf.d/elasticbeanstalk/kestrel.conf << 'EOF'
-          upstream app_server { 
-              server 127.0.0.1:5000; 
-          }
-      
-          server {
-              listen 80;
-      
-              location / {
-                  proxy_pass http://app_server;
-                  proxy_http_version 1.1;
-                  proxy_set_header Upgrade $http_upgrade;
-                  proxy_set_header Connection keep-alive;
-                  proxy_set_header Host $host;
-                  proxy_cache_bypass $http_upgrade;
-              }
-      
-              location /api {
-                  proxy_pass http://app_server;
-                  proxy_http_version 1.1;
-                  proxy_set_header Upgrade $http_upgrade;
-                  proxy_set_header Connection keep-alive;
-                  proxy_set_header Host $host;
-                  proxy_cache_bypass $http_upgrade;
-              }
-          }
-          EOF
-      
-          # Verificação visual para garantir que o arquivo foi criado
-          cat .platform/nginx/conf.d/elasticbeanstalk/kestrel.conf
+          # 1. Cria o Procfile DENTRO da pasta publish/
+          # ESSENCIAL: Garante que o EB saiba como iniciar o app.
+          echo "web: dotnet BitFolio.dll" > publish/Procfile
 
-      # Mover a configuração para dentro da pasta publish para zipar tudo junto
-      - name: Preparar ZIP
-        run: |
-          # Move a pasta .platform para dentro de publish
-          mv .platform publish/
+          # 2. Cria a estrutura de pastas .platform DENTRO de publish/
+          mkdir -p publish/.platform/nginx/conf.d/elasticbeanstalk
 
+          # 3. Cria a configuração SIMPLIFICADA do Nginx (apenas o upstream).
+          # O Nginx do EB por padrão tem a regra "location /" que usa o upstream,
+          # então só precisamos definir o servidor do Kestrel.
+          echo 'upstream app_server { server 127.0.0.1:5000; }' > publish/.platform/nginx/conf.d/elasticbeanstalk/kestrel.conf
+          
+          # 4. Verificação visual (Opcional, mas útil para debug)
+          echo "Conteúdo de publish/Procfile:"
+          cat publish/Procfile
+          echo "Conteúdo de publish/.platform/nginx/conf.d/elasticbeanstalk/kestrel.conf:"
+          cat publish/.platform/nginx/conf.d/elasticbeanstalk/kestrel.conf
+
+      # --- ZIP (Permanece igual, mas agora usando o conteúdo de publish/) ---
       - name: Criar arquivo ZIP final
         run: |
           VERSION_LABEL=v-${{ github.run_number }}-${{ github.sha }}
-          
-          # Entra na pasta publish (onde agora estão o app E a pasta .platform)
+          # Entra na pasta publish (onde estão todos os arquivos de deploy)
           cd publish
-          
-          # Zipa tudo que está ali dentro para a raiz do zip
+          # Zipa o conteúdo, garantindo que Procfile e .platform fiquem na raiz do ZIP
           zip -r ../$VERSION_LABEL.zip .
         env:
           VERSION_LABEL: v-${{ github.run_number }}-${{ github.sha }}
