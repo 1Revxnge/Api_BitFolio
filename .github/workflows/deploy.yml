@@ -24,12 +24,11 @@ jobs:
       - name: Compilar e publicar
         run: dotnet publish BitFolio.csproj -c Release -o ./publish
 
-      - name: Criar ZIP
+      - name: Criar arquivo ZIP único
         run: |
           VERSION_LABEL=v-${{ github.run_number }}-${{ github.sha }}
-          # Supondo que o projeto principal seja BitFolio.csproj e a saída esteja em ./publish
           cd publish
-          zip -r ../$VERSION_LABEL.zip .
+          zip -r ../$VERSION_LABEL.zip . # Sintaxe corrigida (removendo chaves)
         env:
           VERSION_LABEL: v-${{ github.run_number }}-${{ github.sha }}
 
@@ -42,26 +41,26 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           VERSION_LABEL: v-${{ github.run_number }}-${{ github.sha }}
 
-      - name: Criar versão, aguardar processamento e atualizar Beanstalk 🚀
+      - name: Criar versão e atualizar Beanstalk
         run: |
           VERSION_LABEL=v-${{ github.run_number }}-${{ github.sha }}
           
-          # 1. Cria a nova versão da aplicação (aponta o EB para o ZIP no S3)
+          # 1. Cria a nova versão no Elastic Beanstalk
+          # O Beanstalk fará o processamento em background.
           aws elasticbeanstalk create-application-version \
             --application-name ${{ secrets.EB_APP_NAME }} \
             --version-label $VERSION_LABEL \
             --source-bundle S3Bucket=${{ secrets.EB_S3_BUCKET }},S3Key=$VERSION_LABEL.zip
             
-          # 2. AGUARDA até que o EB termine de processar e validar o ZIP.
-          # Isso é essencial para que o 'update-environment' encontre a versão no estado Ready/Processed.
-          aws elasticbeanstalk wait application-version-processed \
-            --application-name ${{ secrets.EB_APP_NAME }} \
-            --version-label $VERSION_LABEL
-            
-          # 3. Atualiza o ambiente com a nova versão, agora processada.
+          # 2. Atualiza o ambiente com a nova versão.
           aws elasticbeanstalk update-environment \
             --environment-name ${{ secrets.EB_ENV_NAME }} \
             --version-label $VERSION_LABEL
+            
+          # 3. AGUARDA que o ambiente termine a atualização e volte ao estado Ready/OK.
+          # Isso é essencial para que futuras execuções do pipeline não falhem.
+          aws elasticbeanstalk wait environment-updated \
+            --environment-name ${{ secrets.EB_ENV_NAME }}
 
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
