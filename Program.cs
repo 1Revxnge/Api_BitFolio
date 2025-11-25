@@ -88,6 +88,14 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("CandidatoPolicy", policy => policy.RequireRole("Candidato"));
 });
 
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+
+// Garante que o Kestrel ouça a porta correta
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(int.Parse(port));
+});
+
 var app = builder.Build();
 
 // MIGRATIONS AUTOMÁTICAS
@@ -114,4 +122,4 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapGet("/", () => "API funcionando!");
 
-app.Run();
+app.Run($"http://0.0.0.0:{port}");
