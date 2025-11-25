@@ -88,11 +88,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("CandidatoPolicy", policy => policy.RequireRole("Candidato"));
 });
 
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-    serverOptions.ListenAnyIP(5000);
-});
-builder.WebHost.UseUrls("http://*:5000");
+
 
 var app = builder.Build();
 
