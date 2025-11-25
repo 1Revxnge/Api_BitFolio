@@ -11,7 +11,6 @@ namespace ApiJobfy.Controllers
         public class FuncionarioController : ControllerBase
         {
             private readonly IFuncionarioService _funcionarioService;
-
             public FuncionarioController(IFuncionarioService funcionarioService)
             {
                 _funcionarioService = funcionarioService;
