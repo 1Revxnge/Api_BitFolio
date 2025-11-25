@@ -54,7 +54,7 @@ jobs:
             
           # 2. AGUARDA até que o EB termine de processar e validar o ZIP.
           # Isso é essencial para que o 'update-environment' encontre a versão no estado Ready/Processed.
-          aws elasticbeanstalk wait application-version-updated \
+          aws elasticbeanstalk wait application-version-processed \
             --application-name ${{ secrets.EB_APP_NAME }} \
             --version-label $VERSION_LABEL
             
