@@ -24,11 +24,14 @@ jobs:
       - name: Compilar e publicar
         run: dotnet publish BitFolio.csproj -c Release -o ./publish
 
-      - name: Criar arquivo ZIP único
+      - name: Copiar web.config
+        run: cp web.config ./publish/web.config
+
+      - name: Criar ZIP
         run: |
           VERSION_LABEL=v-${{ github.run_number }}-${{ github.sha }}
           cd publish
-          zip -r ../${VERSION_LABEL}.zip .
+          zip -r ../$VERSION_LABEL.zip .
         env:
           VERSION_LABEL: v-${{ github.run_number }}-${{ github.sha }}
 
