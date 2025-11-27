@@ -3,12 +3,11 @@ using ApiJobfy.Services.IService;
 using Microsoft.Extensions.Logging;
 using MimeKit;
 using MailKit.Net.Smtp;
-using System.Threading.Tasks;
 using System.Diagnostics.CodeAnalysis;
+
 namespace ApiJobfy.Services
 {
     [ExcludeFromCodeCoverage]
-
     public class EmailService : IEmailService
     {
         private readonly ILogger<EmailService> _logger;
@@ -21,11 +20,11 @@ namespace ApiJobfy.Services
         public async Task EnviarEmailAsync(string para, string assunto, string corpo)
         {
             var mensagem = new MimeMessage();
-            mensagem.From.Add(new MailboxAddress("JobFY", "contato.jobfy@gmail.com")); 
+            mensagem.From.Add(new MailboxAddress("BitFolio", "contato.bitfolio@gmail.com"));
             mensagem.To.Add(new MailboxAddress("", para));
             mensagem.Subject = assunto;
 
-            mensagem.Body = new TextPart("html") 
+            mensagem.Body = new TextPart("html")
             {
                 Text = corpo
             };
@@ -35,7 +34,11 @@ namespace ApiJobfy.Services
                 try
                 {
                     await cliente.ConnectAsync("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
-                    await cliente.AuthenticateAsync("contato.jobfy@gmail.com", "pqeevqmgjeuoerml"); 
+
+                    await cliente.AuthenticateAsync(
+                        "contato.bitfolio@gmail.com",
+                        "ylmc goju nepx eswn"  
+                    );
 
                     await cliente.SendAsync(mensagem);
                     await cliente.DisconnectAsync(true);
@@ -49,4 +52,3 @@ namespace ApiJobfy.Services
         }
     }
 }
-

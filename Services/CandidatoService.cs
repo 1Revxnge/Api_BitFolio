@@ -22,14 +22,24 @@ namespace ApiJobfy.Services
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<Candidato>> GetCandidatosAsync(int page, int pageSize)
+        public async Task<IEnumerable<Candidato>> GetCandidatosAsync(int page, int take)
         {
+            int skip = take * (page - 1);
+
             return await _dbContext.Candidatos
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
+                .Where(c => c.Ativo == true) 
+                .OrderBy(c => c.Nome)
+                .Skip(skip)
+                .Take(take)
                 .ToListAsync();
         }
 
+        public async Task<int> GetTotalCandidatosAsync()
+        {
+            return await _dbContext.Candidatos
+                .Where(c => c.Ativo == true) 
+                .CountAsync();
+        }
         public async Task<Candidato?> GetCandidatoByIdAsync(Guid id)
         {
             return await _dbContext.Candidatos
@@ -174,6 +184,7 @@ namespace ApiJobfy.Services
         .Select(l => new LogCandidato
         {
             LogId = l.LogId,
+            CandidatoId = l.CandidatoId,
             Acao = l.Acao,
             DtAcao = l.DtAcao
         })

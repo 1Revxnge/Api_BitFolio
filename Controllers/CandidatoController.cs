@@ -20,10 +20,43 @@ namespace ApiJobfy.Controllers
         }
 
         [HttpGet("getCandidatos")]
-        public async Task<IActionResult> GetCandidatos(int page = 1, int pageSize = 10)
+        public async Task<IActionResult> GetCandidatos(int page = 1, int take = 10)
         {
-            var candidatos = await _candidatoService.GetCandidatosAsync(page, pageSize);
-            return Ok(candidatos);
+            // Obtém o total de candidatos
+            var qtd = await _candidatoService.GetTotalCandidatosAsync();
+
+            // Cálculo de páginas
+            var pages = take != 0 ? (qtd / take) : 1;
+            int skip = take * (page - 1);
+
+            if (take != 0 && (qtd % take) != 0)
+                pages += 1;
+
+            // Busca com paginação
+            var candidatos = await _candidatoService.GetCandidatosAsync(page, take);
+
+            // Monta resposta com headers
+            var response = new ObjectResult(candidatos)
+            {
+                StatusCode = StatusCodes.Status200OK
+            };
+
+            Response.Headers.Append("Access-Control-Expose-Headers", "pages, qtd, range");
+            Response.Headers.Append("pages", pages.ToString());
+            Response.Headers.Append("qtd", qtd.ToString());
+
+            if (take != 0)
+            {
+                var rangeInicio = skip + 1;
+                var rangeFim = ((skip + take) - qtd) >= 0 ? qtd : (skip + take);
+                Response.Headers.Append("range", $"{rangeInicio}-{rangeFim}");
+            }
+            else
+            {
+                Response.Headers.Append("range", $"1-{qtd}");
+            }
+
+            return response;
         }
 
         [HttpGet("getCandidatoById/{id}")]

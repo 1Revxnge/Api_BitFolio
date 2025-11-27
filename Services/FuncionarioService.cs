@@ -19,13 +19,24 @@ namespace ApiJobfy.Services
             _configuration = configuration;
         }
 
-        public async Task<IEnumerable<Recrutador>> GetFuncionariosAsync(int page, int pageSize)
+        public async Task<IEnumerable<Recrutador>> GetFuncionariosAsync(int page, int take)
         {
+            int skip = take * (page - 1);
+
             return await _dbContext.Recrutadores
-                .Skip((page - 1) * pageSize)  
-                .Take(pageSize)              
+                .Where(f => f.Ativo == true)
+                .Include(f => f.Empresa)
+                .OrderBy(f => f.Nome)
+                .Skip(skip)
+                .Take(take)
                 .ToListAsync();
         }
+
+        public async Task<int> GetTotalFuncionariosAsync()
+        {
+            return await _dbContext.Recrutadores.CountAsync(f => f.Ativo == true);
+        }
+
 
         public async Task<Recrutador?> GetFuncionarioByIdAsync(Guid id)
         {

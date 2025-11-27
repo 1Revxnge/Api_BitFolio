@@ -16,14 +16,46 @@ namespace ApiJobfy.Controllers
                 _funcionarioService = funcionarioService;
             }
 
-            [HttpGet("getFunc")]
-            public async Task<IActionResult> GetFunc(int page = 1, int pageSize = 10)
+        [HttpGet("getFunc")]
+        public async Task<IActionResult> GetFunc(int page = 1, int take = 10)
+        {
+            // total de funcionários ativos
+            var qtd = await _funcionarioService.GetTotalFuncionariosAsync();
+
+            var pages = take != 0 ? (qtd / take) : 1;
+            int skip = take * (page - 1);
+
+            if (take != 0 && (qtd % take) != 0)
+                pages += 1;
+
+            // lista paginada
+            var funcionarios = await _funcionarioService.GetFuncionariosAsync(page, take);
+
+            var response = new ObjectResult(funcionarios)
             {
-                var funcionarios = await _funcionarioService.GetFuncionariosAsync(page, pageSize);
-                return Ok(funcionarios);
+                StatusCode = StatusCodes.Status200OK
+            };
+
+            Response.Headers.Append("Access-Control-Expose-Headers", "pages, qtd, range");
+            Response.Headers.Append("pages", pages.ToString());
+            Response.Headers.Append("qtd", qtd.ToString());
+
+            if (take != 0)
+            {
+                var rangeInicio = skip + 1;
+                var rangeFim = ((skip + take) - qtd) >= 0 ? qtd : (skip + take);
+                Response.Headers.Append("range", $"{rangeInicio}-{rangeFim}");
+            }
+            else
+            {
+                Response.Headers.Append("range", $"1-{qtd}");
             }
 
-            [HttpGet("getFuncById/{id}")]
+            return response;
+        }
+
+
+        [HttpGet("getFuncById/{id}")]
             public async Task<IActionResult> GetFuncById(Guid id)
             {
                 var funcionario = await _funcionarioService.GetFuncionarioByIdAsync(id);

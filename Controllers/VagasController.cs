@@ -261,7 +261,7 @@ using System.Diagnostics.CodeAnalysis;
             var result = await _vagaService.GetCandidatosDaVagaAsync(vagaId, status, search);
 
             if (result == null || !result.Any())
-                return NotFound(new { message = "Nenhum candidato encontrado para esta vaga." });
+                return Ok(new { message = "Nenhum candidato encontrado para esta vaga." });
 
             var counts = await _vagaService.GetCandidatosCountsAsync(vagaId);
 

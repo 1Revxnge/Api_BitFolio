@@ -97,8 +97,12 @@ namespace ApiJobfy.Services
             existingVaga.Tecnologias = vaga.Tecnologias;
             existingVaga.Area = vaga.Area;
             existingVaga.Requisitos = vaga.Requisitos;
-            existingVaga.DataAbertura = vaga.DataAbertura;
-            existingVaga.DataFechamento = vaga.DataFechamento;
+            existingVaga.DataAbertura = vaga.DataAbertura.HasValue
+                ? DateTime.SpecifyKind(vaga.DataAbertura.Value, DateTimeKind.Utc)
+                : null;
+            existingVaga.DataFechamento = vaga.DataFechamento.HasValue
+                ? DateTime.SpecifyKind(vaga.DataFechamento.Value, DateTimeKind.Utc)
+                : null;
             existingVaga.Salario = vaga.Salario;
 
             await _dbContext.SaveChangesAsync();
@@ -107,13 +111,25 @@ namespace ApiJobfy.Services
 
         public async Task<bool> DeleteVagaAsync(Guid id)
         {
+            // Busca a vaga
             var vaga = await _dbContext.Vagas
                 .FirstOrDefaultAsync(v => v.VagaId == id);
 
             if (vaga == null)
                 return false;
 
+            var historicos = _dbContext.HistoricoCandidaturas
+                .Where(h => h.VagaId == id);
+            _dbContext.HistoricoCandidaturas.RemoveRange(historicos);
+
+            var candidatoVagas = _dbContext.CandidatoVagas
+                .Where(cv => cv.VagaId == id);
+            _dbContext.CandidatoVagas.RemoveRange(candidatoVagas);
+
+         
             _dbContext.Vagas.Remove(vaga);
+
+          
             await _dbContext.SaveChangesAsync();
             return true;
         }
@@ -336,6 +352,7 @@ namespace ApiJobfy.Services
             };
 
             _dbContext.LogCandidatos.Add(log);
+            _dbContext.SaveChangesAsync();
 
             return new ResultadoCandidaturaDTO
             {
@@ -403,6 +420,7 @@ namespace ApiJobfy.Services
             };
 
             _dbContext.LogCandidatos.Add(logCandidato);
+            await _dbContext.SaveChangesAsync();
 
             var recrutador = await _dbContext.Recrutadores
             .FirstOrDefaultAsync(r => r.EmpresaId == candidatura.Vaga.EmpresaId);
@@ -418,6 +436,7 @@ namespace ApiJobfy.Services
                 };
 
                 _dbContext.LogRecrutadores.Add(logRecrutador);
+                await _dbContext.SaveChangesAsync();
             }
 
 

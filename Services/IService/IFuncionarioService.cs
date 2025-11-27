@@ -14,6 +14,8 @@ using System.Diagnostics.CodeAnalysis;
             Task<bool> DeleteFuncionarioAsync(Guid id);
             Task<int> GetTotalLogsRecrutadorAsync(Guid recrutadorId);
             Task<List<LogRecrutador>> GetLogsRecrutadorAsync(Guid recrutadorId, int page, int pageSize);
+        Task<int> GetTotalFuncionariosAsync();
+
     }
-    }
+}
 

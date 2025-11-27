@@ -16,5 +16,6 @@ namespace ApiJobfy.Services.IService
         bool Deletar(Guid candidatoId);
         Task<int> GetTotalLogsCandidatoAsync(Guid candidatoId);
         Task<List<LogCandidato>> GetLogsCandidatoAsync(Guid candidatoId, int page, int pageSize);
+        Task<int> GetTotalCandidatosAsync();
     }
 }
