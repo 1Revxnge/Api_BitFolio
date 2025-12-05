@@ -127,7 +127,7 @@ namespace ApiJobfy.Services
             var tokenEmail = new TokenTemporario
             {
                 Tipo = TipoToken.ValidacaoEmail,
-                Email = empresa.Email,
+                Email = funcionario.Email,
                 Codigo = token,
                 CriadoEm = DateTime.UtcNow,
                 ExpiraEm = DateTime.UtcNow.AddHours(24),
@@ -141,15 +141,19 @@ namespace ApiJobfy.Services
 
             // Carregar template novo
             var templateHtml = await CarregarTemplateEmailAsync(_templateSolicitacaoFuncionario);
-
+            var telefoneFormatado = MascaraTelefone(funcionario.Telefone);
+            var dataLocal = TimeZoneInfo.ConvertTimeFromUtc(
+                DateTime.UtcNow,
+                TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time")
+            );
             // Substituir placeholders
             var corpoEmail = SubstituirPlaceholdersNovaSolicitacao(
                 templateHtml,
                 empresa.Nome,
                 funcionario.Nome,
                 funcionario.Email,
-                funcionario.Telefone,
-                DateTime.UtcNow.ToString("dd/MM/yyyy HH:mm"),
+                telefoneFormatado,
+                dataLocal.ToString("dd/MM/yyyy HH:mm"),
                 link
             );
 
@@ -163,7 +167,21 @@ namespace ApiJobfy.Services
             return funcionario;
         }
 
+        private string MascaraTelefone(string telefone)
+        {
+            if (string.IsNullOrWhiteSpace(telefone))
+                return telefone;
 
+            telefone = new string(telefone.Where(char.IsDigit).ToArray());
+
+            if (telefone.Length == 11)
+                return $"({telefone[..2]}) {telefone.Substring(2, 5)}-{telefone.Substring(7)}"; 
+
+            if (telefone.Length == 10)
+                return $"({telefone[..2]}) {telefone.Substring(2, 4)}-{telefone.Substring(6)}"; 
+
+            return telefone; // fallback
+        }
 
         public async Task<Administrador> RegisterAdministradorAsync(RegisterAdminDto dto)
         {
@@ -180,31 +198,6 @@ namespace ApiJobfy.Services
 
             _dbContext.Administradores.Add(administrador);
             await _dbContext.SaveChangesAsync();
-
-            // Gerar token
-            var token = Guid.NewGuid().ToString("N");
-            var tokenEmail = new TokenTemporario
-            {
-                Tipo = TipoToken.ValidacaoEmail,
-                Email = administrador.Email,
-                Codigo = token,
-                CriadoEm = DateTime.UtcNow,
-                ExpiraEm = DateTime.UtcNow.AddHours(24),
-                Utilizado = false
-            };
-            _dbContext.TokenTemporario.Add(tokenEmail);
-            await _dbContext.SaveChangesAsync();
-
-            // Montar link e carregar template
-            var link = $"https://bitfolio-s3.s3.sa-east-1.amazonaws.com/ConfirmacaoCadastroBitFolio.html?token={token}";
-            var templateHtml = await CarregarTemplateEmailAsync(_templateValidacaoConta);
-            var corpoEmail = SubstituirPlaceholders(templateHtml, administrador.Nome, link);
-
-            await _emailService.EnviarEmailAsync(
-                administrador.Email,
-                "Confirmação de Cadastro - BitFolio",
-                corpoEmail
-            );
 
             return administrador;
         }
@@ -561,6 +554,50 @@ namespace ApiJobfy.Services
                 return false;
             }
         }
+
+
+        public async Task AlterarSenhaAsync(string email, string senhaAtual, string novaSenha, string confirmacao)
+        {
+            var usuario = await BuscarUsuarioPorEmail(email);
+
+            if (usuario == null)
+                throw new Exception("Usuário não encontrado.");
+
+            if (novaSenha != confirmacao)
+                throw new Exception("A nova senha e a confirmação não conferem.");
+
+            string senhaHashAtual;
+            if (usuario is Candidato cand)
+                senhaHashAtual = cand.Senha;
+            else if (usuario is Administrador admin)
+                senhaHashAtual = admin.Senha;
+            else if (usuario is Recrutador rec)
+                senhaHashAtual = rec.Senha;
+            else
+                throw new Exception("Tipo de usuário inválido.");
+
+            // 1. Verifica senha atual
+            if (!VerifyPassword(senhaAtual, senhaHashAtual))
+                throw new Exception("A senha atual está incorreta.");
+
+            // 2. Evita trocar por senha igual
+            if (VerifyPassword(novaSenha, senhaHashAtual))
+                throw new Exception("A nova senha deve ser diferente da senha atual.");
+
+            // 3. Gera novo hash da nova senha
+            var novaSenhaHash = HashPassword(novaSenha);
+
+            // 4. Atualiza o usuário de fato
+            if (usuario is Candidato cand2)
+                cand2.Senha = novaSenhaHash;
+            else if (usuario is Administrador admin2)
+                admin2.Senha = novaSenhaHash;
+            else if (usuario is Recrutador rec2)
+                rec2.Senha = novaSenhaHash;
+
+            await _dbContext.SaveChangesAsync();
+        }
+
 
         public async Task<TokenTemporario> GerarToken2FAAsync(string email)
         {

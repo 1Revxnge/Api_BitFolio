@@ -37,7 +37,7 @@ namespace ApiJobfy.Services
         public async Task<int> GetTotalCandidatosAsync()
         {
             return await _dbContext.Candidatos
-                .Where(c => c.Ativo == true) 
+                .Where(c => c.Ativo) 
                 .CountAsync();
         }
         public async Task<Candidato?> GetCandidatoByIdAsync(Guid id)
@@ -58,7 +58,7 @@ namespace ApiJobfy.Services
             existingCandidato.Nome = candidato.Nome;
             existingCandidato.Email = candidato.Email;
             existingCandidato.Telefone = candidato.Telefone;
-
+            existingCandidato.DataNascimento = candidato.DataNascimento;
             await _dbContext.SaveChangesAsync();
             return true;
         }

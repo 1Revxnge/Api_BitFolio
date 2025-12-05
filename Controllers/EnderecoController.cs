@@ -1,5 +1,7 @@
 ﻿using ApiJobfy.models;
+using ApiJobfy.Services;
 using ApiJobfy.Services.IService;
+using BitFolio.models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics.CodeAnalysis;
 
@@ -45,7 +47,10 @@ namespace ApiJobfy.Controllers
             var enderecoId = endereco.EnderecoId;
             if (enderecoId != null)
             {
-                var resultado = await _enderecoService.UpdateEnderecoAsync(endereco);
+                if (candidatoId != null) {
+                    var resultado = await _enderecoService.UpdateEnderecoAsync(endereco);
+            }
+
             } else
             {
                 var resultado = await _enderecoService.AddEnderecoAsync(endereco, candidatoId, empresaId);
@@ -54,6 +59,8 @@ namespace ApiJobfy.Controllers
 
             return NoContent();
         }
+
+
 
         [HttpDelete("deleteEndereco/{id}")]
         public async Task<IActionResult> DeleteEndereco(Guid id)
@@ -64,5 +71,8 @@ namespace ApiJobfy.Controllers
 
             return NoContent();
         }
+
+
+
     }
 }

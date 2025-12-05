@@ -196,12 +196,21 @@ namespace ApiJobfy.Services
                 }
             }
 
-            // Linguagens
-            if (filtro.Linguagens != null && filtro.Linguagens.Any())
+            if (!string.IsNullOrWhiteSpace(filtro.Linguagens))
             {
-                query = query.Where(v => filtro.Linguagens.Any(lang =>
-                    (v.Tecnologias ?? "").ToLower().Contains(lang.ToLower())));
+                var linguagensList = filtro.Linguagens
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(x => x.Trim().ToLower())
+                    .ToList();
+
+                query = query.Where(v =>
+                    linguagensList.All(lang =>
+                        (v.Tecnologias ?? "").ToLower().Contains(lang)
+                    )
+                );
             }
+
+
 
             if (!string.IsNullOrWhiteSpace(filtro.Experiencia))
                 query = query.Where(v => v.Nivel != null &&
@@ -370,15 +379,20 @@ namespace ApiJobfy.Services
             if (candidatura == null)
                 throw new KeyNotFoundException("Candidatura não encontrada.");
 
-            // Correção do InMemory EF — carregamento manual
             await _dbContext.Entry(candidatura).Reference(c => c.Candidato).LoadAsync();
             await _dbContext.Entry(candidatura).Reference(c => c.Vaga).LoadAsync();
             if (candidatura.Vaga != null)
                 await _dbContext.Entry(candidatura.Vaga).Reference(v => v.Empresa).LoadAsync();
 
-            // evitar atualizações redundantes
             if (candidatura.Status == request.NovoStatus)
                 throw new InvalidOperationException("O status informado é igual ao status atual.");
+
+            bool statusFinal = candidatura.Status == StatusVaga.CVSelecionado ||
+                   candidatura.Status == StatusVaga.CVNaoSelecionado;
+
+            if (statusFinal && request.NovoStatus < candidatura.Status)
+                throw new InvalidOperationException("Não é permitido retornar o status após Selecionado ou Não Selecionado.");
+
 
             var statusAnterior = candidatura.Status;
 

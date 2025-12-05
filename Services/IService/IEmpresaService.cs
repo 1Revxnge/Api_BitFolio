@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using ApiJobfy.models;
+using BitFolio.models;
 
 namespace ApiJobfy.Services.IService
 {
@@ -18,6 +19,9 @@ namespace ApiJobfy.Services.IService
         Task<Empresa?> AprovarEmpresaAsync(Guid empresaId);
         Task<bool> ReprovarEmpresaAsync(Guid empresaId);
         Task<int> GetTotalEmpresasAsync();
+        Task<bool> AprovarSolicitacaoEnderecoAsync(Guid solicitacaoId);
+        Task<bool> SolicitarAlteracaoEmpresaAsync(SolicitacaoEmpresa dto, Guid funcionarioId);
+        Task<bool> AprovarSolicitacaoEmpresaAsync(Guid solicitacaoId);
 
     }
 }

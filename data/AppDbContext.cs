@@ -22,6 +22,8 @@ namespace ApiJobfy.Data
             public DbSet<VagaFavorita> VagasFavoritas => Set<VagaFavorita>();
             public DbSet<TokenTemporario> TokenTemporario => Set<TokenTemporario>();
             public DbSet<HistoricoCandidatura> HistoricoCandidaturas => Set<HistoricoCandidatura>();
+            public DbSet<SolicitacaoEmpresa> SolicitacoesEmpresa => Set<SolicitacaoEmpresa>();
+            public DbSet<SolicitacaoEndereco> SolicitacoesEndereco => Set<SolicitacaoEndereco>();
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
             {
@@ -44,6 +46,8 @@ namespace ApiJobfy.Data
             modelBuilder.Entity<LogRecrutador>().HasKey(l => l.LogId);
             modelBuilder.Entity<LogAdministrador>().HasKey(l => l.LogId);
             modelBuilder.Entity<HistoricoCandidatura>().HasKey(h => h.HistoricoId);
+            modelBuilder.Entity<SolicitacaoEmpresa>().HasKey(s => s.SolicitacaoId);
+            modelBuilder.Entity<SolicitacaoEndereco>().HasKey(s => s.SolicitacaoId);
 
             // ========= Índices Únicos =========
             modelBuilder.Entity<Candidato>().HasIndex(c => c.Email).IsUnique();
@@ -136,6 +140,20 @@ namespace ApiJobfy.Data
                 .WithMany(v => v.Historicos)
                 .HasForeignKey(h => h.VagaId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<SolicitacaoEmpresa>()
+           .HasOne(s => s.Empresa)
+           .WithMany()
+           .HasForeignKey(s => s.EmpresaId)
+           .OnDelete(DeleteBehavior.Cascade);
+
+            // SolicitacaoEndereco → Endereco (1:N)
+            modelBuilder.Entity<SolicitacaoEndereco>()
+                .HasOne<Endereco>()
+                .WithMany()
+                .HasForeignKey(s => s.EnderecoId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             base.OnModelCreating(modelBuilder);
         }
 

@@ -18,5 +18,6 @@ namespace ApiJobfy.Services.IService
         Task<LoginResult> LoginAsync(string email, string senha, string tipo);
         Task<string?> ValidarToken2FAAsync(string email, string codigo);
         Task ConfirmarEmailAsync(string token);
+        Task AlterarSenhaAsync(string email, string senhaAtual, string novaSenha, string confirmacao);
     }
 }

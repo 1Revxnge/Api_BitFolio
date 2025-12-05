@@ -1,4 +1,5 @@
 ﻿using ApiJobfy.models;
+using BitFolio.models;
 using System.Diagnostics.CodeAnalysis;
 
 namespace ApiJobfy.Services.IService
@@ -8,9 +9,11 @@ namespace ApiJobfy.Services.IService
         [ExcludeFromCodeCoverage]
 
         Task<Endereco> AddEnderecoAsync(Endereco endereco, Guid? candidatoId = null, Guid? empresaId = null);
-     Task<bool> UpdateEnderecoAsync(Endereco endereco);
-     Task<bool> DeleteEnderecoAsync(Guid id);
-     Task<Endereco> GetEnderecoByIdAsync(Guid id);
-     }
+        Task<bool> UpdateEnderecoAsync(Endereco endereco);
+        Task<bool> DeleteEnderecoAsync(Guid id);
+        Task<Endereco> GetEnderecoByIdAsync(Guid id);
+        Task<bool> SolicitarAlteracaoEnderecoAsync(SolicitacaoEndereco solicitacao, Guid funcionarioId);
+
+    }
 }
 

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using ApiJobfy.models;
 using ApiJobfy.Services.IService;
 using System.Diagnostics.CodeAnalysis;
+using BitFolio.models;
 
 namespace ApiJobfy.Controllers
 {
@@ -12,10 +13,12 @@ namespace ApiJobfy.Controllers
         public class EmpresaController : ControllerBase
         {
             private readonly IEmpresaService _empresaService;
+            private readonly IEnderecoService _enderecoService;
 
-            public EmpresaController(IEmpresaService empresaService)
+            public EmpresaController(IEmpresaService empresaService, IEnderecoService enderecoService)
             {
                 _empresaService = empresaService;
+                _enderecoService = enderecoService;
             }
 
             [HttpGet("getEmpresas")]
@@ -96,6 +99,51 @@ namespace ApiJobfy.Controllers
 
             return response;
         }
+        [HttpPost("alterarEndereco/{funcionarioId}")]
+        public async Task<IActionResult> SolicitarAlteracaoEndereco(
+       [FromBody] SolicitacaoEndereco dto, Guid funcionarioId)
+        {
+            var result = await _enderecoService.SolicitarAlteracaoEnderecoAsync(dto, funcionarioId);
+
+            if (!result)
+                return BadRequest("Erro ao solicitar alteração de endereço.");
+
+            return Ok(new { message = "Solicitação enviada com sucesso!" });
+        }
+        [HttpGet("solicitacoes/aprovar/{id}")]
+        public async Task<IActionResult> AprovarSolicitacaoEndereco(Guid id)
+        {
+            var resultado = await _empresaService.AprovarSolicitacaoEnderecoAsync(id);
+
+            if (!resultado)
+                return BadRequest("Solicitação não encontrada ou já aprovada.");
+
+            return Ok("Endereço atualizado com sucesso!");
+        }
+
+        [HttpPost("alterarDados/{funcionarioId}")]
+        public async Task<IActionResult> SolicitarAlteracaoEmpresa(
+    [FromBody] SolicitacaoEmpresa dto, Guid funcionarioId)
+        {
+            var result = await _empresaService.SolicitarAlteracaoEmpresaAsync(dto, funcionarioId);
+
+            if (!result)
+                return BadRequest("Erro ao solicitar alteração dos dados da empresa.");
+
+            return Ok("Solicitação enviada com sucesso!");
+        }
+
+        [HttpGet("solicitacoes/aprovarDados/{id}")]
+        public async Task<IActionResult> AprovarSolicitacaoEmpresa(Guid id)
+        {
+            var resultado = await _empresaService.AprovarSolicitacaoEmpresaAsync(id);
+
+            if (!resultado)
+                return BadRequest("Solicitação não encontrada ou já aprovada.");
+
+            return Ok("Dados da empresa atualizados com sucesso!");
+        }
+
 
     }
 }

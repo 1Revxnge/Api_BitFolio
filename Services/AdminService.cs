@@ -24,7 +24,10 @@ namespace ApiJobfy.Services
                 .Take(take)
                 .ToListAsync();
         }
-
+        public async Task<int> GetTotalAdministradoresAsync()
+        {
+            return await _dbContext.Administradores.CountAsync();
+        }
         public async Task<Administrador?> GetAdministradorByIdAsync(Guid id)
         {
             return await _dbContext.Administradores
@@ -63,5 +66,35 @@ namespace ApiJobfy.Services
             await _dbContext.SaveChangesAsync();
             return true;
         }
+
+        public async Task<Administrador?> AprovarAdministradorAsync(Guid administradorId)
+        {
+            var admin = await _dbContext.Administradores.FindAsync(administradorId);
+
+            if (admin == null)
+                return null;
+
+            admin.Ativo = true;
+            admin.UltimoAcesso = DateTime.UtcNow;
+
+            await _dbContext.SaveChangesAsync();
+
+            return admin;
+        }
+        public async Task<bool> ReprovarAdministradorAsync(Guid administradorId)
+        {
+            var admin = await _dbContext.Administradores
+                .FirstOrDefaultAsync(a => a.AdminId == administradorId);
+
+            if (admin == null)
+                return false;
+
+            _dbContext.Administradores.Remove(admin);
+            await _dbContext.SaveChangesAsync();
+
+            return true;
+        }
+
+
     }
 }

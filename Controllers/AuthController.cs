@@ -202,5 +202,30 @@ namespace ApiJobfy.Controllers
                 return BadRequest(new { mensagem = ex.Message });
             }
         }
+
+        [HttpPut("alterar-senha")]
+     
+        public async Task<IActionResult> AlterarSenha([FromBody] AlterarSenhaDto dto)
+        {
+            try
+            {
+                if (dto == null)
+                    return BadRequest(new { mensagem = "Dados inválidos." });
+
+                await _authService.AlterarSenhaAsync(
+                    dto.Email,
+                    dto.SenhaAtual,
+                    dto.NovaSenha,
+                    dto.ConfirmacaoNovaSenha
+                );
+
+                return Ok(new { mensagem = "Senha alterada com sucesso!" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { mensagem = ex.Message });
+            }
+        }
+
     }
 }

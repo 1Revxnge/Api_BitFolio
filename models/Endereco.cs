@@ -5,7 +5,7 @@ namespace ApiJobfy.models
 
     public class Endereco
     {
-        public Guid? EnderecoId { get; set; }
+        public Guid EnderecoId { get; set; }
         public string? Cep { get; set; }
         public string? Rua { get; set; }
         public string? Numero { get; set; }

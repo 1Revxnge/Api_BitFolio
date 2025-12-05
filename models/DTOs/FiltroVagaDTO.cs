@@ -8,7 +8,7 @@ namespace BitFolio.models.DTOs
     {
         public string? PalavrasChave { get; set; }
         public double? Proximidade { get; set; }
-        public List<string>? Linguagens { get; set; }
+        public string? Linguagens { get; set; }
         public string? Experiencia { get; set; }
         public string? Area { get; set; }
         public string? Modelo { get; set; }
