@@ -10,7 +10,6 @@ namespace ApiJobfy.Services.IService
 
         Task<Endereco> AddEnderecoAsync(Endereco endereco, Guid? candidatoId = null, Guid? empresaId = null);
         Task<bool> UpdateEnderecoAsync(Endereco endereco);
-        Task<bool> DeleteEnderecoAsync(Guid id);
         Task<Endereco> GetEnderecoByIdAsync(Guid id);
         Task<bool> SolicitarAlteracaoEnderecoAsync(SolicitacaoEndereco solicitacao, Guid funcionarioId);
 

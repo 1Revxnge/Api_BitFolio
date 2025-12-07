@@ -24,6 +24,7 @@ namespace ApiJobfy.Data
             public DbSet<HistoricoCandidatura> HistoricoCandidaturas => Set<HistoricoCandidatura>();
             public DbSet<SolicitacaoEmpresa> SolicitacoesEmpresa => Set<SolicitacaoEmpresa>();
             public DbSet<SolicitacaoEndereco> SolicitacoesEndereco => Set<SolicitacaoEndereco>();
+            public DbSet<LogEndereco> LogEnderecos => Set<LogEndereco>();
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
             {

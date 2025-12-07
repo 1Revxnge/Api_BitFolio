@@ -51,8 +51,8 @@ namespace ApiJobfy.Services
         }
 
         public async Task<bool> SolicitarAlteracaoEnderecoAsync(
-    SolicitacaoEndereco solicitacao,
-    Guid funcionarioId)
+     SolicitacaoEndereco solicitacao,
+     Guid funcionarioId)
         {
             // 1. Buscar empresa e endereço atual
             var empresa = await _dbContext.Empresas
@@ -83,7 +83,18 @@ namespace ApiJobfy.Services
             _dbContext.SolicitacoesEndereco.Add(solicitacao);
             await _dbContext.SaveChangesAsync();
 
-            // 4. Enviar e-mail
+            // 4. Criar log de solicitação de alteração de endereço
+            var logEndereco = new LogEndereco
+            {
+                LogId = Guid.NewGuid(),
+                Acao = $"O funcionário {nomeFuncionario} solicitou uma alteração no endereço.",
+                DtAcao = DateTime.UtcNow
+            };
+
+            _dbContext.LogEnderecos.Add(logEndereco);
+            await _dbContext.SaveChangesAsync();
+
+            // 5. Enviar e-mail
             await EnviarEmailSolicitacaoEnderecoAsync(
                 empresa,
                 enderecoAtual,
@@ -184,37 +195,6 @@ namespace ApiJobfy.Services
                 return true;
             
         }
-
-        public async Task<bool> DeleteEnderecoAsync(Guid enderecoId)
-        {
-            // Remove vínculo do candidato
-            var candidato = await _dbContext.Candidatos
-                .FirstOrDefaultAsync(c => c.EnderecoId == enderecoId);
-            if (candidato != null)
-            {
-                candidato.EnderecoId = null;
-            }
-
-            // Remove vínculo da empresa
-            var empresa = await _dbContext.Empresas
-                .FirstOrDefaultAsync(e => e.EnderecoId == enderecoId);
-            if (empresa != null)
-            {
-                empresa.EnderecoId = null;
-            }
-
-            var endereco = await _dbContext.Enderecos.FindAsync(enderecoId);
-            if (endereco != null)
-            {
-                _dbContext.Enderecos.Remove(endereco);
-                await _dbContext.SaveChangesAsync();
-                return true;
-            }
-
-            await _dbContext.SaveChangesAsync();
-            return false;
-        }
-
 
         public async Task<Endereco> GetEnderecoByIdAsync(Guid id)
         {

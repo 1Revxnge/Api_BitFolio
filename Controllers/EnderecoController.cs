@@ -62,17 +62,5 @@ namespace ApiJobfy.Controllers
 
 
 
-        [HttpDelete("deleteEndereco/{id}")]
-        public async Task<IActionResult> DeleteEndereco(Guid id)
-        {
-            var resultado = await _enderecoService.DeleteEnderecoAsync(id);
-            if (!resultado)
-                return NotFound();
-
-            return NoContent();
-        }
-
-
-
     }
 }

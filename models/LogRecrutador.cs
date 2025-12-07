@@ -12,4 +12,11 @@ namespace ApiJobfy.models
         public string Acao { get; set; } = string.Empty;
         public DateTime? DtAcao { get; set; }
     }
+
+    public class LogEndereco
+    {
+        public Guid LogId { get; set; }
+        public string Acao { get; set; }
+        public DateTime? DtAcao { get; set; }
+    }
 }
